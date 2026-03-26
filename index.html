@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gelectronics Ombor</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #f4f4f9; padding: 20px; }
+        h2 { color: #003366; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .card { background: white; border: 1px solid #ddd; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; }
+        .card h3 { margin: 10px 0 0; font-size: 16px; color: #0055a4; }
+    </style>
+</head>
+<body>
+    <h2>Gelectronics Magazin</h2>
+    <p>Ombor nazorati</p>
+    
+    <div class="grid">
+        <div class="card"><h3>INOVANCE HMI</h3></div>
+        <div class="card"><h3>INOVANCE PLC</h3></div>
+        <div class="card"><h3>INOVANCE INVERTER</h3></div>
+        <div class="card"><h3>INOVANCE SERVO</h3></div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Ekranni to'liq egallash
+    </script>
+</body>
+</html>
