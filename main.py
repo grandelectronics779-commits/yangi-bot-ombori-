@@ -1,57 +1,40 @@
 import os
-import asyncio
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import CommandStart
-from aiogram.types import WebAppInfo, ReplyKeyboardMarkup, KeyboardButton
-from aiohttp import web
+import telebot
+from flask import Flask
 
-BOT_TOKEN = os.getenv('8572454769:AAGLqkS2l62r29oLMRYQ6KBfUxsgAdxv1sI')
+# 1. BOT SOZLAMALARI
+API_TOKEN = os.getenv('8572454769:AAGLqkS2l62r29oLMRYQ6KBfUxsgAdxv1sI')
+bot = telebot.TeleBot(API_TOKEN)
 
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN topilmadi! Render'da Environment Variables qismiga tokenni qo'shganingizni tekshiring.")
+# 2. RENDER UCHUN ODDIY VEB-SERVER (BU PORT MUAMMOSINI HAL QILADI)
+server = Flask(__name__)
 
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+@server.route("/")
+def webhook():
+    return "Gelectronics Bot ishlayapti!", 200
 
-# /start buyrug'i bosilganda HAMMAGA Web App tugmasi (URL) chiqishi shart!
-@dp.message(CommandStart())
-async def cmd_start(message: types.Message):
-    # Dasturga kirish manzili (Haqiqiy himoya shu linkning ichida ishlaydi)
-    web_app_url = "https://grandelectronics779-commits.github.io/yangi-bot-ombori-/" 
+# 3. TELEGRAM START BUYRUG'I
+@bot.message_handler(commands=['start'])
+def start(message):
+    # Sizning GitHub Pages manzilingiz
+    web_app_url = "https://grandelectronics779-commits.github.io/yangi-bot-ombori-/"
     
-    markup = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="Gelectronics Cloud 👑", web_app=WebAppInfo(url=web_app_url))]
-        ],
-        resize_keyboard=True
-    )
-    await message.answer(
-        "Assalomu alaykum!\n\n"
-        "Gelectronics omboriga xush kelibsiz. Pastdagi tugmani bosib tizimga kiring:", 
-        reply_markup=markup
-    )
-
-# Render "Port scan timeout" deb xato bermasligi uchun mitti soxta veb-server
-async def handle_ping(request):
-    return web.Response(text="Gelectronics Bot 100% ishlayapti va himoyalangan!")
-
-async def main():
-    # 1. Soxta veb-serverni sozlash va ishga tushirish
-    app = web.Application()
-    app.router.add_get('/', handle_ping)
-    runner = web.AppRunner(app)
-    await runner.setup()
+    markup = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    web_app = telebot.types.WebAppInfo(web_app_url)
+    button = telebot.types.KeyboardButton(text="Gelectronics Cloud 👑", web_app=web_app)
+    markup.add(button)
     
-    # Render o'zi bergan portni topamiz, yo'q bo'lsa 10000 ishlatamiz
-    port = int(os.environ.get("PORT", 10000))
-    site = web.TCPSite(runner, '0.0.0.0', port)
-    await site.start()
-    print(f"Veb-server {port}-portda ishga tushdi...")
+    bot.send_message(message.chat.id, "Xush kelibsiz! Omborga kirish uchun tugmani bosing:", reply_markup=markup)
 
-    # 2. Telegram botni ishga tushirish
-    print("Telegram bot ishga tushdi...")
-    await bot.delete_webhook(drop_pending_updates=True) 
-    await dp.start_polling(bot)
-
+# 4. BOTNI VA SERVERNI BIRGA ISHLATISH
 if __name__ == "__main__":
-    asyncio.run(main())
+    # Render portni o'zi beradi, biz uni qabul qilamiz
+    port = int(os.environ.get("PORT", 5000))
+    
+    # Botni alohida "oqim"da emas, oddiygina server bilan birga yurgizamiz
+    from threading import Thread
+    def run_bot():
+        bot.infinity_polling()
+
+    Thread(target=run_bot).start()
+    server.run(host="0.0.0.0", port=port)
