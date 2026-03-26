@@ -6,7 +6,7 @@ from aiogram.filters import CommandStart
 
 BOT_TOKEN = "8572454769:AAGLqkS2l62r29oLMRYQ6KBfUxsgAdxv1sI"
 ADMIN_ID = 8508142416  # O'z ID raqamingizni yozing
-WEBAPP_URL = "https://sizning-github-nomingiz.github.io/papka-nomi/" # Buni GitHub'dan olgach o'zgartiramiz
+WEBAPP_URL = "https://grandelectronics779-commits.github.io/yangi-bot-ombori-/" # Buni GitHub'dan olgach o'zgartiramiz
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
