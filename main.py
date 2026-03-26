@@ -1,40 +1,45 @@
 import os
+import threading
 import telebot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from flask import Flask
 
-# 1. BOT SOZLAMALARI
-API_TOKEN = os.getenv('8572454769:AAGLqkS2l62r29oLMRYQ6KBfUxsgAdxv1sI')
-bot = telebot.TeleBot(API_TOKEN)
+# ---------- TOKEN VA PORT ----------
+BOT_TOKEN  = os.getenv("8572454769:AAGLqkS2l62r29oLMRYQ6KBfUxsgAdxv1sI")
+PORT       = int(os.getenv("PORT", 10000))
+WEBAPP_URL = "https://grandelectronics779-commits.github.io/yangi-bot-ombori-/"
 
-# 2. RENDER UCHUN ODDIY VEB-SERVER (BU PORT MUAMMOSINI HAL QILADI)
-server = Flask(__name__)
+bot = telebot.TeleBot(BOT_TOKEN)
 
-@server.route("/")
-def webhook():
-    return "Gelectronics Bot ishlayapti!", 200
+# ---------- FLASK (Render uchun) ----------
+app = Flask(__name__)
 
-# 3. TELEGRAM START BUYRUG'I
-@bot.message_handler(commands=['start'])
-def start(message):
-    # Sizning GitHub Pages manzilingiz
-    web_app_url = "https://grandelectronics779-commits.github.io/yangi-bot-ombori-/"
-    
-    markup = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    web_app = telebot.types.WebAppInfo(web_app_url)
-    button = telebot.types.KeyboardButton(text="Gelectronics Cloud 👑", web_app=web_app)
-    markup.add(button)
-    
-    bot.send_message(message.chat.id, "Xush kelibsiz! Omborga kirish uchun tugmani bosing:", reply_markup=markup)
+@app.route("/")
+def home():
+    return "Bot ishlayapti!", 200
 
-# 4. BOTNI VA SERVERNI BIRGA ISHLATISH
-if __name__ == "__main__":
-    # Render portni o'zi beradi, biz uni qabul qilamiz
-    port = int(os.environ.get("PORT", 5000))
-    
-    # Botni alohida "oqim"da emas, oddiygina server bilan birga yurgizamiz
-    from threading import Thread
-    def run_bot():
-        bot.infinity_polling()
+def flask_thread():
+    app.run(host="0.0.0.0", port=PORT, debug=False, use_reloader=False)
 
-    Thread(target=run_bot).start()
-    server.run(host="0.0.0.0", port=port)
+# ---------- TUGMA ----------
+def tugma():
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("📦 Omborxonani ochish", web_app=WebAppInfo(url=WEBAPP_URL)))
+    return markup
+
+# ---------- BOT BUYRUQLARI ----------
+@bot.message_handler(commands=["start"])
+def start(msg):
+    bot.send_message(msg.chat.id,
+        "👋 Salom! Omborxonani boshqarish uchun quyidagi tugmani bosing:",
+        reply_markup=tugma())
+
+@bot.message_handler(func=lambda m: True)
+def boshqa(msg):
+    bot.send_message(msg.chat.id, "👇 Tugmani bosing:", reply_markup=tugma())
+
+# ---------- ISHGA TUSHIRISH ----------
+threading.Thread(target=flask_thread, daemon=True).start()
+print("✅ Server ishga tushdi, port:", PORT)
+
+bot.infinity_polling(timeout=30, long_polling_timeout=25)
