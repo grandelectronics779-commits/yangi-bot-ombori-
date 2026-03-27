@@ -87,8 +87,7 @@ def callback_handler(call):
 
     if d.startswith("av_"):       # approve view
         uid = int(d[3:])
-        fb_update(f"permissions/{uid}", {"status": "approved"})
-        fb_update(f"devices/{uid}",     {"status": "approved"})
+        fb_update(f"devices/{uid}", {"viewPerm": True, "editPerm": False, "status": "approved"})
         bot.answer_callback_query(call.id, "✅ Ruxsat berildi!")
         try:
             bot.edit_message_text(call.message.text + "\n\n✅ RUXSAT BERILDI",
@@ -99,8 +98,7 @@ def callback_handler(call):
 
     elif d.startswith("rv_"):     # reject view
         uid = int(d[3:])
-        fb_update(f"permissions/{uid}", {"status": "rejected"})
-        fb_update(f"devices/{uid}",     {"status": "rejected"})
+        fb_update(f"devices/{uid}", {"viewPerm": False, "editPerm": False, "status": "rejected"})
         bot.answer_callback_query(call.id, "❌ Rad etildi!")
         try:
             bot.edit_message_text(call.message.text + "\n\n❌ RAD ETILDI",
@@ -111,8 +109,7 @@ def callback_handler(call):
 
     elif d.startswith("ae_"):     # approve edit
         uid = int(d[3:])
-        fb_update(f"edit_perms/{uid}", {"status": "approved",
-                                         "timestamp": int(time.time() * 1000)})
+        fb_update(f"edit_requests/{uid}", {"status": "approved", "timestamp": int(time.time()*1000)})
         bot.answer_callback_query(call.id, "✅ Tahrirlash ruxsati berildi!")
         try:
             bot.edit_message_text(call.message.text + "\n\n✅ TAHRIRLASH RUXSATI BERILDI",
@@ -123,7 +120,7 @@ def callback_handler(call):
 
     elif d.startswith("re_"):     # reject edit
         uid = int(d[3:])
-        fb_update(f"edit_perms/{uid}", {"status": "rejected"})
+        fb_update(f"edit_requests/{uid}", {"status": "rejected"})
         bot.answer_callback_query(call.id, "❌ Rad etildi!")
         try:
             bot.edit_message_text(call.message.text + "\n\n❌ RAD ETILDI",
