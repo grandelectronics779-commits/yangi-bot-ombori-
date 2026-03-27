@@ -7,113 +7,127 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-:root{--p:#0f2027;--a:#2c5364;--g:#11998e;--r:#e74c3c;--bg:#f0f4f3;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);min-height:100vh;overflow-x:hidden;}
+:root{--p:#0f2027;--a:#2c5364;--g:#11998e;--r:#e74c3c;--y:#f39c12;--bg:#f0f4f3;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);min-height:100vh;}
 
 /* SCREENS */
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px 20px;text-align:center;}
 .screen.active{display:flex;}
-.s-icon{font-size:64px;margin-bottom:20px;}
-.s-title{font-size:22px;font-weight:bold;color:var(--p);margin-bottom:10px;}
-.s-text{color:#666;font-size:14px;line-height:1.6;margin-bottom:30px;}
-.spinner{width:38px;height:38px;border:4px solid #ddd;border-top:4px solid var(--g);border-radius:50%;animation:spin 0.9s linear infinite;margin:20px auto;}
+.s-icon{font-size:64px;margin-bottom:16px;}
+.s-title{font-size:22px;font-weight:bold;color:var(--p);margin-bottom:8px;}
+.s-text{color:#666;font-size:14px;line-height:1.6;margin-bottom:24px;}
+.spinner{width:36px;height:36px;border:4px solid #ddd;border-top:4px solid var(--g);border-radius:50%;animation:spin .9s linear infinite;margin:16px auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.btn-green{background:var(--g);color:#fff;border:none;padding:15px 30px;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;width:100%;max-width:280px;}
-.btn-red{background:var(--r);color:#fff;border:none;padding:15px 30px;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;width:100%;max-width:280px;}
+.btn{border:none;padding:14px 24px;border-radius:12px;font-size:15px;font-weight:bold;cursor:pointer;width:100%;max-width:280px;margin-top:8px;}
+.btn-g{background:var(--g);color:#fff;}
+.btn-r{background:var(--r);color:#fff;}
+.btn-b{background:#3498db;color:#fff;}
+.btn-gray{background:#eee;color:#555;}
 
 /* HEADER */
-.header{background:linear-gradient(135deg,var(--p),var(--a));color:#fff;padding:18px 16px;position:sticky;top:0;z-index:10;}
-.h-row{display:flex;align-items:center;justify-content:space-between;}
-.h-title{font-size:19px;font-weight:bold;}
-.h-sub{font-size:11px;opacity:0.65;margin-top:2px;}
+.header{background:linear-gradient(135deg,var(--p),var(--a));color:#fff;padding:16px;position:sticky;top:0;z-index:10;}
+.h-title{font-size:18px;font-weight:bold;}
+.h-sub{font-size:11px;opacity:.6;margin-top:2px;}
 .stats{display:flex;gap:10px;margin-top:12px;}
-.stat{background:rgba(255,255,255,0.15);padding:10px 12px;border-radius:10px;flex:1;font-size:12px;}
-.stat b{display:block;font-size:17px;margin-top:2px;}
+.stat{background:rgba(255,255,255,.15);padding:9px 12px;border-radius:10px;flex:1;font-size:12px;}
+.stat b{display:block;font-size:16px;margin-top:2px;}
 
 /* TABS */
-.tabs{display:flex;background:#fff;border-bottom:1px solid #e8e8e8;}
-.tab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;color:#aaa;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #eee;}
+.tab{flex:1;padding:12px 6px;text-align:center;font-size:13px;font-weight:600;color:#aaa;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;}
 .tab.on{color:var(--g);border-bottom-color:var(--g);}
 
 /* GRID */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px;}
-.card{background:#fff;padding:24px 12px;border-radius:14px;text-align:center;font-weight:bold;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);cursor:pointer;transition:transform .1s,border-color .1s;border:2px solid transparent;}
-.card:active{transform:scale(0.96);border-color:var(--g);}
-.card span{display:block;font-size:34px;margin-bottom:8px;}
+.card{background:#fff;padding:22px 10px;border-radius:14px;text-align:center;font-weight:bold;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);cursor:pointer;transition:transform .1s;border:2px solid transparent;}
+.card:active{transform:scale(.96);border-color:var(--g);}
+.card span{display:block;font-size:32px;margin-bottom:8px;}
 
 /* INVENTORY */
 .inv{padding:14px;}
 .inv-top{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.back{background:none;border:none;font-size:24px;cursor:pointer;padding:4px;}
-.inv-title{font-size:19px;font-weight:bold;flex:1;}
+.back-btn{background:none;border:none;font-size:22px;cursor:pointer;padding:4px 8px;}
+.inv-title{font-size:18px;font-weight:bold;flex:1;}
 .add-btn{background:var(--g);color:#fff;border:none;padding:13px;width:100%;border-radius:11px;font-weight:bold;font-size:15px;cursor:pointer;margin-bottom:14px;}
 
-/* ITEM CARD */
+/* ITEM */
 .item{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid var(--g);box-shadow:0 2px 6px rgba(0,0,0,.05);}
 .item-name{font-weight:bold;font-size:15px;margin-bottom:5px;}
 .item-info{color:#555;font-size:13px;margin-bottom:3px;}
-.item-media{width:100%;border-radius:9px;margin:8px 0;max-height:160px;object-fit:cover;display:block;}
+.item-img{width:100%;border-radius:9px;margin:8px 0;max-height:160px;object-fit:cover;display:block;}
+.item-vid{width:100%;border-radius:9px;margin:8px 0;display:block;}
 .item-btns{display:flex;gap:8px;margin-top:10px;}
-.btn-edit{flex:1;padding:9px;background:#3498db;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;}
-.btn-del{flex:1;padding:9px;background:#fef0ef;color:var(--r);border:1px solid #f8d0cc;border-radius:8px;font-size:13px;cursor:pointer;}
-.empty{text-align:center;padding:50px 20px;color:#bbb;}
-.empty div:first-child{font-size:48px;margin-bottom:10px;}
+.i-edit{flex:1;padding:9px;background:#3498db;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-weight:600;}
+.i-del{flex:1;padding:9px;background:#fef0ef;color:var(--r);border:1px solid #f8d0cc;border-radius:8px;font-size:13px;cursor:pointer;font-weight:600;}
+.empty{text-align:center;padding:40px 20px;color:#bbb;}
+.empty-icon{font-size:48px;margin-bottom:10px;}
 
 /* MODAL */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:flex-end;}
 .overlay.open{display:flex;}
-.mbox{background:#fff;width:100%;padding:20px;border-radius:20px 20px 0 0;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.mbox{background:#fff;width:100%;padding:20px;border-radius:20px 20px 0 0;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .m-title{font-size:17px;font-weight:bold;margin-bottom:16px;}
 .fg{margin-bottom:12px;}
-.fg label{font-size:12px;color:#888;margin-bottom:4px;display:block;font-weight:600;}
-input,select,textarea{width:100%;padding:12px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;background:#fafafa;-webkit-appearance:none;}
+.fg label{font-size:12px;color:#888;margin-bottom:4px;display:block;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+input,select,textarea{width:100%;padding:12px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;background:#fafafa;}
 input:focus,select:focus{border-color:var(--g);background:#fff;}
-.media-prev{width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover;display:none;}
+.media-prev{width:100%;border-radius:10px;margin-top:8px;max-height:180px;object-fit:cover;display:none;}
 .save-btn{width:100%;padding:15px;background:var(--p);color:#fff;border:none;border-radius:12px;font-weight:bold;font-size:15px;cursor:pointer;margin-top:8px;}
-.save-btn:disabled{opacity:.6;}
-.cancel-btn{width:100%;padding:12px;border:none;background:none;color:#aaa;cursor:pointer;margin-top:6px;font-size:14px;}
+.save-btn:disabled{opacity:.5;}
+.cancel-btn{width:100%;padding:11px;border:none;background:none;color:#aaa;cursor:pointer;margin-top:6px;font-size:14px;}
 
 /* DEVICES */
-.dcard{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 6px rgba(0,0,0,.05);}
-.davatar{width:44px;height:44px;background:var(--a);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:bold;flex-shrink:0;}
+.dev-add{display:flex;gap:8px;margin-bottom:16px;}
+.dev-add input{flex:1;padding:12px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;background:#fafafa;outline:none;}
+.dev-add input:focus{border-color:var(--g);}
+.dev-add-btn{background:var(--g);color:#fff;border:none;padding:12px 18px;border-radius:10px;font-weight:bold;font-size:20px;cursor:pointer;flex-shrink:0;}
+.dcard{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.dcard-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.davatar{width:42px;height:42px;background:var(--a);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:bold;flex-shrink:0;}
 .dinfo{flex:1;min-width:0;}
 .dname{font-weight:bold;font-size:14px;}
-.did{font-size:11px;color:#aaa;margin-top:1px;word-break:break-all;}
-.badge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:bold;display:inline-block;margin-top:4px;}
+.did{font-size:11px;color:#aaa;margin-top:1px;}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.badge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:bold;}
 .b-ok{background:#e8f8f0;color:var(--g);}
-.b-wait{background:#fff8e1;color:#f39c12;}
+.b-wait{background:#fff8e1;color:var(--y);}
 .b-no{background:#fef0ef;color:var(--r);}
+.b-edit{background:#e8f0fe;color:#3498db;}
+.dcard-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.d-btn{padding:9px 6px;border:none;border-radius:9px;font-size:12px;font-weight:bold;cursor:pointer;text-align:center;}
+.d-btn-view{background:#e8f8f0;color:var(--g);}
+.d-btn-edit{background:#e8f0fe;color:#3498db;}
+.d-btn-del{background:#fef0ef;color:var(--r);}
 
 /* EDIT WAIT */
-.ewait{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;}
+.ewait{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:center;justify-content:center;}
 .ewait.open{display:flex;}
-.ebox{background:#fff;padding:30px 24px;border-radius:20px;text-align:center;margin:20px;max-width:300px;width:100%;}
+.ebox{background:#fff;padding:28px 22px;border-radius:20px;text-align:center;margin:20px;max-width:300px;width:100%;}
 </style>
 </head>
 <body>
 
 <!-- Loading -->
 <div class="screen active" id="sLoad">
-  <div class="s-icon">🔐</div>
-  <div class="s-title">Tekshirilmoqda...</div>
   <div class="spinner"></div>
+  <div class="s-text" style="margin:0">Tekshirilmoqda...</div>
 </div>
 
-<!-- Request -->
+<!-- Request Access -->
 <div class="screen" id="sReq">
   <div class="s-icon">🏪</div>
   <div class="s-title">Gelectronics Cloud</div>
   <div class="s-text">Omborxonaga kirish uchun<br>admin ruxsati kerak.</div>
-  <button class="btn-green" onclick="requestAccess()">📨 Ruxsat so'rash</button>
+  <button class="btn btn-g" onclick="requestAccess()">📨 Ruxsat so'rash</button>
 </div>
 
 <!-- Pending -->
 <div class="screen" id="sPend">
   <div class="s-icon">⏳</div>
   <div class="s-title">So'rov yuborildi!</div>
-  <div class="s-text">Admin tasdiqlashini kuting.<br>Bu sahifani yopmang.</div>
+  <div class="s-text">Admin tasdiqlashini kuting.<br>Sahifani yopmang.</div>
   <div class="spinner"></div>
-  <div style="color:#aaa;font-size:13px;margin-top:10px;" id="pendSec">0 soniya...</div>
+  <div style="color:#aaa;font-size:13px;margin-top:6px;" id="pendSec"></div>
 </div>
 
 <!-- Rejected -->
@@ -121,14 +135,22 @@ input:focus,select:focus{border-color:var(--g);background:#fff;}
   <div class="s-icon">❌</div>
   <div class="s-title">Ruxsat berilmadi</div>
   <div class="s-text">Admin so'rovingizni rad etdi.</div>
-  <button class="btn-red" onclick="requestAccess()">🔄 Qayta so'rash</button>
+  <button class="btn btn-r" onclick="requestAccess()">🔄 Qayta so'rash</button>
+</div>
+
+<!-- Kicked -->
+<div class="screen" id="sKick">
+  <div class="s-icon">🚫</div>
+  <div class="s-title">Chiqarib yuborildi</div>
+  <div class="s-text">Admin sizni tizimdan o'chirdi.<br>Yana kirish uchun ruxsat so'rang.</div>
+  <button class="btn btn-g" onclick="requestAccess()">📨 Qayta so'rash</button>
 </div>
 
 <!-- MAIN APP -->
-<div id="APP" style="display:none">
+<div id="APP" style="display:none;">
 
   <div class="header">
-    <div class="h-row">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
       <div>
         <div class="h-title">📦 Gelectronics Cloud</div>
         <div class="h-sub" id="uName"></div>
@@ -140,9 +162,10 @@ input:focus,select:focus{border-color:var(--g);background:#fff;}
     </div>
   </div>
 
-  <div class="tabs" id="adminTabs" style="display:none">
+  <!-- Tabs (faqat admin ko'radi) -->
+  <div class="tabs" id="adminTabs" style="display:none;">
     <div class="tab on" id="tOmbor" onclick="swTab('ombor')">📦 Ombor</div>
-    <div class="tab" id="tDevs"  onclick="swTab('devices')">📱 Devices</div>
+    <div class="tab" id="tDevs" onclick="swTab('devices')">📱 Devices</div>
   </div>
 
   <!-- OMBOR -->
@@ -153,25 +176,28 @@ input:focus,select:focus{border-color:var(--g);background:#fff;}
       <div class="card" onclick="openCat('INVERTER')"><span>⚡️</span>INVERTER</div>
       <div class="card" onclick="openCat('SERVO')"><span>🤖</span>SERVO</div>
     </div>
-    <div class="inv" id="invSec" style="display:none">
+    <div class="inv" id="invSec" style="display:none;">
       <div class="inv-top">
-        <button class="back" onclick="goBack()">⬅️</button>
+        <button class="back-btn" onclick="goBack()">⬅️</button>
         <div class="inv-title" id="catTitle"></div>
       </div>
-      <button class="add-btn" onclick="needEdit('add')">+ Mahsulot qo'shish</button>
+      <button class="add-btn" id="addItemBtn" onclick="needEdit('add')" style="display:none;">+ Mahsulot qo'shish</button>
       <div id="itemsCont"></div>
     </div>
   </div>
 
-  <!-- DEVICES -->
-  <div id="cDevs" style="display:none;padding:14px">
-    <h3 style="margin-bottom:14px;color:var(--p)">📱 Foydalanuvchilar</h3>
+  <!-- DEVICES (faqat admin) -->
+  <div id="cDevs" style="display:none;padding:14px;">
+    <div class="dev-add">
+      <input type="number" id="newDevId" placeholder="Telegram ID kiriting..." inputmode="numeric">
+      <button class="dev-add-btn" onclick="addDevById()">+</button>
+    </div>
     <div id="devList"></div>
   </div>
 
 </div>
 
-<!-- ADD / EDIT MODAL -->
+<!-- ADD/EDIT MODAL -->
 <div class="overlay" id="addModal">
   <div class="mbox" id="mboxEl">
     <div class="m-title" id="mTitle">➕ Mahsulot qo'shish</div>
@@ -179,13 +205,13 @@ input:focus,select:focus{border-color:var(--g);background:#fff;}
     <div class="fg"><label>Model *</label><input type="text" id="fModel" placeholder="Siemens S7-1200"></div>
     <div class="fg"><label>Soni *</label><input type="number" id="fSoni" placeholder="0" inputmode="numeric"></div>
     <div class="fg"><label>Narxi ($) *</label><input type="number" id="fNarx" placeholder="0.00" inputmode="decimal"></div>
-    <div class="fg"><label>Yetkazib beruvchi</label><input type="text" id="fSupp" placeholder="Kompaniya nomi"></div>
+    <div class="fg"><label>Yetkazib beruvchi</label><input type="text" id="fSupp" placeholder="Kompaniya"></div>
     <div class="fg"><label>Sana</label><input type="date" id="fSana"></div>
-    <div class="fg"><label>Holati</label><select id="fHol"><option value="Yangi">Yangi</option><option value="B/U">B/U</option></select></div>
+    <div class="fg"><label>Holati</label><select id="fHol"><option>Yangi</option><option>B/U</option></select></div>
     <div class="fg">
       <label>📸 Rasm / 🎥 Video</label>
       <input type="file" id="fMedia" accept="image/*,video/*" onchange="prevMedia(this)">
-      <img  id="imgPrev" class="media-prev">
+      <img id="imgPrev" class="media-prev">
       <video id="vidPrev" class="media-prev" controls playsinline></video>
     </div>
     <div class="fg"><label>Izoh</label><input type="text" id="fIzoh" placeholder="Qo'shimcha ma'lumot"></div>
@@ -194,25 +220,23 @@ input:focus,select:focus{border-color:var(--g);background:#fff;}
   </div>
 </div>
 
-<!-- EDIT WAIT -->
+<!-- EDIT WAIT MODAL -->
 <div class="ewait" id="eWait">
   <div class="ebox">
-    <div style="font-size:44px;margin-bottom:14px">⏳</div>
-    <div style="font-weight:bold;font-size:16px;margin-bottom:8px">Ruxsat kutilmoqda</div>
-    <div style="color:#888;font-size:13px;margin-bottom:20px">Admin tahrirlash ruxsatini berishi kerak</div>
+    <div style="font-size:44px;margin-bottom:12px;">⏳</div>
+    <div style="font-weight:bold;font-size:16px;margin-bottom:6px;">Ruxsat kutilmoqda</div>
+    <div style="color:#888;font-size:13px;margin-bottom:16px;">Admin tahrirlash ruxsatini berishi kerak</div>
     <div class="spinner"></div>
-    <button onclick="cancelEdit()" style="margin-top:14px;border:none;background:none;color:#aaa;cursor:pointer;font-size:13px">Bekor qilish</button>
+    <button onclick="cancelEditWait()" style="margin-top:12px;border:none;background:none;color:#aaa;cursor:pointer;font-size:13px;">Bekor qilish</button>
   </div>
 </div>
 
 <script type="module">
-import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, remove, update, get, set }
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove, update, get, set, off }
   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL }
-  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-const FB_CFG = {
+const FB = {
   apiKey:"AIzaSyAPuxVuP_KSVgTbgBuLX6jATt_2dWIYmfU",
   authDomain:"scholaris-ai.firebaseapp.com",
   projectId:"scholaris-ai",
@@ -221,14 +245,12 @@ const FB_CFG = {
   appId:"1:403057074223:web:078f51c8cf29243ac3a6da",
   databaseURL:"https://scholaris-ai-default-rtdb.firebaseio.com"
 };
-
-const RENDER = "https://yangi-bot-ombori1.onrender.com";
+const RENDER   = "https://yangi-bot-ombori1.onrender.com";
 const ADMIN_ID = 8508142416;
 
-const fApp   = initializeApp(FB_CFG);
-const db     = getDatabase(fApp);
-const store  = getStorage(fApp);
-const tg     = window.Telegram.WebApp;
+const fApp = initializeApp(FB);
+const db   = getDatabase(fApp);
+const tg   = window.Telegram.WebApp;
 tg.expand();
 
 const user  = tg.initDataUnsafe?.user || {id:0,first_name:"Test",last_name:"",username:""};
@@ -237,343 +259,505 @@ const UNAME = [user.first_name, user.last_name||''].join(' ').trim();
 const UUSER = user.username || '';
 const ADMIN = UID === ADMIN_ID;
 
-let curCat   = '';
-let pendAct  = null;
-let pendId   = null;
-let editUnsub = null;
+let curCat     = '';
+let curEditAct = null;
+let curEditId  = null;
+let editUnsub  = null;
+let userPerms  = { view: false, edit: false };
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
-function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const el=document.getElementById(id);
-  if(el) el.classList.add('active');
-}
-
-// ── INIT ────────────────────────────────────────────────────────────────────
+// ─── INIT ────────────────────────────────────────────────────────────────────
 document.getElementById('uName').textContent = UNAME;
 
-if(ADMIN){
-  set(ref(db,`devices/${UID}`),{name:UNAME,username:UUSER,status:'approved',isAdmin:true,lastSeen:Date.now()});
+if (ADMIN) {
+  // Admin: hech narsa so'ralmaydi, to'g'ri kiradi
+  await set(ref(db, `devices/${UID}`), {
+    name: UNAME, username: UUSER,
+    viewPerm: true, editPerm: true,
+    isAdmin: true, status: 'approved',
+    lastSeen: Date.now()
+  });
+  userPerms = { view: true, edit: true };
   showApp();
 } else {
   checkPerm();
 }
 
-async function checkPerm(){
+// ─── PERM CHECK ──────────────────────────────────────────────────────────────
+async function checkPerm() {
   show('sLoad');
-  const snap = await get(ref(db,`permissions/${UID}`));
-  if(!snap.exists()){ show('sReq'); return; }
-  const s = snap.val().status;
-  if(s==='approved') showApp();
-  else if(s==='rejected') show('sRej');
-  else { show('sPend'); pollPerm(); }
+  const snap = await get(ref(db, `devices/${UID}`));
+  if (!snap.exists()) { show('sReq'); return; }
+  const d = snap.val();
+  if (d.status === 'kicked') { show('sKick'); return; }
+  if (d.viewPerm) {
+    userPerms.view = true;
+    userPerms.edit = !!d.editPerm;
+    showApp();
+  } else if (d.status === 'pending') {
+    show('sPend');
+    pollPerm();
+  } else {
+    show('sReq');
+  }
 }
 
-window.requestAccess = async function(){
+// ─── REQUEST ACCESS ──────────────────────────────────────────────────────────
+window.requestAccess = async function() {
   show('sPend');
-  await set(ref(db,`permissions/${UID}`),{name:UNAME,username:UUSER,status:'pending',timestamp:Date.now()});
-  await set(ref(db,`devices/${UID}`),{name:UNAME,username:UUSER,status:'pending',lastSeen:Date.now()});
-  try{
-    await fetch(`${RENDER}/api/request_access`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER})
+  await set(ref(db, `devices/${UID}`), {
+    name: UNAME, username: UUSER,
+    viewPerm: false, editPerm: false,
+    status: 'pending', timestamp: Date.now()
+  });
+  try {
+    await fetch(`${RENDER}/api/request_access`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({user_id: UID, name: UNAME, username: UUSER})
     });
-  }catch(e){}
+  } catch(e) {}
   pollPerm();
 };
 
-function pollPerm(){
-  let s=0;
-  const t=setInterval(()=>{s++;const el=document.getElementById('pendSec');if(el)el.textContent=s+' soniya...';},1000);
-  onValue(ref(db,`permissions/${UID}/status`),(snap)=>{
-    const v=snap.val();
-    if(v==='approved'){clearInterval(t);showApp();}
-    else if(v==='rejected'){clearInterval(t);show('sRej');}
-  });
-}
+function pollPerm() {
+  let s = 0;
+  const timer = setInterval(() => {
+    s++;
+    const el = document.getElementById('pendSec');
+    if (el) el.textContent = s + ' soniya...';
+  }, 1000);
 
-function showApp(){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('APP').style.display='block';
-  if(ADMIN) document.getElementById('adminTabs').style.display='flex';
-  dashboard();
-}
-
-// ── Dashboard ────────────────────────────────────────────────────────────────
-function dashboard(){
-  onValue(ref(db,'ombor'),(snap)=>{
-    let cnt=0,val=0;
-    const d=snap.val();
-    if(d) for(let c in d) for(let id in d[c]){
-      cnt+=parseInt(d[c][id].soni||0);
-      val+=parseInt(d[c][id].soni||0)*parseFloat(d[c][id].narx||0);
+  const permRef = ref(db, `devices/${UID}`);
+  onValue(permRef, (snap) => {
+    if (!snap.exists()) return;
+    const d = snap.val();
+    if (d.status === 'kicked') { clearInterval(timer); show('sKick'); return; }
+    if (d.viewPerm) {
+      clearInterval(timer);
+      off(permRef);
+      userPerms.view = true;
+      userPerms.edit = !!d.editPerm;
+      showApp();
+    } else if (d.status === 'rejected') {
+      clearInterval(timer);
+      off(permRef);
+      show('sRej');
     }
-    document.getElementById('totItems').textContent=cnt+' ta';
-    document.getElementById('totVal').textContent='$'+val.toLocaleString();
   });
 }
 
-// ── Tabs ─────────────────────────────────────────────────────────────────────
-window.swTab = function(t){
-  document.getElementById('cOmbor').style.display=t==='ombor'?'block':'none';
-  document.getElementById('cDevs').style.display=t==='devices'?'block':'none';
-  document.getElementById('tOmbor').classList.toggle('on',t==='ombor');
-  document.getElementById('tDevs').classList.toggle('on',t==='devices');
-  if(t==='devices') loadDevs();
+// ─── SHOW APP ────────────────────────────────────────────────────────────────
+function showApp() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('APP').style.display = 'block';
+  if (ADMIN) document.getElementById('adminTabs').style.display = 'flex';
+  // Edit huquqi bo'lsa "Qo'shish" tugmasi ko'rinadi
+  if (userPerms.edit || ADMIN) {
+    document.getElementById('addItemBtn').style.display = 'block';
+  }
+  dashboard();
+  // Real-time kick/perm monitoring (non-admin)
+  if (!ADMIN) monitorKick();
+}
+
+// ─── KICK MONITOR ────────────────────────────────────────────────────────────
+function monitorKick() {
+  onValue(ref(db, `devices/${UID}`), (snap) => {
+    if (!snap.exists()) { show('sKick'); document.getElementById('APP').style.display = 'none'; return; }
+    const d = snap.val();
+    if (d.status === 'kicked') {
+      document.getElementById('APP').style.display = 'none';
+      show('sKick');
+    }
+    // Update edit perm in real-time
+    userPerms.edit = !!d.editPerm;
+    const addBtn = document.getElementById('addItemBtn');
+    if (addBtn) addBtn.style.display = userPerms.edit ? 'block' : 'none';
+  });
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────────────────────────
+function dashboard() {
+  onValue(ref(db, 'ombor'), (snap) => {
+    let cnt = 0, val = 0;
+    const d = snap.val();
+    if (d) for (let c in d) for (let id in d[c]) {
+      cnt += parseInt(d[c][id].soni || 0);
+      val += parseInt(d[c][id].soni || 0) * parseFloat(d[c][id].narx || 0);
+    }
+    document.getElementById('totItems').textContent = cnt + ' ta';
+    document.getElementById('totVal').textContent = '$' + val.toLocaleString();
+  });
+}
+
+// ─── TABS ────────────────────────────────────────────────────────────────────
+window.swTab = function(t) {
+  document.getElementById('cOmbor').style.display = t === 'ombor' ? 'block' : 'none';
+  document.getElementById('cDevs').style.display  = t === 'devices' ? 'block' : 'none';
+  document.getElementById('tOmbor').classList.toggle('on', t === 'ombor');
+  document.getElementById('tDevs').classList.toggle('on', t === 'devices');
+  if (t === 'devices') loadDevs();
 };
 
-// ── Category ─────────────────────────────────────────────────────────────────
-window.openCat = function(cat){
-  curCat=cat;
-  document.getElementById('mainGrid').style.display='none';
-  document.getElementById('invSec').style.display='block';
-  document.getElementById('catTitle').textContent=cat;
+// ─── CATEGORY ────────────────────────────────────────────────────────────────
+window.openCat = function(cat) {
+  curCat = cat;
+  document.getElementById('mainGrid').style.display = 'none';
+  document.getElementById('invSec').style.display = 'block';
+  document.getElementById('catTitle').textContent = cat;
   loadItems(cat);
 };
 
-window.goBack = function(){
-  document.getElementById('mainGrid').style.display='grid';
-  document.getElementById('invSec').style.display='none';
-  curCat='';
+window.goBack = function() {
+  document.getElementById('mainGrid').style.display = 'grid';
+  document.getElementById('invSec').style.display = 'none';
+  curCat = '';
 };
 
-function loadItems(cat){
-  onValue(ref(db,'ombor/'+cat),(snap)=>renderItems(snap.val()));
+function loadItems(cat) {
+  onValue(ref(db, 'ombor/' + cat), (snap) => renderItems(snap.val()));
 }
 
-function renderItems(data){
-  const c=document.getElementById('itemsCont');
-  c.innerHTML='';
-  if(!data||!Object.keys(data).length){
-    c.innerHTML='<div class="empty"><div>📭</div><div>Mahsulotlar yo\'q</div></div>';
+function renderItems(data) {
+  const c = document.getElementById('itemsCont');
+  c.innerHTML = '';
+  if (!data || !Object.keys(data).length) {
+    c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div>Mahsulotlar yo\'q</div></div>';
     return;
   }
-  for(let id in data){
-    const it=data[id];
-    const d=document.createElement('div');
-    d.className='item';
-    let media='';
-    if(it.mediaUrl){
-      if(it.mediaType==='video')
-        media=`<video src="${it.mediaUrl}" class="item-media" controls playsinline></video>`;
+  for (let id in data) {
+    const it = data[id];
+    let media = '';
+    if (it.mediaUrl) {
+      if (it.mediaType === 'video')
+        media = `<video src="${it.mediaUrl}" class="item-vid" controls playsinline></video>`;
       else
-        media=`<img src="${it.mediaUrl}" class="item-media" onclick="this.requestFullscreen&&this.requestFullscreen()" loading="lazy">`;
+        media = `<img src="${it.mediaUrl}" class="item-img">`;
     }
-    d.innerHTML=`
+    const canEdit = ADMIN || userPerms.edit;
+    const editBtns = canEdit ? `
+      <div class="item-btns">
+        <button class="i-edit" data-action="edit" data-id="${id}">✏️ Tahrirlash</button>
+        <button class="i-del"  data-action="delete" data-id="${id}">🗑 O'chirish</button>
+      </div>` : '';
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = `
       <div class="item-name">${it.model}</div>
       <div class="item-info">Soni: <b>${it.soni} ta</b> &nbsp;|&nbsp; Narxi: <b>$${it.narx}</b> &nbsp;|&nbsp; ${it.holati}</div>
       <div class="item-info">📅 ${it.sana||'-'} &nbsp;|&nbsp; 🏭 ${it.supplier||'-'}</div>
-      ${it.izoh?`<div class="item-info">💬 ${it.izoh}</div>`:''}
-      ${media}
-      <div class="item-btns">
-        <button class="btn-edit" onclick="needEdit('edit','${id}')">✏️ Tahrirlash</button>
-        <button class="btn-del"  onclick="needEdit('delete','${id}')">🗑 O'chirish</button>
-      </div>`;
-    c.appendChild(d);
+      ${it.izoh ? `<div class="item-info">💬 ${it.izoh}</div>` : ''}
+      ${media}${editBtns}`;
+    c.appendChild(div);
   }
 }
 
-// ── Edit permission ───────────────────────────────────────────────────────────
-window.needEdit = async function(action,itemId=''){
-  pendAct=action; pendId=itemId;
-  if(ADMIN){ doAction(action,itemId); return; }
+// Item edit/delete buttons
+document.getElementById('itemsCont').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  needEdit(btn.dataset.action, btn.dataset.id);
+});
 
-  // Check existing edit permission (5 min window)
-  const snap=await get(ref(db,`edit_perms/${UID}`));
-  if(snap.exists()){
-    const ep=snap.val();
-    if(ep.status==='approved'&&(Date.now()-ep.timestamp)<300000){ doAction(action,itemId); return; }
-  }
+// ─── EDIT PERMISSION ─────────────────────────────────────────────────────────
+window.needEdit = async function(action, itemId = '') {
+  curEditAct = action;
+  curEditId  = itemId;
 
-  // Show wait modal
-  document.getElementById('eWait').classList.add('open');
-  await set(ref(db,`edit_perms/${UID}`),{name:UNAME,username:UUSER,action,status:'pending',timestamp:Date.now()});
-  try{
-    await fetch(`${RENDER}/api/request_edit`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER,action})
+  if (ADMIN) { doAction(action, itemId); return; }
+  if (!userPerms.edit) {
+    // So'rov yuborish
+    document.getElementById('eWait').classList.add('open');
+    await set(ref(db, `edit_requests/${UID}`), {
+      name: UNAME, username: UUSER, action, status: 'pending', timestamp: Date.now()
     });
-  }catch(e){}
-
-  editUnsub=onValue(ref(db,`edit_perms/${UID}/status`),(snap)=>{
-    if(snap.val()==='approved'){
-      document.getElementById('eWait').classList.remove('open');
-      doAction(action,itemId);
-    } else if(snap.val()==='rejected'){
-      document.getElementById('eWait').classList.remove('open');
-      tg.showAlert('❌ Tahrirlash ruxsati berilmadi!');
-    }
-  });
-};
-
-window.cancelEdit = function(){
-  document.getElementById('eWait').classList.remove('open');
-  if(editUnsub){editUnsub();editUnsub=null;}
-  set(ref(db,`edit_perms/${UID}`),null);
-};
-
-function doAction(action,itemId){
-  if(action==='add') openModal();
-  else if(action==='edit') openEditModal(itemId);
-  else if(action==='delete'){
-    tg.showConfirm("Haqiqatan ham o'chirasizmi?",(ok)=>{
-      if(ok){
-        remove(ref(db,`ombor/${curCat}/${itemId}`));
-        tg.HapticFeedback.notificationOccurred('success');
-        if(!ADMIN) set(ref(db,`edit_perms/${UID}/status`),'used');
+    try {
+      await fetch(`${RENDER}/api/request_edit`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({user_id: UID, name: UNAME, username: UUSER, action})
+      });
+    } catch(e) {}
+    const erRef = ref(db, `edit_requests/${UID}/status`);
+    editUnsub = onValue(erRef, (snap) => {
+      if (snap.val() === 'approved') {
+        document.getElementById('eWait').classList.remove('open');
+        off(erRef);
+        doAction(action, itemId);
+      } else if (snap.val() === 'rejected') {
+        document.getElementById('eWait').classList.remove('open');
+        off(erRef);
+        tg.showAlert('❌ Tahrirlash ruxsati berilmadi!');
       }
     });
-  }
-}
-
-// ── Modal ─────────────────────────────────────────────────────────────────────
-function openModal(){
-  document.getElementById('mTitle').textContent='➕ Mahsulot qo\'shish';
-  document.getElementById('eId').value='';
-  ['fModel','fSoni','fNarx','fSupp','fIzoh'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('fSana').valueAsDate=new Date();
-  document.getElementById('fHol').value='Yangi';
-  document.getElementById('fMedia').value='';
-  document.getElementById('imgPrev').style.display='none';
-  document.getElementById('vidPrev').style.display='none';
-  document.getElementById('addModal').classList.add('open');
-}
-
-async function openEditModal(itemId){
-  const snap=await get(ref(db,`ombor/${curCat}/${itemId}`));
-  if(!snap.exists()) return;
-  const it=snap.val();
-  document.getElementById('mTitle').textContent='✏️ Tahrirlash';
-  document.getElementById('eId').value=itemId;
-  document.getElementById('fModel').value=it.model||'';
-  document.getElementById('fSoni').value=it.soni||'';
-  document.getElementById('fNarx').value=it.narx||'';
-  document.getElementById('fSupp').value=it.supplier||'';
-  document.getElementById('fIzoh').value=it.izoh||'';
-  document.getElementById('fSana').value=it.sana||'';
-  document.getElementById('fHol').value=it.holati||'Yangi';
-  document.getElementById('fMedia').value='';
-  document.getElementById('imgPrev').style.display='none';
-  document.getElementById('vidPrev').style.display='none';
-  document.getElementById('addModal').classList.add('open');
-}
-
-window.closeModal = function(){document.getElementById('addModal').classList.remove('open');};
-
-window.prevMedia = function(input){
-  const f=input.files[0]; if(!f) return;
-  const url=URL.createObjectURL(f);
-  const ip=document.getElementById('imgPrev'), vp=document.getElementById('vidPrev');
-  if(f.type.startsWith('image/')){ip.src=url;ip.style.display='block';vp.style.display='none';}
-  else if(f.type.startsWith('video/')){vp.src=url;vp.style.display='block';ip.style.display='none';}
-};
-
-window.saveItem = async function(){
-  const model=document.getElementById('fModel').value.trim();
-  const soni=document.getElementById('fSoni').value.trim();
-  const narx=document.getElementById('fNarx').value.trim();
-  if(!model||!soni||!narx){tg.showAlert('Model, soni va narxi majburiy!');return;}
-
-  const btn=document.getElementById('saveBtn');
-  btn.textContent='⏳ Saqlanmoqda...';btn.disabled=true;
-
-  const eId=document.getElementById('eId').value;
-  const mFile=document.getElementById('fMedia').files[0];
-  let mediaUrl=null,mediaType=null;
-
-  if(mFile){
-    try{
-      const sr=sRef(store,`ombor/${curCat}/${Date.now()}_${mFile.name}`);
-      await uploadBytes(sr,mFile);
-      mediaUrl=await getDownloadURL(sr);
-      mediaType=mFile.type.startsWith('video/')?'video':'image';
-    }catch(e){tg.showAlert('⚠️ Rasm yuklanmadi (Firebase Storage ruxsatini tekshiring)');}
-  }
-
-  const item={
-    model,soni,narx,
-    supplier:document.getElementById('fSupp').value.trim(),
-    sana:document.getElementById('fSana').value,
-    holati:document.getElementById('fHol').value,
-    izoh:document.getElementById('fIzoh').value.trim(),
-    timestamp:Date.now()
-  };
-  if(mediaUrl){item.mediaUrl=mediaUrl;item.mediaType=mediaType;}
-
-  if(eId){
-    if(!mFile){
-      const snap=await get(ref(db,`ombor/${curCat}/${eId}`));
-      if(snap.exists()&&snap.val().mediaUrl){
-        item.mediaUrl=snap.val().mediaUrl;item.mediaType=snap.val().mediaType;
-      }
-    }
-    await update(ref(db,`ombor/${curCat}/${eId}`),item);
   } else {
-    await push(ref(db,`ombor/${curCat}`),item);
+    doAction(action, itemId);
+  }
+};
+
+window.cancelEditWait = function() {
+  document.getElementById('eWait').classList.remove('open');
+  if (editUnsub) { editUnsub(); editUnsub = null; }
+  remove(ref(db, `edit_requests/${UID}`));
+};
+
+function doAction(action, itemId) {
+  if (action === 'add') openModal();
+  else if (action === 'edit') openEditModal(itemId);
+  else if (action === 'delete') {
+    tg.showConfirm("Haqiqatan ham o'chirasizmi?", (ok) => {
+      if (ok) {
+        remove(ref(db, `ombor/${curCat}/${itemId}`));
+        tg.HapticFeedback.notificationOccurred('success');
+      }
+    });
+  }
+}
+
+// ─── MODAL ───────────────────────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('mTitle').textContent = '➕ Mahsulot qo\'shish';
+  document.getElementById('eId').value = '';
+  ['fModel','fSoni','fNarx','fSupp','fIzoh'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fSana').valueAsDate = new Date();
+  document.getElementById('fHol').value = 'Yangi';
+  document.getElementById('fMedia').value = '';
+  document.getElementById('imgPrev').style.display = 'none';
+  document.getElementById('vidPrev').style.display = 'none';
+  document.getElementById('addModal').classList.add('open');
+}
+
+async function openEditModal(itemId) {
+  const snap = await get(ref(db, `ombor/${curCat}/${itemId}`));
+  if (!snap.exists()) return;
+  const it = snap.val();
+  document.getElementById('mTitle').textContent = '✏️ Tahrirlash';
+  document.getElementById('eId').value = itemId;
+  document.getElementById('fModel').value = it.model || '';
+  document.getElementById('fSoni').value  = it.soni  || '';
+  document.getElementById('fNarx').value  = it.narx  || '';
+  document.getElementById('fSupp').value  = it.supplier || '';
+  document.getElementById('fIzoh').value  = it.izoh  || '';
+  document.getElementById('fSana').value  = it.sana  || '';
+  document.getElementById('fHol').value   = it.holati || 'Yangi';
+  document.getElementById('fMedia').value = '';
+  document.getElementById('imgPrev').style.display = 'none';
+  document.getElementById('vidPrev').style.display = 'none';
+  document.getElementById('addModal').classList.add('open');
+}
+
+window.closeModal = function() { document.getElementById('addModal').classList.remove('open'); };
+
+window.prevMedia = function(input) {
+  const f = input.files[0]; if (!f) return;
+  const url = URL.createObjectURL(f);
+  if (f.type.startsWith('image/')) {
+    document.getElementById('imgPrev').src = url;
+    document.getElementById('imgPrev').style.display = 'block';
+    document.getElementById('vidPrev').style.display = 'none';
+  } else {
+    document.getElementById('vidPrev').src = url;
+    document.getElementById('vidPrev').style.display = 'block';
+    document.getElementById('imgPrev').style.display = 'none';
+  }
+};
+
+// Rasm siqish
+function compressMedia(file) {
+  return new Promise((res) => {
+    if (file.type.startsWith('video/')) {
+      const r = new FileReader();
+      r.onload = e => res({url: e.target.result, type: 'video'});
+      r.readAsDataURL(file); return;
+    }
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      let w = img.width, h = img.height, max = 800;
+      if (w > max || h > max) {
+        if (w > h) { h = Math.round(h * max / w); w = max; }
+        else { w = Math.round(w * max / h); h = max; }
+      }
+      const cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      cv.getContext('2d').drawImage(img, 0, 0, w, h);
+      res({url: cv.toDataURL('image/jpeg', 0.72), type: 'image'});
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  });
+}
+
+window.saveItem = async function() {
+  const model = document.getElementById('fModel').value.trim();
+  const soni  = document.getElementById('fSoni').value.trim();
+  const narx  = document.getElementById('fNarx').value.trim();
+  if (!model || !soni || !narx) { tg.showAlert('Model, soni va narxi majburiy!'); return; }
+
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '⏳ Saqlanmoqda...'; btn.disabled = true;
+
+  const eId   = document.getElementById('eId').value;
+  const mFile = document.getElementById('fMedia').files[0];
+  let mediaUrl = null, mediaType = null;
+
+  if (mFile) {
+    try {
+      const c = await compressMedia(mFile);
+      mediaUrl = c.url; mediaType = c.type;
+    } catch(e) { tg.showAlert('⚠️ Media siqilmadi!'); }
   }
 
-  if(!ADMIN) set(ref(db,`edit_perms/${UID}/status`),'used');
+  const item = {
+    model, soni, narx,
+    supplier: document.getElementById('fSupp').value.trim(),
+    sana:     document.getElementById('fSana').value,
+    holati:   document.getElementById('fHol').value,
+    izoh:     document.getElementById('fIzoh').value.trim(),
+    timestamp: Date.now()
+  };
+  if (mediaUrl) { item.mediaUrl = mediaUrl; item.mediaType = mediaType; }
+
+  if (eId) {
+    if (!mFile) {
+      const snap = await get(ref(db, `ombor/${curCat}/${eId}`));
+      if (snap.exists() && snap.val().mediaUrl) {
+        item.mediaUrl  = snap.val().mediaUrl;
+        item.mediaType = snap.val().mediaType;
+      }
+    }
+    await update(ref(db, `ombor/${curCat}/${eId}`), item);
+  } else {
+    await push(ref(db, `ombor/${curCat}`), item);
+  }
+
   closeModal();
   tg.HapticFeedback.notificationOccurred('success');
-  btn.textContent='💾 SAQLASH';btn.disabled=false;
+  btn.textContent = '💾 SAQLASH'; btn.disabled = false;
 };
 
-// ── Devices ───────────────────────────────────────────────────────────────────
-function loadDevs(){
-  onValue(ref(db,'devices'),(snap)=>{
-    const c=document.getElementById('devList');
-    c.innerHTML='';
-    const d=snap.val();
-    if(!d){c.innerHTML='<div class="empty"><div>📱</div><div>Qurilmalar yo\'q</div></div>';return;}
-    for(let uid in d){
-      const dv=d[uid];
-      const bc={approved:'b-ok',pending:'b-wait',rejected:'b-no'}[dv.status]||'b-wait';
-      const bt={approved:'✅ Ruxsatli',pending:'⏳ Kutmoqda',rejected:'❌ Rad etilgan'}[dv.status]||dv.status;
-      const el=document.createElement('div');
-      el.className='dcard';
-      el.innerHTML=`
-        <div class="davatar">${(dv.name||'?').charAt(0).toUpperCase()}</div>
-        <div class="dinfo">
-          <div class="dname">${dv.name||'Noma\'lum'}${dv.isAdmin?' 👑':''}</div>
-          <div class="did">ID: ${uid}${dv.username?' | @'+dv.username:''}</div>
-          <span class="badge ${bc}">${bt}</span>
+// ─── DEVICES ─────────────────────────────────────────────────────────────────
+function loadDevs() {
+  onValue(ref(db, 'devices'), (snap) => {
+    const c = document.getElementById('devList');
+    c.innerHTML = '';
+    const data = snap.val();
+    if (!data) {
+      c.innerHTML = '<div class="empty"><div class="empty-icon">📱</div><div>Hech kim yo\'q</div></div>';
+      return;
+    }
+    for (let uid in data) {
+      const dv = data[uid];
+      const statusBadge = dv.status === 'pending'
+        ? '<span class="badge b-wait">⏳ Kutmoqda</span>'
+        : dv.status === 'kicked'
+        ? '<span class="badge b-no">🚫 Chiqarilgan</span>'
+        : '<span class="badge b-ok">✅ Faol</span>';
+      const viewBadge = dv.viewPerm
+        ? '<span class="badge b-ok">👁 Ko\'rish</span>'
+        : '<span class="badge b-no">👁 Yo\'q</span>';
+      const editBadge = dv.editPerm
+        ? '<span class="badge b-edit">✏️ Tahrirlash</span>'
+        : '<span class="badge b-no">✏️ Yo\'q</span>';
+
+      const div = document.createElement('div');
+      div.className = 'dcard';
+      div.innerHTML = `
+        <div class="dcard-top">
+          <div class="davatar">${(dv.name||'?').charAt(0).toUpperCase()}</div>
+          <div class="dinfo">
+            <div class="dname">${dv.name||'Noma\'lum'} ${dv.isAdmin?'👑':''}</div>
+            <div class="did">ID: ${uid}${dv.username?' · @'+dv.username:''}</div>
+            <div class="badges">${statusBadge}${viewBadge}${editBadge}</div>
+          </div>
         </div>
-        ${!dv.isAdmin?`<button onclick="delDev('${uid}')" style="border:none;background:#fef0ef;color:var(--r);padding:9px;border-radius:8px;cursor:pointer;font-size:16px">🗑</button>`:''}`;
-      c.appendChild(el);
+        ${!dv.isAdmin ? `
+        <div class="dcard-btns">
+          <button class="d-btn d-btn-view" data-uid="${uid}" data-act="giveView">👁 Ko'rish</button>
+          <button class="d-btn d-btn-edit" data-uid="${uid}" data-act="giveEdit">✏️ Tahrirlash</button>
+          <button class="d-btn d-btn-del"  data-uid="${uid}" data-act="kick">🚫 O'chirish</button>
+        </div>` : ''}`;
+      c.appendChild(div);
     }
   });
 }
 
-window.delDev = function(uid){
-  tg.showConfirm("Bu foydalanuvchini o'chirasizmi?",(ok)=>{
-    if(ok){
-      remove(ref(db,`devices/${uid}`));
-      remove(ref(db,`permissions/${uid}`));
-      remove(ref(db,`edit_perms/${uid}`));
+// Device tugmalar
+document.getElementById('devList').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn) return;
+  const uid = btn.dataset.uid;
+  const act = btn.dataset.act;
+  if (act === 'giveView') giveViewPerm(uid);
+  else if (act === 'giveEdit') giveEditPerm(uid);
+  else if (act === 'kick') kickUser(uid);
+});
+
+function giveViewPerm(uid) {
+  tg.showConfirm("Ko'rish huquqi berilsinmi?", (ok) => {
+    if (ok) {
+      update(ref(db, `devices/${uid}`), {viewPerm: true, editPerm: false, status: 'approved'});
+      try { bot.send_message(uid, '✅ Ko\'rish huquqi berildi!'); } catch(e) {}
+      tg.HapticFeedback.notificationOccurred('success');
     }
   });
+}
+
+function giveEditPerm(uid) {
+  tg.showConfirm("Ko'rish + tahrirlash huquqi berilsinmi?", (ok) => {
+    if (ok) {
+      update(ref(db, `devices/${uid}`), {viewPerm: true, editPerm: true, status: 'approved'});
+      tg.HapticFeedback.notificationOccurred('success');
+    }
+  });
+}
+
+function kickUser(uid) {
+  tg.showConfirm("Bu foydalanuvchini chiqarib yuborasizmi?\nU darhol tizimdan chiqariladi.", (ok) => {
+    if (ok) {
+      update(ref(db, `devices/${uid}`), {viewPerm: false, editPerm: false, status: 'kicked'});
+      tg.HapticFeedback.notificationOccurred('warning');
+    }
+  });
+}
+
+// ID bo'yicha qo'shish
+window.addDevById = async function() {
+  const input = document.getElementById('newDevId');
+  const uid   = input.value.trim();
+  if (!uid) { tg.showAlert('Telegram ID kiriting!'); return; }
+
+  const snap = await get(ref(db, `devices/${uid}`));
+  if (snap.exists() && snap.val().viewPerm) {
+    tg.showAlert('Bu foydalanuvchi allaqachon ruxsatli!'); return;
+  }
+  await set(ref(db, `devices/${uid}`), {
+    name: 'ID: ' + uid, username: '',
+    viewPerm: true, editPerm: false,
+    status: 'approved', addedByAdmin: true, lastSeen: Date.now()
+  });
+  input.value = '';
+  tg.showAlert('✅ Foydalanuvchi qo\'shildi (ko\'rish huquqi berildi)!');
+  tg.HapticFeedback.notificationOccurred('success');
 };
 
-// ── Klaviatura FIX ────────────────────────────────────────────────────────────
-// Input focus bo'lganda tepaga uchmasin
-document.getElementById('addModal').addEventListener('focusin',(e)=>{
-  if(e.target.matches('input,select,textarea')){
-    setTimeout(()=>e.target.scrollIntoView({behavior:'smooth',block:'center'}),350);
+// ─── SCREEN HELPER ───────────────────────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+// ─── KLAVIATURA FIX ──────────────────────────────────────────────────────────
+document.getElementById('addModal').addEventListener('focusin', (e) => {
+  if (e.target.matches('input,select,textarea')) {
+    setTimeout(() => e.target.scrollIntoView({behavior: 'smooth', block: 'center'}), 350);
   }
 });
-
-if(window.visualViewport){
-  window.visualViewport.addEventListener('resize',()=>{
-    const f=document.querySelector('#mboxEl :focus');
-    if(f) setTimeout(()=>f.scrollIntoView({behavior:'smooth',block:'center'}),100);
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    const f = document.querySelector('#mboxEl :focus');
+    if (f) setTimeout(() => f.scrollIntoView({behavior: 'smooth', block: 'center'}), 100);
   });
 }
-
-tg.onEvent('viewportChanged',()=>{
-  const f=document.querySelector('#mboxEl :focus');
-  if(f) setTimeout(()=>f.scrollIntoView({behavior:'smooth',block:'center'}),200);
-});
-
 </script>
 </body>
 </html>
