@@ -11,7 +11,7 @@ BOT_TOKEN  = "8572454769:AAGLqkS2l62r29oLMRYQ6KBfUxsgAdxv1sI"
 ADMIN_ID   = 8508142416
 PORT       = int(os.getenv("PORT", 10000))
 WEBAPP_URL = "https://grandelectronics779-commits.github.io/yangi-bot-ombori-/"
-FB_URL     = "https://scholaris-ai-default-rtdb.firebaseio.com"
+FB_URL     = "https://scholaris-ai-723bc-default-rtdb.firebaseio.com"
 
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
