@@ -1,163 +1,579 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gelectronics Cloud Ombor</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Gelectronics Cloud</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--p:#0f2027;--a:#2c5364;--g:#11998e;--r:#e74c3c;--bg:#f0f4f3;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);min-height:100vh;overflow-x:hidden;}
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAPuxVuP_KSVgTbgBuLX6jATt_2dWIYmfU",
-      authDomain: "scholaris-ai.firebaseapp.com",
-      projectId: "scholaris-ai",
-      storageBucket: "scholaris-ai.firebasestorage.app",
-      messagingSenderId: "403057074223",
-      appId: "1:403057074223:web:078f51c8cf29243ac3a6da",
-      databaseURL: "https://scholaris-ai-default-rtdb.firebaseio.com"
-    };
+/* SCREENS */
+.screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px 20px;text-align:center;}
+.screen.active{display:flex;}
+.s-icon{font-size:64px;margin-bottom:20px;}
+.s-title{font-size:22px;font-weight:bold;color:var(--p);margin-bottom:10px;}
+.s-text{color:#666;font-size:14px;line-height:1.6;margin-bottom:30px;}
+.spinner{width:38px;height:38px;border:4px solid #ddd;border-top:4px solid var(--g);border-radius:50%;animation:spin 0.9s linear infinite;margin:20px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.btn-green{background:var(--g);color:#fff;border:none;padding:15px 30px;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;width:100%;max-width:280px;}
+.btn-red{background:var(--r);color:#fff;border:none;padding:15px 30px;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;width:100%;max-width:280px;}
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+/* HEADER */
+.header{background:linear-gradient(135deg,var(--p),var(--a));color:#fff;padding:18px 16px;position:sticky;top:0;z-index:10;}
+.h-row{display:flex;align-items:center;justify-content:space-between;}
+.h-title{font-size:19px;font-weight:bold;}
+.h-sub{font-size:11px;opacity:0.65;margin-top:2px;}
+.stats{display:flex;gap:10px;margin-top:12px;}
+.stat{background:rgba(255,255,255,0.15);padding:10px 12px;border-radius:10px;flex:1;font-size:12px;}
+.stat b{display:block;font-size:17px;margin-top:2px;}
 
-    window.saveItem = function() {
-        let model = document.getElementById('tModel').value;
-        let soni = document.getElementById('tSoni').value;
-        let narx = document.getElementById('tNarx').value;
-        let supplier = document.getElementById('tSupplier').value;
-        let sana = document.getElementById('tSana').value;
-        let holati = document.getElementById('tHolati').value;
+/* TABS */
+.tabs{display:flex;background:#fff;border-bottom:1px solid #e8e8e8;}
+.tab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;color:#aaa;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;}
+.tab.on{color:var(--g);border-bottom-color:var(--g);}
 
-        if(!model || !soni || !narx) {
-            window.Telegram.WebApp.showAlert("Iltimos, asosiy maydonlarni to'ldiring!");
-            return;
-        }
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px;}
+.card{background:#fff;padding:24px 12px;border-radius:14px;text-align:center;font-weight:bold;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.07);cursor:pointer;transition:transform .1s,border-color .1s;border:2px solid transparent;}
+.card:active{transform:scale(0.96);border-color:var(--g);}
+.card span{display:block;font-size:34px;margin-bottom:8px;}
 
-        push(ref(db, 'ombor/' + window.currentCat), {
-            model: model, soni: soni, narx: narx,
-            supplier: supplier, sana: sana, holati: holati,
-            timestamp: Date.now()
-        }).then(() => {
-            closeModal();
-            window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-        });
-    };
+/* INVENTORY */
+.inv{padding:14px;}
+.inv-top{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.back{background:none;border:none;font-size:24px;cursor:pointer;padding:4px;}
+.inv-title{font-size:19px;font-weight:bold;flex:1;}
+.add-btn{background:var(--g);color:#fff;border:none;padding:13px;width:100%;border-radius:11px;font-weight:bold;font-size:15px;cursor:pointer;margin-bottom:14px;}
 
-    window.deleteItem = function(id) {
-        window.Telegram.WebApp.showConfirm("Sotildimi yoki o'chirasizmi?", (res) => {
-            if(res) remove(ref(db, `ombor/${window.currentCat}/${id}`));
-        });
-    };
+/* ITEM CARD */
+.item{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;border-left:4px solid var(--g);box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.item-name{font-weight:bold;font-size:15px;margin-bottom:5px;}
+.item-info{color:#555;font-size:13px;margin-bottom:3px;}
+.item-media{width:100%;border-radius:9px;margin:8px 0;max-height:160px;object-fit:cover;display:block;}
+.item-btns{display:flex;gap:8px;margin-top:10px;}
+.btn-edit{flex:1;padding:9px;background:#3498db;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;}
+.btn-del{flex:1;padding:9px;background:#fef0ef;color:var(--r);border:1px solid #f8d0cc;border-radius:8px;font-size:13px;cursor:pointer;}
+.empty{text-align:center;padding:50px 20px;color:#bbb;}
+.empty div:first-child{font-size:48px;margin-bottom:10px;}
 
-    window.loadData = function(cat) {
-        onValue(ref(db, 'ombor/' + cat), (snapshot) => {
-            renderItems(snapshot.val());
-        });
-    };
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:flex-end;}
+.overlay.open{display:flex;}
+.mbox{background:#fff;width:100%;padding:20px;border-radius:20px 20px 0 0;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.m-title{font-size:17px;font-weight:bold;margin-bottom:16px;}
+.fg{margin-bottom:12px;}
+.fg label{font-size:12px;color:#888;margin-bottom:4px;display:block;font-weight:600;}
+input,select,textarea{width:100%;padding:12px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;background:#fafafa;-webkit-appearance:none;}
+input:focus,select:focus{border-color:var(--g);background:#fff;}
+.media-prev{width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover;display:none;}
+.save-btn{width:100%;padding:15px;background:var(--p);color:#fff;border:none;border-radius:12px;font-weight:bold;font-size:15px;cursor:pointer;margin-top:8px;}
+.save-btn:disabled{opacity:.6;}
+.cancel-btn{width:100%;padding:12px;border:none;background:none;color:#aaa;cursor:pointer;margin-top:6px;font-size:14px;}
 
-    window.updateDashboard = function() {
-        onValue(ref(db, 'ombor'), (snapshot) => {
-            let count = 0; let value = 0;
-            const data = snapshot.val();
-            if(data) {
-                for(let c in data) {
-                    for(let id in data[c]) {
-                        count += parseInt(data[c][id].soni || 0);
-                        value += (parseInt(data[c][id].soni || 0) * parseFloat(data[c][id].narx || 0));
-                    }
-                }
-            }
-            document.getElementById('totalItems').innerText = count + " ta";
-            document.getElementById('totalValue').innerText = "$" + value.toLocaleString();
-        });
-    };
-  </script>
+/* DEVICES */
+.dcard{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.davatar{width:44px;height:44px;background:var(--a);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:bold;flex-shrink:0;}
+.dinfo{flex:1;min-width:0;}
+.dname{font-weight:bold;font-size:14px;}
+.did{font-size:11px;color:#aaa;margin-top:1px;word-break:break-all;}
+.badge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:bold;display:inline-block;margin-top:4px;}
+.b-ok{background:#e8f8f0;color:var(--g);}
+.b-wait{background:#fff8e1;color:#f39c12;}
+.b-no{background:#fef0ef;color:var(--r);}
 
-  <style>
-     :root { --primary: #0f2027; --accent: #2c5364; --success: #11998e; }
-     body { font-family: sans-serif; background: #f4f7f6; margin:0; padding:0; }
-     .header { background: linear-gradient(to right, var(--primary), var(--accent)); color: white; padding: 20px; border-bottom-radius: 20px; }
-     .stats { display: flex; gap: 10px; margin-top: 15px; }
-     .stat-box { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; flex: 1; }
-     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-     .card { background: white; padding: 25px; border-radius: 15px; text-align: center; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-     .inventory-section { display: none; padding: 15px; }
-     .item-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid var(--success); }
-     .modal { display: none; position: fixed; bottom: 0; width: 100%; background: rgba(0,0,0,0.5); height: 100%; align-items: flex-end; }
-     .modal-content { background: white; width: 100%; padding: 20px; border-radius: 20px 20px 0 0; box-sizing: border-box; }
-     input, select { width: 100%; padding: 12px; margin: 5px 0 10px; border: 1px solid #ddd; border-radius: 8px; }
-     .add-btn { background: var(--success); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; margin-bottom: 15px; }
-  </style>
+/* EDIT WAIT */
+.ewait{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;}
+.ewait.open{display:flex;}
+.ebox{background:#fff;padding:30px 24px;border-radius:20px;text-align:center;margin:20px;max-width:300px;width:100%;}
+</style>
 </head>
 <body>
-   <div class="header" id="headerSection">
-      <div style="font-size: 22px; font-weight: bold;">Gelectronics Cloud</div>
-      <div class="stats">
-         <div class="stat-box">Dona: <br><span id="totalItems">0</span></div>
-         <div class="stat-box">Qiymat: <br><span id="totalValue">$0</span></div>
+
+<!-- Loading -->
+<div class="screen active" id="sLoad">
+  <div class="s-icon">🔐</div>
+  <div class="s-title">Tekshirilmoqda...</div>
+  <div class="spinner"></div>
+</div>
+
+<!-- Request -->
+<div class="screen" id="sReq">
+  <div class="s-icon">🏪</div>
+  <div class="s-title">Gelectronics Cloud</div>
+  <div class="s-text">Omborxonaga kirish uchun<br>admin ruxsati kerak.</div>
+  <button class="btn-green" onclick="requestAccess()">📨 Ruxsat so'rash</button>
+</div>
+
+<!-- Pending -->
+<div class="screen" id="sPend">
+  <div class="s-icon">⏳</div>
+  <div class="s-title">So'rov yuborildi!</div>
+  <div class="s-text">Admin tasdiqlashini kuting.<br>Bu sahifani yopmang.</div>
+  <div class="spinner"></div>
+  <div style="color:#aaa;font-size:13px;margin-top:10px;" id="pendSec">0 soniya...</div>
+</div>
+
+<!-- Rejected -->
+<div class="screen" id="sRej">
+  <div class="s-icon">❌</div>
+  <div class="s-title">Ruxsat berilmadi</div>
+  <div class="s-text">Admin so'rovingizni rad etdi.</div>
+  <button class="btn-red" onclick="requestAccess()">🔄 Qayta so'rash</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="APP" style="display:none">
+
+  <div class="header">
+    <div class="h-row">
+      <div>
+        <div class="h-title">📦 Gelectronics Cloud</div>
+        <div class="h-sub" id="uName"></div>
       </div>
-   </div>
+    </div>
+    <div class="stats">
+      <div class="stat">Jami dona<b id="totItems">0</b></div>
+      <div class="stat">Jami qiymat<b id="totVal">$0</b></div>
+    </div>
+  </div>
 
-   <div class="grid" id="mainGrid">
-      <div class="card" onclick="openCategory('HMI')">🖥 HMI</div>
-      <div class="card" onclick="openCategory('PLC')">⚙️ PLC</div>
-      <div class="card" onclick="openCategory('INVERTER')">⚡️ INVERTER</div>
-      <div class="card" onclick="openCategory('SERVO')">🤖 SERVO</div>
-   </div>
+  <div class="tabs" id="adminTabs" style="display:none">
+    <div class="tab on" id="tOmbor" onclick="swTab('ombor')">📦 Ombor</div>
+    <div class="tab" id="tDevs"  onclick="swTab('devices')">📱 Devices</div>
+  </div>
 
-   <div class="inventory-section" id="invSection">
-      <button onclick="goBack()" style="border:none; background:none; font-weight:bold; padding:10px 0;">⬅️ Orqaga</button>
-      <h2 id="catTitle"></h2>
-      <button class="add-btn" onclick="openModal()">+ Mahsulot qo'shish</button>
-      <div id="itemsContainer"></div>
-   </div>
-
-   <div class="modal" id="addModal">
-      <div class="modal-content">
-         <input type="text" id="tModel" placeholder="Model">
-         <input type="number" id="tSoni" placeholder="Soni">
-         <input type="number" id="tNarx" placeholder="Narxi ($)">
-         <input type="text" id="tSupplier" placeholder="Yetkazib beruvchi">
-         <input type="date" id="tSana">
-         <select id="tHolati"><option value="Yangi">Yangi</option><option value="B/U">B/U</option></select>
-         <button onclick="saveItem()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:10px; font-weight:bold;">SAQLASH</button>
-         <button onclick="closeModal()" style="width:100%; margin-top:10px; border:none; background:none;">Bekor qilish</button>
+  <!-- OMBOR -->
+  <div id="cOmbor">
+    <div class="grid" id="mainGrid">
+      <div class="card" onclick="openCat('HMI')"><span>🖥</span>HMI</div>
+      <div class="card" onclick="openCat('PLC')"><span>⚙️</span>PLC</div>
+      <div class="card" onclick="openCat('INVERTER')"><span>⚡️</span>INVERTER</div>
+      <div class="card" onclick="openCat('SERVO')"><span>🤖</span>SERVO</div>
+    </div>
+    <div class="inv" id="invSec" style="display:none">
+      <div class="inv-top">
+        <button class="back" onclick="goBack()">⬅️</button>
+        <div class="inv-title" id="catTitle"></div>
       </div>
-   </div>
+      <button class="add-btn" onclick="needEdit('add')">+ Mahsulot qo'shish</button>
+      <div id="itemsCont"></div>
+    </div>
+  </div>
 
-   <script>
-      let tg = window.Telegram.WebApp;
-      window.currentCat = '';
-      function openCategory(cat) {
-          window.currentCat = cat;
-          document.getElementById('headerSection').style.display = 'none';
-          document.getElementById('mainGrid').style.display = 'none';
-          document.getElementById('invSection').style.display = 'block';
-          document.getElementById('catTitle').innerText = cat;
-          window.loadData(cat);
+  <!-- DEVICES -->
+  <div id="cDevs" style="display:none;padding:14px">
+    <h3 style="margin-bottom:14px;color:var(--p)">📱 Foydalanuvchilar</h3>
+    <div id="devList"></div>
+  </div>
+
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="overlay" id="addModal">
+  <div class="mbox" id="mboxEl">
+    <div class="m-title" id="mTitle">➕ Mahsulot qo'shish</div>
+    <input type="hidden" id="eId">
+    <div class="fg"><label>Model *</label><input type="text" id="fModel" placeholder="Siemens S7-1200"></div>
+    <div class="fg"><label>Soni *</label><input type="number" id="fSoni" placeholder="0" inputmode="numeric"></div>
+    <div class="fg"><label>Narxi ($) *</label><input type="number" id="fNarx" placeholder="0.00" inputmode="decimal"></div>
+    <div class="fg"><label>Yetkazib beruvchi</label><input type="text" id="fSupp" placeholder="Kompaniya nomi"></div>
+    <div class="fg"><label>Sana</label><input type="date" id="fSana"></div>
+    <div class="fg"><label>Holati</label><select id="fHol"><option value="Yangi">Yangi</option><option value="B/U">B/U</option></select></div>
+    <div class="fg">
+      <label>📸 Rasm / 🎥 Video</label>
+      <input type="file" id="fMedia" accept="image/*,video/*" onchange="prevMedia(this)">
+      <img  id="imgPrev" class="media-prev">
+      <video id="vidPrev" class="media-prev" controls playsinline></video>
+    </div>
+    <div class="fg"><label>Izoh</label><input type="text" id="fIzoh" placeholder="Qo'shimcha ma'lumot"></div>
+    <button class="save-btn" id="saveBtn" onclick="saveItem()">💾 SAQLASH</button>
+    <button class="cancel-btn" onclick="closeModal()">Bekor qilish</button>
+  </div>
+</div>
+
+<!-- EDIT WAIT -->
+<div class="ewait" id="eWait">
+  <div class="ebox">
+    <div style="font-size:44px;margin-bottom:14px">⏳</div>
+    <div style="font-weight:bold;font-size:16px;margin-bottom:8px">Ruxsat kutilmoqda</div>
+    <div style="color:#888;font-size:13px;margin-bottom:20px">Admin tahrirlash ruxsatini berishi kerak</div>
+    <div class="spinner"></div>
+    <button onclick="cancelEdit()" style="margin-top:14px;border:none;background:none;color:#aaa;cursor:pointer;font-size:13px">Bekor qilish</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove, update, get, set }
+  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL }
+  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+const FB_CFG = {
+  apiKey:"AIzaSyAPuxVuP_KSVgTbgBuLX6jATt_2dWIYmfU",
+  authDomain:"scholaris-ai.firebaseapp.com",
+  projectId:"scholaris-ai",
+  storageBucket:"scholaris-ai.firebasestorage.app",
+  messagingSenderId:"403057074223",
+  appId:"1:403057074223:web:078f51c8cf29243ac3a6da",
+  databaseURL:"https://scholaris-ai-default-rtdb.firebaseio.com"
+};
+
+const RENDER = "https://yangi-bot-ombori.onrender.com";
+const ADMIN_ID = 8508142416;
+
+const fApp   = initializeApp(FB_CFG);
+const db     = getDatabase(fApp);
+const store  = getStorage(fApp);
+const tg     = window.Telegram.WebApp;
+tg.expand();
+
+const user  = tg.initDataUnsafe?.user || {id:0,first_name:"Test",last_name:"",username:""};
+const UID   = user.id;
+const UNAME = [user.first_name, user.last_name||''].join(' ').trim();
+const UUSER = user.username || '';
+const ADMIN = UID === ADMIN_ID;
+
+let curCat   = '';
+let pendAct  = null;
+let pendId   = null;
+let editUnsub = null;
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+
+// ── INIT ────────────────────────────────────────────────────────────────────
+document.getElementById('uName').textContent = UNAME;
+
+if(ADMIN){
+  set(ref(db,`devices/${UID}`),{name:UNAME,username:UUSER,status:'approved',isAdmin:true,lastSeen:Date.now()});
+  showApp();
+} else {
+  checkPerm();
+}
+
+async function checkPerm(){
+  show('sLoad');
+  const snap = await get(ref(db,`permissions/${UID}`));
+  if(!snap.exists()){ show('sReq'); return; }
+  const s = snap.val().status;
+  if(s==='approved') showApp();
+  else if(s==='rejected') show('sRej');
+  else { show('sPend'); pollPerm(); }
+}
+
+window.requestAccess = async function(){
+  show('sPend');
+  await set(ref(db,`permissions/${UID}`),{name:UNAME,username:UUSER,status:'pending',timestamp:Date.now()});
+  await set(ref(db,`devices/${UID}`),{name:UNAME,username:UUSER,status:'pending',lastSeen:Date.now()});
+  try{
+    await fetch(`${RENDER}/api/request_access`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER})
+    });
+  }catch(e){}
+  pollPerm();
+};
+
+function pollPerm(){
+  let s=0;
+  const t=setInterval(()=>{s++;const el=document.getElementById('pendSec');if(el)el.textContent=s+' soniya...';},1000);
+  onValue(ref(db,`permissions/${UID}/status`),(snap)=>{
+    const v=snap.val();
+    if(v==='approved'){clearInterval(t);showApp();}
+    else if(v==='rejected'){clearInterval(t);show('sRej');}
+  });
+}
+
+function showApp(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('APP').style.display='block';
+  if(ADMIN) document.getElementById('adminTabs').style.display='flex';
+  dashboard();
+}
+
+// ── Dashboard ────────────────────────────────────────────────────────────────
+function dashboard(){
+  onValue(ref(db,'ombor'),(snap)=>{
+    let cnt=0,val=0;
+    const d=snap.val();
+    if(d) for(let c in d) for(let id in d[c]){
+      cnt+=parseInt(d[c][id].soni||0);
+      val+=parseInt(d[c][id].soni||0)*parseFloat(d[c][id].narx||0);
+    }
+    document.getElementById('totItems').textContent=cnt+' ta';
+    document.getElementById('totVal').textContent='$'+val.toLocaleString();
+  });
+}
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+window.swTab = function(t){
+  document.getElementById('cOmbor').style.display=t==='ombor'?'block':'none';
+  document.getElementById('cDevs').style.display=t==='devices'?'block':'none';
+  document.getElementById('tOmbor').classList.toggle('on',t==='ombor');
+  document.getElementById('tDevs').classList.toggle('on',t==='devices');
+  if(t==='devices') loadDevs();
+};
+
+// ── Category ─────────────────────────────────────────────────────────────────
+window.openCat = function(cat){
+  curCat=cat;
+  document.getElementById('mainGrid').style.display='none';
+  document.getElementById('invSec').style.display='block';
+  document.getElementById('catTitle').textContent=cat;
+  loadItems(cat);
+};
+
+window.goBack = function(){
+  document.getElementById('mainGrid').style.display='grid';
+  document.getElementById('invSec').style.display='none';
+  curCat='';
+};
+
+function loadItems(cat){
+  onValue(ref(db,'ombor/'+cat),(snap)=>renderItems(snap.val()));
+}
+
+function renderItems(data){
+  const c=document.getElementById('itemsCont');
+  c.innerHTML='';
+  if(!data||!Object.keys(data).length){
+    c.innerHTML='<div class="empty"><div>📭</div><div>Mahsulotlar yo\'q</div></div>';
+    return;
+  }
+  for(let id in data){
+    const it=data[id];
+    const d=document.createElement('div');
+    d.className='item';
+    let media='';
+    if(it.mediaUrl){
+      if(it.mediaType==='video')
+        media=`<video src="${it.mediaUrl}" class="item-media" controls playsinline></video>`;
+      else
+        media=`<img src="${it.mediaUrl}" class="item-media" onclick="this.requestFullscreen&&this.requestFullscreen()" loading="lazy">`;
+    }
+    d.innerHTML=`
+      <div class="item-name">${it.model}</div>
+      <div class="item-info">Soni: <b>${it.soni} ta</b> &nbsp;|&nbsp; Narxi: <b>$${it.narx}</b> &nbsp;|&nbsp; ${it.holati}</div>
+      <div class="item-info">📅 ${it.sana||'-'} &nbsp;|&nbsp; 🏭 ${it.supplier||'-'}</div>
+      ${it.izoh?`<div class="item-info">💬 ${it.izoh}</div>`:''}
+      ${media}
+      <div class="item-btns">
+        <button class="btn-edit" onclick="needEdit('edit','${id}')">✏️ Tahrirlash</button>
+        <button class="btn-del"  onclick="needEdit('delete','${id}')">🗑 O'chirish</button>
+      </div>`;
+    c.appendChild(d);
+  }
+}
+
+// ── Edit permission ───────────────────────────────────────────────────────────
+window.needEdit = async function(action,itemId=''){
+  pendAct=action; pendId=itemId;
+  if(ADMIN){ doAction(action,itemId); return; }
+
+  // Check existing edit permission (5 min window)
+  const snap=await get(ref(db,`edit_perms/${UID}`));
+  if(snap.exists()){
+    const ep=snap.val();
+    if(ep.status==='approved'&&(Date.now()-ep.timestamp)<300000){ doAction(action,itemId); return; }
+  }
+
+  // Show wait modal
+  document.getElementById('eWait').classList.add('open');
+  await set(ref(db,`edit_perms/${UID}`),{name:UNAME,username:UUSER,action,status:'pending',timestamp:Date.now()});
+  try{
+    await fetch(`${RENDER}/api/request_edit`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER,action})
+    });
+  }catch(e){}
+
+  editUnsub=onValue(ref(db,`edit_perms/${UID}/status`),(snap)=>{
+    if(snap.val()==='approved'){
+      document.getElementById('eWait').classList.remove('open');
+      doAction(action,itemId);
+    } else if(snap.val()==='rejected'){
+      document.getElementById('eWait').classList.remove('open');
+      tg.showAlert('❌ Tahrirlash ruxsati berilmadi!');
+    }
+  });
+};
+
+window.cancelEdit = function(){
+  document.getElementById('eWait').classList.remove('open');
+  if(editUnsub){editUnsub();editUnsub=null;}
+  set(ref(db,`edit_perms/${UID}`),null);
+};
+
+function doAction(action,itemId){
+  if(action==='add') openModal();
+  else if(action==='edit') openEditModal(itemId);
+  else if(action==='delete'){
+    tg.showConfirm("Haqiqatan ham o'chirasizmi?",(ok)=>{
+      if(ok){
+        remove(ref(db,`ombor/${curCat}/${itemId}`));
+        tg.HapticFeedback.notificationOccurred('success');
+        if(!ADMIN) set(ref(db,`edit_perms/${UID}/status`),'used');
       }
-      function goBack() {
-          document.getElementById('headerSection').style.display = 'block';
-          document.getElementById('mainGrid').style.display = 'grid';
-          document.getElementById('invSection').style.display = 'none';
+    });
+  }
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal(){
+  document.getElementById('mTitle').textContent='➕ Mahsulot qo\'shish';
+  document.getElementById('eId').value='';
+  ['fModel','fSoni','fNarx','fSupp','fIzoh'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fSana').valueAsDate=new Date();
+  document.getElementById('fHol').value='Yangi';
+  document.getElementById('fMedia').value='';
+  document.getElementById('imgPrev').style.display='none';
+  document.getElementById('vidPrev').style.display='none';
+  document.getElementById('addModal').classList.add('open');
+}
+
+async function openEditModal(itemId){
+  const snap=await get(ref(db,`ombor/${curCat}/${itemId}`));
+  if(!snap.exists()) return;
+  const it=snap.val();
+  document.getElementById('mTitle').textContent='✏️ Tahrirlash';
+  document.getElementById('eId').value=itemId;
+  document.getElementById('fModel').value=it.model||'';
+  document.getElementById('fSoni').value=it.soni||'';
+  document.getElementById('fNarx').value=it.narx||'';
+  document.getElementById('fSupp').value=it.supplier||'';
+  document.getElementById('fIzoh').value=it.izoh||'';
+  document.getElementById('fSana').value=it.sana||'';
+  document.getElementById('fHol').value=it.holati||'Yangi';
+  document.getElementById('fMedia').value='';
+  document.getElementById('imgPrev').style.display='none';
+  document.getElementById('vidPrev').style.display='none';
+  document.getElementById('addModal').classList.add('open');
+}
+
+window.closeModal = function(){document.getElementById('addModal').classList.remove('open');};
+
+window.prevMedia = function(input){
+  const f=input.files[0]; if(!f) return;
+  const url=URL.createObjectURL(f);
+  const ip=document.getElementById('imgPrev'), vp=document.getElementById('vidPrev');
+  if(f.type.startsWith('image/')){ip.src=url;ip.style.display='block';vp.style.display='none';}
+  else if(f.type.startsWith('video/')){vp.src=url;vp.style.display='block';ip.style.display='none';}
+};
+
+window.saveItem = async function(){
+  const model=document.getElementById('fModel').value.trim();
+  const soni=document.getElementById('fSoni').value.trim();
+  const narx=document.getElementById('fNarx').value.trim();
+  if(!model||!soni||!narx){tg.showAlert('Model, soni va narxi majburiy!');return;}
+
+  const btn=document.getElementById('saveBtn');
+  btn.textContent='⏳ Saqlanmoqda...';btn.disabled=true;
+
+  const eId=document.getElementById('eId').value;
+  const mFile=document.getElementById('fMedia').files[0];
+  let mediaUrl=null,mediaType=null;
+
+  if(mFile){
+    try{
+      const sr=sRef(store,`ombor/${curCat}/${Date.now()}_${mFile.name}`);
+      await uploadBytes(sr,mFile);
+      mediaUrl=await getDownloadURL(sr);
+      mediaType=mFile.type.startsWith('video/')?'video':'image';
+    }catch(e){tg.showAlert('⚠️ Rasm yuklanmadi (Firebase Storage ruxsatini tekshiring)');}
+  }
+
+  const item={
+    model,soni,narx,
+    supplier:document.getElementById('fSupp').value.trim(),
+    sana:document.getElementById('fSana').value,
+    holati:document.getElementById('fHol').value,
+    izoh:document.getElementById('fIzoh').value.trim(),
+    timestamp:Date.now()
+  };
+  if(mediaUrl){item.mediaUrl=mediaUrl;item.mediaType=mediaType;}
+
+  if(eId){
+    if(!mFile){
+      const snap=await get(ref(db,`ombor/${curCat}/${eId}`));
+      if(snap.exists()&&snap.val().mediaUrl){
+        item.mediaUrl=snap.val().mediaUrl;item.mediaType=snap.val().mediaType;
       }
-      function openModal() { document.getElementById('addModal').style.display = 'flex'; document.getElementById('tSana').valueAsDate = new Date(); }
-      function closeModal() { document.getElementById('addModal').style.display = 'none'; }
-      function renderItems(data) {
-          let container = document.getElementById('itemsContainer');
-          container.innerHTML = '';
-          for(let id in data) {
-              let item = data[id];
-              let div = document.createElement('div');
-              div.className = 'item-card';
-              div.innerHTML = `<b>${item.model}</b> (${item.holati})<br>Soni: ${item.soni} ta | Narxi: $${item.narx}<br><small>Sana: ${item.sana}</small><br><button onclick="deleteItem('${id}')" style="color:red; border:none; background:none; padding:5px 0;">🗑 O'chirish</button>`;
-              container.appendChild(div);
-          }
-      }
-      window.onload = () => window.updateDashboard();
-   </script>
+    }
+    await update(ref(db,`ombor/${curCat}/${eId}`),item);
+  } else {
+    await push(ref(db,`ombor/${curCat}`),item);
+  }
+
+  if(!ADMIN) set(ref(db,`edit_perms/${UID}/status`),'used');
+  closeModal();
+  tg.HapticFeedback.notificationOccurred('success');
+  btn.textContent='💾 SAQLASH';btn.disabled=false;
+};
+
+// ── Devices ───────────────────────────────────────────────────────────────────
+function loadDevs(){
+  onValue(ref(db,'devices'),(snap)=>{
+    const c=document.getElementById('devList');
+    c.innerHTML='';
+    const d=snap.val();
+    if(!d){c.innerHTML='<div class="empty"><div>📱</div><div>Qurilmalar yo\'q</div></div>';return;}
+    for(let uid in d){
+      const dv=d[uid];
+      const bc={approved:'b-ok',pending:'b-wait',rejected:'b-no'}[dv.status]||'b-wait';
+      const bt={approved:'✅ Ruxsatli',pending:'⏳ Kutmoqda',rejected:'❌ Rad etilgan'}[dv.status]||dv.status;
+      const el=document.createElement('div');
+      el.className='dcard';
+      el.innerHTML=`
+        <div class="davatar">${(dv.name||'?').charAt(0).toUpperCase()}</div>
+        <div class="dinfo">
+          <div class="dname">${dv.name||'Noma\'lum'}${dv.isAdmin?' 👑':''}</div>
+          <div class="did">ID: ${uid}${dv.username?' | @'+dv.username:''}</div>
+          <span class="badge ${bc}">${bt}</span>
+        </div>
+        ${!dv.isAdmin?`<button onclick="delDev('${uid}')" style="border:none;background:#fef0ef;color:var(--r);padding:9px;border-radius:8px;cursor:pointer;font-size:16px">🗑</button>`:''}`;
+      c.appendChild(el);
+    }
+  });
+}
+
+window.delDev = function(uid){
+  tg.showConfirm("Bu foydalanuvchini o'chirasizmi?",(ok)=>{
+    if(ok){
+      remove(ref(db,`devices/${uid}`));
+      remove(ref(db,`permissions/${uid}`));
+      remove(ref(db,`edit_perms/${uid}`));
+    }
+  });
+};
+
+// ── Klaviatura FIX ────────────────────────────────────────────────────────────
+// Input focus bo'lganda tepaga uchmasin
+document.getElementById('addModal').addEventListener('focusin',(e)=>{
+  if(e.target.matches('input,select,textarea')){
+    setTimeout(()=>e.target.scrollIntoView({behavior:'smooth',block:'center'}),350);
+  }
+});
+
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize',()=>{
+    const f=document.querySelector('#mboxEl :focus');
+    if(f) setTimeout(()=>f.scrollIntoView({behavior:'smooth',block:'center'}),100);
+  });
+}
+
+tg.onEvent('viewportChanged',()=>{
+  const f=document.querySelector('#mboxEl :focus');
+  if(f) setTimeout(()=>f.scrollIntoView({behavior:'smooth',block:'center'}),200);
+});
+
+</script>
 </body>
 </html>
