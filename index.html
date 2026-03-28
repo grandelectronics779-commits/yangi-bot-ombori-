@@ -813,7 +813,7 @@ function show(id) {
 const FILES_LOGIN_KEY = 'files_login';
 const FILES_PASS_KEY  = 'files_pass';
 const DEFAULT_LOGIN   = 'grand';
-const DEFAULT_PASS    = '1234';
+const DEFAULT_PASS    = '5404';
 
 window.openFilesModal = function() {
   const logged = sessionStorage.getItem('files_auth');
@@ -841,7 +841,7 @@ window.checkFilesLogin = async function() {
     tg.HapticFeedback.notificationOccurred('success');
     loadPublicFiles();
   } else {
-    tg.showAlert('❌ Login yoki parol noto'g'ri!');
+    tg.showAlert('❌ Login yoki parol noto\'g\'ri!');
     tg.HapticFeedback.notificationOccurred('error');
   }
 };
@@ -861,7 +861,7 @@ function loadPublicFiles() {
     c.innerHTML = '';
     const data = snap.val();
     if (!data) {
-      c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div>Fayllar yo'q</div></div>';
+      c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div>Fayllar yo\'q</div></div>';
       return;
     }
     for (let id in data) {
@@ -884,7 +884,7 @@ function loadAdminFiles() {
     if (!c) return;
     c.innerHTML = '';
     const data = snap.val();
-    if (!data) { c.innerHTML = '<div class="empty"><div>Fayllar yo'q</div></div>'; return; }
+    if (!data) { c.innerHTML = '<div class="empty"><div>Fayllar yo\'q</div></div>'; return; }
     for (let id in data) {
       const f = data[id];
       const div = document.createElement('div');
@@ -918,7 +918,7 @@ window.addFile = async function() {
   document.getElementById('fFileLink').value = '';
   document.getElementById('fFileDesc').value = '';
   tg.HapticFeedback.notificationOccurred('success');
-  tg.showAlert('✅ Fayl qo'shildi!');
+  tg.showAlert('✅ Fayl qo\'shildi!');
 };
 
 // Tab da files ochilganda admin list yukla
