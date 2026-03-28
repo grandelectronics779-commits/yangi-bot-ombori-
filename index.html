@@ -176,6 +176,7 @@ input:focus,select:focus{border-color:var(--g);background:#fff;}
   <div class="tabs" id="adminTabs" style="display:none;">
     <div class="tab on" id="tOmbor" onclick="swTab('ombor')">📦 Ombor</div>
     <div class="tab" id="tDevs" onclick="swTab('devices')">📱 Devices</div>
+    <div class="tab" id="tFiles" onclick="swTab('files')">🗂 Fayllar</div>
   </div>
 
   <!-- OMBOR -->
@@ -185,6 +186,9 @@ input:focus,select:focus{border-color:var(--g);background:#fff;}
       <div class="card" onclick="openCat('PLC')"><span>⚙️</span>PLC</div>
       <div class="card" onclick="openCat('INVERTER')"><span>⚡️</span>INVERTER</div>
       <div class="card" onclick="openCat('SERVO')"><span>🤖</span>SERVO</div>
+      <div class="card" onclick="openFilesModal()" style="grid-column:1/-1;border-color:#e8e8e8;background:#fafafa;color:#aaa;font-size:13px;padding:14px;">
+        <span style="font-size:22px;">🗂</span>Fayllar
+      </div>
     </div>
     <div class="inv" id="invSec" style="display:none;">
       <div class="inv-top">
@@ -205,6 +209,38 @@ input:focus,select:focus{border-color:var(--g);background:#fff;}
     <div id="devList"></div>
   </div>
 
+  <!-- FILES ADMIN -->
+  <div id="cFiles" style="display:none;padding:14px;">
+    <h3 style="margin-bottom:14px;color:var(--p)">🗂 Fayl boshqaruvi</h3>
+    <div style="background:#fff;border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);">
+      <div class="fg"><label>Fayl nomi</label><input type="text" id="fFileName" placeholder="TWRP Samsung A52"></div>
+      <div class="fg"><label>Google Drive linki</label><input type="text" id="fFileLink" placeholder="https://drive.google.com/..."></div>
+      <div class="fg"><label>Tavsif</label><input type="text" id="fFileDesc" placeholder="Android 12 uchun"></div>
+      <button class="add-btn" style="margin:0;" onclick="addFile()">+ Fayl qo'shish</button>
+    </div>
+    <div id="adminFileList"></div>
+  </div>
+
+</div>
+
+<!-- FILES LOGIN MODAL -->
+<div class="overlay" id="filesModal">
+  <div class="mbox">
+    <div class="m-title">🔐 Fayllarga kirish</div>
+    <div id="filesLoginBox">
+      <div class="fg"><label>Login</label><input type="text" id="fLogin" placeholder="Login" autocomplete="off"></div>
+      <div class="fg"><label>Parol</label><input type="password" id="fPass" placeholder="Parol"></div>
+      <button class="save-btn" onclick="checkFilesLogin()">Kirish</button>
+      <button class="cancel-btn" onclick="closeFilesModal()">Bekor qilish</button>
+    </div>
+    <div id="filesListBox" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span style="font-weight:bold;font-size:15px;">📁 Fayllar</span>
+        <button onclick="logoutFiles()" style="border:none;background:none;color:#aaa;font-size:13px;cursor:pointer;">Chiqish</button>
+      </div>
+      <div id="publicFileList"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ADD/EDIT MODAL -->
@@ -770,6 +806,133 @@ function show(id) {
   const el = document.getElementById(id);
   if (el) el.classList.add('active');
 }
+
+// ─── FILES ───────────────────────────────────────────────────────────────────
+// Login/parol — Firebase da saqlanadi, faqat admin o'zgartira oladi
+// Default: login=grand, parol=1234 (admin o'zgartiradi)
+const FILES_LOGIN_KEY = 'files_login';
+const FILES_PASS_KEY  = 'files_pass';
+const DEFAULT_LOGIN   = 'grand';
+const DEFAULT_PASS    = '1234';
+
+window.openFilesModal = function() {
+  const logged = sessionStorage.getItem('files_auth');
+  document.getElementById('filesLoginBox').style.display = logged ? 'none' : 'block';
+  document.getElementById('filesListBox').style.display  = logged ? 'block' : 'none';
+  document.getElementById('filesModal').classList.add('open');
+  if (logged) loadPublicFiles();
+};
+
+window.closeFilesModal = function() {
+  document.getElementById('filesModal').classList.remove('open');
+  document.getElementById('fLogin').value = '';
+  document.getElementById('fPass').value  = '';
+};
+
+window.checkFilesLogin = async function() {
+  const login = document.getElementById('fLogin').value.trim();
+  const pass  = document.getElementById('fPass').value.trim();
+  const snap  = await get(ref(db, 'files_auth'));
+  const stored = snap.val() || {login: DEFAULT_LOGIN, pass: DEFAULT_PASS};
+  if (login === stored.login && pass === stored.pass) {
+    sessionStorage.setItem('files_auth', '1');
+    document.getElementById('filesLoginBox').style.display = 'none';
+    document.getElementById('filesListBox').style.display  = 'block';
+    tg.HapticFeedback.notificationOccurred('success');
+    loadPublicFiles();
+  } else {
+    tg.showAlert('❌ Login yoki parol noto'g'ri!');
+    tg.HapticFeedback.notificationOccurred('error');
+  }
+};
+
+window.logoutFiles = function() {
+  sessionStorage.removeItem('files_auth');
+  document.getElementById('filesLoginBox').style.display = 'block';
+  document.getElementById('filesListBox').style.display  = 'none';
+  document.getElementById('fLogin').value = '';
+  document.getElementById('fPass').value  = '';
+};
+
+function loadPublicFiles() {
+  onValue(ref(db, 'files'), (snap) => {
+    const c = document.getElementById('publicFileList');
+    if (!c) return;
+    c.innerHTML = '';
+    const data = snap.val();
+    if (!data) {
+      c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div>Fayllar yo'q</div></div>';
+      return;
+    }
+    for (let id in data) {
+      const f = data[id];
+      const div = document.createElement('div');
+      div.style.cssText = 'background:#f8f8f8;border-radius:12px;padding:14px;margin-bottom:10px;';
+      div.innerHTML = `
+        <div style="font-weight:bold;font-size:14px;margin-bottom:4px;">📄 ${f.name}</div>
+        ${f.desc ? `<div style="font-size:12px;color:#888;margin-bottom:10px;">${f.desc}</div>` : '<div style="margin-bottom:10px;"></div>'}
+        <a href="${f.link}" target="_blank" style="display:block;text-align:center;padding:11px;background:var(--g);color:#fff;border-radius:9px;font-weight:bold;font-size:14px;text-decoration:none;">⬇️ Yuklab olish</a>`;
+      c.appendChild(div);
+    }
+  });
+}
+
+// Admin: fayllarni boshqarish
+function loadAdminFiles() {
+  onValue(ref(db, 'files'), (snap) => {
+    const c = document.getElementById('adminFileList');
+    if (!c) return;
+    c.innerHTML = '';
+    const data = snap.val();
+    if (!data) { c.innerHTML = '<div class="empty"><div>Fayllar yo'q</div></div>'; return; }
+    for (let id in data) {
+      const f = data[id];
+      const div = document.createElement('div');
+      div.style.cssText = 'background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.05);display:flex;align-items:center;gap:10px;';
+      div.innerHTML = `
+        <div style="flex:1;">
+          <div style="font-weight:bold;font-size:14px;">📄 ${f.name}</div>
+          ${f.desc ? `<div style="font-size:12px;color:#888;">${f.desc}</div>` : ''}
+        </div>
+        <button data-fid="${id}" style="border:none;background:#fef0ef;color:var(--r);padding:9px 12px;border-radius:8px;cursor:pointer;font-size:16px;">🗑</button>`;
+      c.appendChild(div);
+    }
+  });
+}
+
+document.getElementById('adminFileList')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-fid]');
+  if (!btn) return;
+  tg.showConfirm("Bu faylni o'chirasizmi?", (ok) => {
+    if (ok) remove(ref(db, `files/${btn.dataset.fid}`));
+  });
+});
+
+window.addFile = async function() {
+  const name = document.getElementById('fFileName').value.trim();
+  const link = document.getElementById('fFileLink').value.trim();
+  const desc = document.getElementById('fFileDesc').value.trim();
+  if (!name || !link) { tg.showAlert('Nom va link majburiy!'); return; }
+  await push(ref(db, 'files'), {name, link, desc, timestamp: Date.now()});
+  document.getElementById('fFileName').value = '';
+  document.getElementById('fFileLink').value = '';
+  document.getElementById('fFileDesc').value = '';
+  tg.HapticFeedback.notificationOccurred('success');
+  tg.showAlert('✅ Fayl qo'shildi!');
+};
+
+// Tab da files ochilganda admin list yukla
+const origSwTab = window.swTab;
+window.swTab = function(t) {
+  document.getElementById('cOmbor').style.display = t==='ombor' ? 'block' : 'none';
+  document.getElementById('cDevs').style.display  = t==='devices' ? 'block' : 'none';
+  document.getElementById('cFiles').style.display = t==='files' ? 'block' : 'none';
+  document.getElementById('tOmbor').classList.toggle('on', t==='ombor');
+  document.getElementById('tDevs').classList.toggle('on', t==='devices');
+  document.getElementById('tFiles').classList.toggle('on', t==='files');
+  if (t==='devices') loadDevs();
+  if (t==='files') loadAdminFiles();
+};
 
 // ─── KLAVIATURA FIX ──────────────────────────────────────────────────────────
 document.getElementById('addModal').addEventListener('focusin', (e) => {
