@@ -183,20 +183,17 @@ body{
   flex-shrink:0;
 }
 .item-badge.bu{background:rgba(240,180,41,.1);color:var(--gold);border-color:rgba(240,180,41,.2);}
-.item-table{width:100%;border-collapse:collapse;margin:10px 0 4px;}
+.item-table{width:100%;border-collapse:collapse;margin:10px 0 4px;table-layout:auto;}
 .item-table tr:not(:last-child) td{border-bottom:1px solid var(--border);}
 .item-table td{padding:9px 10px;vertical-align:middle;}
 .item-table td:first-child{
   color:var(--text2);font-weight:600;font-size:13px;
-  white-space:nowrap;
-  width:60%;
-  padding-right:10px;
+  width:100%;
 }
 .item-table td:last-child{
   color:var(--text);font-weight:700;font-size:14px;
-  text-align:right;
+  text-align:left;
   font-family:'DM Mono',monospace;
-  word-break:break-word;
   white-space:nowrap;
   border-left:2px solid var(--border);
   padding-left:14px;
