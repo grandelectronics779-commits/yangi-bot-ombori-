@@ -668,19 +668,49 @@ window.addFile = function(){
   });
 };
 
-var imgScale = 1;
+var imgScale=1, imgStartDist=0, imgLastScale=1;
+
 window.imgZoom = function(delta){
-  imgScale = Math.min(4, Math.max(0.5, imgScale + delta));
-  document.getElementById('imgViewerSrc').style.transform='scale('+imgScale+')';
+  imgScale = Math.min(4, Math.max(0.5, imgScale+delta));
+  imgLastScale = imgScale;
+  var img = document.getElementById('imgViewerSrc');
+  img.style.transform='scale('+imgScale+')';
   document.getElementById('imgScaleLabel').textContent=Math.round(imgScale*100)+'%';
 };
 
 window.viewImg = function(src){
   var v=document.getElementById('imgViewer');
-  document.getElementById('imgViewerSrc').src=src;
-  imgScale=1;document.getElementById('imgViewerSrc').style.transform='scale(1)';document.getElementById('imgScaleLabel').textContent='100%';
+  var img=document.getElementById('imgViewerSrc');
+  img.src=src;
+  imgScale=1; imgLastScale=1;
+  img.style.transform='scale(1)';
+  document.getElementById('imgScaleLabel').textContent='100%';
   v.style.display='flex';
 };
+
+// Pinch to zoom
+(function(){
+  function getDist(t){
+    var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY;
+    return Math.sqrt(dx*dx+dy*dy);
+  }
+  var img = document.getElementById('imgViewerSrc');
+  img.addEventListener('touchstart', function(e){
+    if(e.touches.length===2){ imgStartDist=getDist(e.touches); e.preventDefault(); }
+  },{passive:false});
+  img.addEventListener('touchmove', function(e){
+    if(e.touches.length===2){
+      e.preventDefault();
+      var dist=getDist(e.touches);
+      imgScale=Math.min(4,Math.max(0.5,imgLastScale*(dist/imgStartDist)));
+      img.style.transform='scale('+imgScale+')';
+      document.getElementById('imgScaleLabel').textContent=Math.round(imgScale*100)+'%';
+    }
+  },{passive:false});
+  img.addEventListener('touchend', function(e){
+    if(e.touches.length<2){ imgLastScale=imgScale; }
+  });
+})();
 
 document.getElementById('addModal').addEventListener('focusin',function(e){
   if(e.target.matches('input,select,textarea')) setTimeout(function(){e.target.scrollIntoView({behavior:'smooth',block:'center'});},350);
