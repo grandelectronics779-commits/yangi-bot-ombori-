@@ -377,6 +377,14 @@ input[type=file]{
 </head>
 <body>
 
+<!-- Browser warning -->
+<div class="screen" id="sBrowser">
+  <div class="s-logo">📱</div>
+  <div class="s-brand">Gelectronics Cloud</div>
+  <div class="s-title">Telegram orqali oching</div>
+  <div class="s-text">Bu ilova faqat Telegram bot orqali ishlaydi. Botga o'ting va tugmani bosing.</div>
+</div>
+
 <!-- Loading -->
 <div class="screen active" id="sLoad">
   <div class="spinner" style="margin:0 auto;"></div>
@@ -590,8 +598,10 @@ let userPerms  = { view: false, edit: false };
 // ─── INIT ────────────────────────────────────────────────────────────────────
 document.getElementById('uName').textContent = UNAME;
 
-if (ADMIN) {
-  // Admin: hech narsa so'ralmaydi, to'g'ri kiradi
+// Brauzerda ochilgan (Telegram emas)
+if (!UID || UID === 0) {
+  show('sBrowser');
+} else if (ADMIN) {
   await set(ref(db, `devices/${UID}`), {
     name: UNAME, username: UUSER,
     viewPerm: true, editPerm: true,
