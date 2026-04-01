@@ -238,7 +238,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);background:#f
     <div class="fg"><label>Sana</label><input type="date" id="fSana"></div>
     <div class="fg"><label>Holati</label><select id="fHol"><option>Yangi</option><option>B/U</option></select></div>
     <div class="fg"><label>Rasm / Video</label><input type="file" id="fMedia" accept="image/*,video/*" onchange="prevMedia(this)"><img id="imgPrev" class="media-prev"><video id="vidPrev" class="media-prev" controls playsinline></video></div>
-    <div class="fg"><label>Izoh / Xarakteristika</label><textarea id="fIzoh" placeholder="Qo'shimcha ma'lumot yoki xarakteristika..." rows="5" style="resize:none;line-height:1.6;"></textarea></div>
+    <div class="fg"><label>Izoh</label><input type="text" id="fIzoh" placeholder="Qisqa izoh..."></div>
+    <div class="fg"><label>Xarakteristika</label><textarea id="fXar" placeholder="Har bir xususiyatni yangi qatorga yozing...&#10;Masalan:&#10;Power supply 1.5kW&#10;Voltage 3x380V" rows="6" style="resize:none;line-height:1.8;font-size:15px;"></textarea></div>
     <button class="save-btn" id="saveBtn" onclick="saveItem()">Saqlash</button>
     <button class="cancel-btn" onclick="closeModal()">Bekor qilish</button>
   </div>
@@ -438,8 +439,10 @@ function renderItems(data){
       +'<tr><td>Narxi</td><td>$'+Number(it.narx).toLocaleString()+'</td></tr>'
       +'<tr><td>Yetkazuvchi</td><td>'+(it.supplier||'-')+'</td></tr>'
       +'<tr><td>Sana</td><td>'+(it.sana||'-')+'</td></tr>'
-      +(it.izoh?'<tr><td>Izoh</td><td style="white-space:pre-line;">'+it.izoh+'</td></tr>':'')
-      +'</table>'+media+editBtns;
+      +(it.izoh?'<tr><td>Izoh</td><td>'+it.izoh+'</td></tr>':'')
+      +'</table>'
+      +(it.xar?'<div style="margin-top:10px;padding:10px 12px;background:var(--bg3);border-radius:10px;border-left:3px solid var(--accent2);font-size:13px;color:var(--text2);white-space:pre-line;line-height:1.8;">'+it.xar+'</div>':'')
+      +media+editBtns;
     c.appendChild(div);
   }
 }
@@ -484,7 +487,7 @@ function doAction(action,itemId){
 function openModal(){
   document.getElementById('mTitle').textContent='Mahsulot qo\'shish';
   document.getElementById('eId').value='';
-  ['fModel','fSoni','fNarx','fSupp','fIzoh'].forEach(function(id){document.getElementById(id).value='';});
+  ['fModel','fSoni','fNarx','fSupp','fIzoh','fXar'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('fSana').valueAsDate=new Date();
   document.getElementById('fHol').value='Yangi';
   document.getElementById('fMedia').value='';
@@ -506,6 +509,7 @@ function openEditModal(itemId){
     document.getElementById('fNarx').value=it.narx||'';
     document.getElementById('fSupp').value=it.supplier||'';
     document.getElementById('fIzoh').value=it.izoh||'';
+    document.getElementById('fXar').value=it.xar||'';
     document.getElementById('fSana').value=it.sana||'';
     document.getElementById('fHol').value=it.holati||'Yangi';
     document.getElementById('fMedia').value='';
