@@ -236,7 +236,7 @@ input:focus,select:focus{border-color:var(--accent);background:#fff;}
     <div class="fg"><label>Sana</label><input type="date" id="fSana"></div>
     <div class="fg"><label>Holati</label><select id="fHol"><option>Yangi</option><option>B/U</option></select></div>
     <div class="fg"><label>Rasm / Video</label><input type="file" id="fMedia" accept="image/*,video/*" onchange="prevMedia(this)"><img id="imgPrev" class="media-prev"><video id="vidPrev" class="media-prev" controls playsinline></video></div>
-    <div class="fg"><label>Izoh</label><input type="text" id="fIzoh" placeholder="Qo'shimcha ma'lumot"></div>
+    <div class="fg"><label>Izoh / Xarakteristika</label><textarea id="fIzoh" placeholder="Qo'shimcha ma'lumot yoki xarakteristika..." rows="5" style="resize:none;line-height:1.6;"></textarea></div>
     <button class="save-btn" id="saveBtn" onclick="saveItem()">Saqlash</button>
     <button class="cancel-btn" onclick="closeModal()">Bekor qilish</button>
   </div>
@@ -436,7 +436,7 @@ function renderItems(data){
       +'<tr><td>Narxi</td><td>$'+Number(it.narx).toLocaleString()+'</td></tr>'
       +'<tr><td>Yetkazuvchi</td><td>'+(it.supplier||'-')+'</td></tr>'
       +'<tr><td>Sana</td><td>'+(it.sana||'-')+'</td></tr>'
-      +(it.izoh?'<tr><td>Izoh</td><td>'+it.izoh+'</td></tr>':'')
+      +(it.izoh?'<tr><td>Izoh</td><td style="white-space:pre-line;">'+it.izoh+'</td></tr>':'')
       +'</table>'+media+editBtns;
     c.appendChild(div);
   }
