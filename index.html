@@ -439,7 +439,7 @@ function renderItems(data){
       +'<tr><td>Narxi</td><td>$'+Number(it.narx).toLocaleString()+'</td></tr>'
       +'<tr><td>Yetkazuvchi</td><td>'+(it.supplier||'-')+'</td></tr>'
       +'<tr><td>Sana</td><td>'+(it.sana||'-')+'</td></tr>'
-      +(it.izoh?'<tr><td>Izoh</td><td>'+it.izoh+'</td></tr>':'')
+      +(it.izoh?'<tr><td>Izoh</td><td style="white-space:normal;word-break:break-word;max-width:160px;">'+it.izoh+'</td></tr>':'')
       +'</table>'
       +(it.xar?'<div style="margin-top:10px;padding:10px 12px;background:var(--bg3);border-radius:10px;border-left:3px solid var(--accent2);font-size:13px;color:var(--text2);white-space:pre-line;line-height:1.8;">'+it.xar+'</div>':'')
       +media+editBtns;
