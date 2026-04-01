@@ -16,6 +16,8 @@
   --text:#1a202c;--text2:#4a5568;--text3:#a0aec0;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+#APP{max-width:600px;margin:0 auto;}
+.header{max-width:600px;margin:0 auto;border-radius:0 0 16px 16px;}
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;text-align:center;}
 .screen.active{display:flex;}
 .s-logo{font-size:52px;margin-bottom:16px;}
@@ -48,8 +50,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .card-files{grid-column:1/-1;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--text2);border-style:dashed;background:var(--bg3);}
 
 .inv{padding:14px;}
-.inv-top{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.back-btn{background:var(--bg3);border:1px solid var(--border);font-size:16px;cursor:pointer;padding:8px 12px;border-radius:10px;color:var(--text);}
+.inv-top{display:flex;align-items:center;gap:10px;margin-bottom:16px;position:sticky;top:72px;background:var(--bg);padding:10px 0;z-index:5;}
+.back-btn{background:var(--bg3);border:1px solid var(--border);font-size:16px;cursor:pointer;padding:8px 14px;border-radius:10px;color:var(--text);}
 .inv-title{font-size:18px;font-weight:700;flex:1;}
 .add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:14px;width:100%;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:14px;font-family:'DM Sans',sans-serif;}
 
@@ -668,48 +670,113 @@ window.addFile = function(){
   });
 };
 
-var imgScale=1, imgStartDist=0, imgLastScale=1;
+// IMAGE VIEWER
+var imgScale=1, imgLastScale=1, imgStartDist=0;
+var imgTransX=0, imgTransY=0, imgDragStartX=0, imgDragStartY=0, imgDragging=false;
+var imgPinchStartX=0, imgPinchStartY=0, imgTransStartX=0, imgTransStartY=0;
+
+function applyImgTransform(){
+  var img=document.getElementById('imgViewerSrc');
+  img.style.transform='scale('+imgScale+') translate('+imgTransX+'px,'+imgTransY+'px)';
+  document.getElementById('imgScaleLabel').textContent=Math.round(imgScale*100)+'%';
+}
+
+function resetImgViewer(){
+  imgScale=1; imgLastScale=1; imgTransX=0; imgTransY=0;
+  applyImgTransform();
+}
+
+window.closeImgViewer = function(){
+  document.getElementById('imgViewer').style.display='none';
+  resetImgViewer();
+};
 
 window.imgZoom = function(delta){
-  imgScale = Math.min(4, Math.max(0.5, imgScale+delta));
-  imgLastScale = imgScale;
-  var img = document.getElementById('imgViewerSrc');
-  img.style.transform='scale('+imgScale+')';
-  document.getElementById('imgScaleLabel').textContent=Math.round(imgScale*100)+'%';
+  imgScale=Math.min(5,Math.max(0.5,imgScale+delta));
+  imgLastScale=imgScale;
+  if(imgScale===1){imgTransX=0;imgTransY=0;}
+  applyImgTransform();
 };
 
 window.viewImg = function(src){
-  var v=document.getElementById('imgViewer');
   var img=document.getElementById('imgViewerSrc');
   img.src=src;
-  imgScale=1; imgLastScale=1;
-  img.style.transform='scale(1)';
-  document.getElementById('imgScaleLabel').textContent='100%';
-  v.style.display='flex';
+  resetImgViewer();
+  document.getElementById('imgViewer').style.display='flex';
 };
 
-// Pinch to zoom
 (function(){
-  function getDist(t){
-    var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY;
-    return Math.sqrt(dx*dx+dy*dy);
-  }
-  var img = document.getElementById('imgViewerSrc');
-  img.addEventListener('touchstart', function(e){
-    if(e.touches.length===2){ imgStartDist=getDist(e.touches); e.preventDefault(); }
-  },{passive:false});
-  img.addEventListener('touchmove', function(e){
+  var wrap=document.getElementById('imgViewerWrap');
+
+  function getDist(t){ var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY; return Math.sqrt(dx*dx+dy*dy); }
+  function getMid(t){ return {x:(t[0].clientX+t[1].clientX)/2, y:(t[0].clientY+t[1].clientY)/2}; }
+
+  // TOUCH
+  wrap.addEventListener('touchstart',function(e){
     if(e.touches.length===2){
       e.preventDefault();
-      var dist=getDist(e.touches);
-      imgScale=Math.min(4,Math.max(0.5,imgLastScale*(dist/imgStartDist)));
-      img.style.transform='scale('+imgScale+')';
-      document.getElementById('imgScaleLabel').textContent=Math.round(imgScale*100)+'%';
+      imgStartDist=getDist(e.touches);
+      imgPinchStartX=getMid(e.touches).x;
+      imgPinchStartY=getMid(e.touches).y;
+      imgTransStartX=imgTransX;
+      imgTransStartY=imgTransY;
+      imgLastScale=imgScale;
+    } else if(e.touches.length===1&&imgScale>1){
+      e.preventDefault();
+      imgDragging=true;
+      imgDragStartX=e.touches[0].clientX-imgTransX*imgScale;
+      imgDragStartY=e.touches[0].clientY-imgTransY*imgScale;
     }
   },{passive:false});
-  img.addEventListener('touchend', function(e){
-    if(e.touches.length<2){ imgLastScale=imgScale; }
+
+  wrap.addEventListener('touchmove',function(e){
+    e.preventDefault();
+    if(e.touches.length===2){
+      var dist=getDist(e.touches);
+      imgScale=Math.min(5,Math.max(0.5,imgLastScale*(dist/imgStartDist)));
+      var mid=getMid(e.touches);
+      imgTransX=imgTransStartX+(mid.x-imgPinchStartX)/imgScale;
+      imgTransY=imgTransStartY+(mid.y-imgPinchStartY)/imgScale;
+      applyImgTransform();
+    } else if(e.touches.length===1&&imgDragging){
+      imgTransX=(e.touches[0].clientX-imgDragStartX)/imgScale;
+      imgTransY=(e.touches[0].clientY-imgDragStartY)/imgScale;
+      applyImgTransform();
+    }
+  },{passive:false});
+
+  wrap.addEventListener('touchend',function(e){
+    if(e.touches.length<2){ imgLastScale=imgScale; imgDragging=false; }
   });
+
+  // MOUSE (desktop)
+  wrap.addEventListener('mousedown',function(e){
+    if(imgScale>1){
+      imgDragging=true;
+      wrap.style.cursor='grabbing';
+      imgDragStartX=e.clientX-imgTransX*imgScale;
+      imgDragStartY=e.clientY-imgTransY*imgScale;
+      e.preventDefault();
+    }
+  });
+  window.addEventListener('mousemove',function(e){
+    if(imgDragging){
+      imgTransX=(e.clientX-imgDragStartX)/imgScale;
+      imgTransY=(e.clientY-imgDragStartY)/imgScale;
+      applyImgTransform();
+    }
+  });
+  window.addEventListener('mouseup',function(){imgDragging=false;wrap.style.cursor='grab';});
+
+  // Mouse wheel zoom (desktop)
+  wrap.addEventListener('wheel',function(e){
+    e.preventDefault();
+    var delta=e.deltaY>0?-0.2:0.2;
+    imgScale=Math.min(5,Math.max(0.5,imgScale+delta));
+    imgLastScale=imgScale;
+    if(imgScale===1){imgTransX=0;imgTransY=0;}
+    applyImgTransform();
+  },{passive:false});
 })();
 
 document.getElementById('addModal').addEventListener('focusin',function(e){
@@ -723,14 +790,14 @@ if(window.visualViewport){
 }
 </script>
 <div id="imgViewer" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:99999;flex-direction:column;align-items:center;justify-content:center;">
-  <button onclick="document.getElementById('imgViewer').style.display='none';imgScale=1;document.getElementById('imgViewerSrc').style.transform='scale(1)';" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:24px;width:44px;height:44px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>
-  <div style="overflow:hidden;width:100%;height:80vh;display:flex;align-items:center;justify-content:center;">
-    <img id="imgViewerSrc" style="max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;transition:transform .2s;transform-origin:center;touch-action:none;">
+  <button onclick="closeImgViewer()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:24px;width:44px;height:44px;border-radius:50%;cursor:pointer;z-index:2;">✕</button>
+  <div id="imgViewerWrap" style="width:100%;height:80vh;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:grab;">
+    <img id="imgViewerSrc" style="max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;transform-origin:center;touch-action:none;user-select:none;pointer-events:none;">
   </div>
   <div style="display:flex;gap:16px;margin-top:16px;align-items:center;">
-    <button onclick="imgZoom(-0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:24px;width:52px;height:52px;border-radius:50%;cursor:pointer;">−</button>
+    <button onclick="imgZoom(-0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:28px;width:52px;height:52px;border-radius:50%;cursor:pointer;">−</button>
     <span id="imgScaleLabel" style="color:rgba(255,255,255,.6);font-size:13px;width:44px;text-align:center;">100%</span>
-    <button onclick="imgZoom(0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:24px;width:52px;height:52px;border-radius:50%;cursor:pointer;">+</button>
+    <button onclick="imgZoom(0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:28px;width:52px;height:52px;border-radius:50%;cursor:pointer;">+</button>
   </div>
 </div>
 </body>
