@@ -5,164 +5,209 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Gelectronics Cloud</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#f5f7fa;--bg2:#ffffff;--bg3:#f0f2f5;
-  --card:#ffffff;--border:#e8ecf2;
-  --accent:#00b894;--accent2:#0099ff;
-  --gold:#f0b429;--red:#ff4757;
-  --text:#1a202c;--text2:#4a5568;--text3:#a0aec0;
+  --bg:#f5f7fa;
+  --card:#ffffff;
+  --border:#e4e8f0;
+  --accent:#00b894;
+  --accent2:#0099ff;
+  --red:#ff4757;
+  --gold:#f0b429;
+  --text:#1a202c;
+  --text2:#4a5568;
+  --text3:#a0aec0;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
-#APP{width:100%;}
+
+/* SCREENS */
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;text-align:center;}
 .screen.active{display:flex;}
-.s-logo{font-size:52px;margin-bottom:16px;}
-.s-brand{font-size:12px;font-weight:600;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
-.s-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:8px;}
-.s-text{color:var(--text2);font-size:14px;line-height:1.7;margin-bottom:24px;max-width:280px;}
-.spinner{width:36px;height:36px;border:3px solid var(--border);border-top:3px solid var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:16px auto;}
+.s-icon{font-size:56px;margin-bottom:16px;}
+.s-brand{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.s-title{font-size:22px;font-weight:700;margin-bottom:8px;}
+.s-text{color:var(--text2);font-size:14px;line-height:1.7;margin-bottom:24px;}
+.spinner{width:34px;height:34px;border:3px solid var(--border);border-top:3px solid var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:16px auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.btn{border:none;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:300px;margin-top:10px;font-family:'DM Sans',sans-serif;}
+.btn{display:block;border:none;padding:15px 24px;border-radius:13px;font-size:15px;font-weight:700;cursor:pointer;width:100%;max-width:300px;margin-top:10px;font-family:'DM Sans',sans-serif;}
 .btn-g{background:var(--accent);color:#fff;}
 .btn-r{background:var(--red);color:#fff;}
 
-.header{background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 16px;position:sticky;top:0;z-index:10;}
+/* HEADER */
+.header{background:#fff;border-bottom:1px solid var(--border);padding:14px 16px;position:sticky;top:0;z-index:10;}
 .h-logo{display:flex;align-items:center;gap:10px;}
-.h-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.h-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .h-title{font-size:17px;font-weight:700;}
 .h-sub{font-size:11px;color:var(--text3);margin-top:1px;}
 .stats{display:flex;gap:8px;margin-top:12px;}
-.stat{background:var(--bg3);border:1px solid var(--border);padding:10px 14px;border-radius:10px;flex:1;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.3px;}
-.stat b{display:block;font-size:17px;font-weight:700;color:var(--text);margin-top:3px;font-family:'DM Mono',monospace;}
+.stat{background:var(--bg);border:1px solid var(--border);padding:10px 14px;border-radius:10px;flex:1;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;font-weight:600;}
+.stat b{display:block;font-size:18px;font-weight:700;color:var(--text);margin-top:2px;font-family:'DM Mono',monospace;}
 
-.tabs{display:flex;background:#fff;border-bottom:1px solid var(--border);}
-.tab{flex:1;padding:12px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;text-transform:uppercase;letter-spacing:.3px;}
+/* TABS */
+.tabs{display:flex;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:1;min-width:80px;padding:12px 8px;text-align:center;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;text-transform:uppercase;letter-spacing:.3px;}
 .tab.on{color:var(--accent);border-bottom-color:var(--accent);}
 
+/* GRID */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;}
-.card{background:var(--card);border:1px solid var(--border);padding:22px 12px 18px;border-radius:16px;text-align:center;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;}
-.card:active{transform:scale(.96);border-color:var(--accent);}
-.card span{display:block;font-size:30px;margin-bottom:10px;}
-.card-files{grid-column:1/-1;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--text2);border-style:dashed;background:var(--bg3);}
+.card{background:var(--card);border:1px solid var(--border);padding:22px 12px 18px;border-radius:16px;text-align:center;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s;color:var(--text);}
+.card:active{transform:scale(.96);border-color:var(--accent);background:#f0fdf9;}
+.card-icon{font-size:32px;margin-bottom:10px;}
+.card-files{grid-column:1/-1;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--text3);border-style:dashed;background:var(--bg);font-weight:600;}
 
-.inv{padding:14px;}
-.inv-top{display:flex;align-items:center;gap:10px;margin-bottom:16px;position:sticky;top:72px;background:var(--bg);padding:10px 0;z-index:5;}
-.back-btn{background:var(--bg3);border:1px solid var(--border);font-size:16px;cursor:pointer;padding:8px 14px;border-radius:10px;color:var(--text);}
+/* INVENTORY */
+.inv{padding:0 14px 14px;}
+.inv-top{display:flex;align-items:center;gap:10px;padding:12px 0;position:sticky;top:64px;background:var(--bg);z-index:5;}
+.back-btn{background:#fff;border:1px solid var(--border);font-size:18px;cursor:pointer;padding:8px 14px;border-radius:10px;color:var(--text);flex-shrink:0;}
 .inv-title{font-size:18px;font-weight:700;flex:1;}
-.add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:14px;width:100%;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:14px;font-family:'DM Sans',sans-serif;}
+.add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:14px;width:100%;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:14px;font-family:'DM Sans',sans-serif;}
 
-.item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;position:relative;width:100%;box-sizing:border-box;}
-.item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--accent),var(--accent2));}
-.item-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
-.item-name{font-weight:700;font-size:15px;flex:1;}
-.item-badge{font-size:10px;background:rgba(0,184,148,.1);color:var(--accent);padding:4px 10px;border-radius:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border:1px solid rgba(0,184,148,.2);flex-shrink:0;}
-.item-badge.bu{background:rgba(240,180,41,.1);color:var(--gold);border-color:rgba(240,180,41,.2);}
+/* ITEM CARD */
+.item{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.item-head{padding:14px 16px 10px;border-bottom:1px solid var(--border);}
+.item-name-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.item-name{font-weight:700;font-size:16px;flex:1;}
+.item-badge{font-size:10px;padding:4px 10px;border-radius:20px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;flex-shrink:0;}
+.badge-new{background:#e6faf5;color:var(--accent);border:1px solid #b2eedd;}
+.badge-bu{background:#fff8e6;color:var(--gold);border:1px solid #fde68a;}
 
-.item-table{width:100%;border-collapse:collapse;margin:4px 0;}
-.item-table tr:not(:last-child) td{border-bottom:1px solid var(--border);}
-.item-table td{padding:8px 10px;vertical-align:middle;}
-.item-table td:first-child{color:var(--text2);font-weight:600;font-size:13px;white-space:nowrap;}
-.item-table td:last-child{color:var(--text);font-weight:700;font-size:14px;text-align:right;border-left:2px solid var(--border);padding-left:14px;font-family:'DM Mono',monospace;width:1%;white-space:nowrap;}
+/* TABLE */
+.item-table{width:100%;border-collapse:collapse;}
+.item-table tr{border-bottom:1px solid var(--border);}
+.item-table tr:last-child{border-bottom:none;}
+.item-table td{padding:9px 16px;font-size:14px;vertical-align:middle;}
+.item-table .td-label{color:var(--text3);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;width:40%;}
+.item-table .td-val{color:var(--text);font-weight:700;text-align:right;font-family:'DM Mono',monospace;}
 
-.item-img{width:100%;border-radius:10px;margin:10px 0 4px;max-height:110px;object-fit:cover;display:block;border:1px solid var(--border);}
-.item-vid{width:100%;border-radius:10px;margin:10px 0 4px;max-height:110px;display:block;}
-.item-action-btns{display:flex;gap:8px;margin-top:12px;}
-.i-edit{flex:1;padding:10px;background:rgba(0,153,255,.08);color:var(--accent2);border:1px solid rgba(0,153,255,.15);border-radius:9px;font-size:13px;cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif;}
-.i-del{flex:1;padding:10px;background:rgba(255,71,87,.06);color:var(--red);border:1px solid rgba(255,71,87,.12);border-radius:9px;font-size:13px;cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif;}
+/* XAR BOX */
+.xar-box{padding:12px 16px;background:#f8faff;border-top:1px solid var(--border);}
+.xar-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.xar-line{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;}
+.xar-line:last-child{margin-bottom:0;}
+.xar-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);margin-top:5px;flex-shrink:0;}
+.xar-text{font-size:13px;color:var(--text2);line-height:1.5;}
+
+/* MEDIA */
+.item-img{width:100%;max-height:160px;object-fit:cover;display:block;cursor:zoom-in;}
+.item-vid{width:100%;max-height:160px;display:block;}
+
+/* ITEM BUTTONS */
+.item-btns{display:flex;gap:0;border-top:1px solid var(--border);}
+.i-edit{flex:1;padding:12px;background:#f0f9ff;color:var(--accent2);border:none;border-right:1px solid var(--border);font-size:13px;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;}
+.i-del{flex:1;padding:12px;background:#fff5f5;color:var(--red);border:none;font-size:13px;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;}
+
 .empty{text-align:center;padding:50px 20px;color:var(--text3);}
-.empty-icon{font-size:44px;margin-bottom:12px;opacity:.5;}
+.empty-icon{font-size:44px;margin-bottom:10px;}
 
-.overlay{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:9999;align-items:flex-end;}
-.overlay.open{display:flex;}
-.mbox{background:#fff;width:100%;padding:24px 20px 40px;border-radius:24px 24px 0 0;max-height:95vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border-top:1px solid var(--border);}
-.mbox::-webkit-scrollbar{display:none;}
-.m-handle{width:40px;height:5px;background:var(--border);border-radius:4px;margin:0 auto 20px;}
-.m-title{font-size:20px;font-weight:700;margin-bottom:20px;}
-.fg{margin-bottom:16px;}
-.fg label{font-size:12px;color:var(--text3);margin-bottom:8px;display:block;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
-input,select,textarea{width:100%;padding:15px 16px;border:1.5px solid var(--border);border-radius:13px;font-size:16px;outline:none;background:var(--bg3);color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .2s;}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);background:#fff;}
-.media-prev{width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover;display:none;}
-.save-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:14px;font-weight:700;font-size:17px;cursor:pointer;margin-top:12px;font-family:'DM Sans',sans-serif;}
-.save-btn:disabled{opacity:.5;}
-.cancel-btn{width:100%;padding:14px;border:none;background:none;color:var(--text3);cursor:pointer;margin-top:8px;font-size:15px;font-family:'DM Sans',sans-serif;}
-
+/* SECTION */
 .section{padding:16px;}
-.section-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.section-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
+
+/* DEVICES */
 .dev-add{display:flex;gap:8px;margin-bottom:16px;}
-.dev-add input{flex:1;}
-.dev-add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:12px 18px;border-radius:11px;font-weight:700;font-size:20px;cursor:pointer;flex-shrink:0;}
-.dcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;}
-.dcard-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.davatar{width:42px;height:42px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:800;flex-shrink:0;}
+.dev-add input{flex:1;padding:13px 14px;border:1.5px solid var(--border);border-radius:11px;font-size:15px;outline:none;background:#fff;color:var(--text);font-family:'DM Sans',sans-serif;}
+.dev-add input:focus{border-color:var(--accent);}
+.dev-add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:13px 20px;border-radius:11px;font-weight:700;font-size:22px;cursor:pointer;flex-shrink:0;}
+.dcard{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.dcard-top{display:flex;align-items:center;gap:12px;padding:14px;}
+.davatar{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:800;flex-shrink:0;}
 .dinfo{flex:1;min-width:0;}
 .dname{font-weight:700;font-size:14px;}
 .did{font-size:11px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace;}
-.badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
-.badge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700;letter-spacing:.3px;}
-.b-ok{background:rgba(0,184,148,.1);color:var(--accent);border:1px solid rgba(0,184,148,.2);}
-.b-wait{background:rgba(240,180,41,.1);color:var(--gold);border:1px solid rgba(240,180,41,.2);}
-.b-no{background:rgba(255,71,87,.08);color:var(--red);border:1px solid rgba(255,71,87,.15);}
-.b-edit{background:rgba(0,153,255,.1);color:var(--accent2);border:1px solid rgba(0,153,255,.2);}
-.dcard-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
-.d-btn{padding:9px 6px;border:1px solid var(--border);border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;text-align:center;background:var(--bg3);color:var(--text2);font-family:'DM Sans',sans-serif;}
+.dbadges{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
+.dbadge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700;}
+.db-ok{background:#e6faf5;color:var(--accent);border:1px solid #b2eedd;}
+.db-wait{background:#fff8e6;color:var(--gold);border:1px solid #fde68a;}
+.db-no{background:#fff5f5;color:var(--red);border:1px solid #fecaca;}
+.db-edit{background:#eff6ff;color:var(--accent2);border:1px solid #bfdbfe;}
+.dcard-btns{display:flex;border-top:1px solid var(--border);}
+.d-btn{flex:1;padding:11px 6px;border:none;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text2);}
+.d-btn:not(:last-child){border-right:1px solid var(--border);}
+.d-btn-del{color:var(--red);}
 
-.file-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
-.dl-btn{display:block;text-align:center;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:10px;font-weight:700;font-size:13px;text-decoration:none;}
+/* MODAL */
+.overlay{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-end;}
+.overlay.open{display:flex;}
+.mbox{background:#fff;width:100%;border-radius:22px 22px 0 0;max-height:94vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.mbox::-webkit-scrollbar{display:none;}
+.m-handle{width:40px;height:4px;background:var(--border);border-radius:4px;margin:16px auto 0;}
+.m-inner{padding:16px 20px 40px;}
+.m-title{font-size:19px;font-weight:700;margin-bottom:18px;margin-top:8px;}
+.fg{margin-bottom:14px;}
+.fg label{font-size:11px;color:var(--text3);margin-bottom:6px;display:block;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:14px 15px;border:1.5px solid var(--border);border-radius:12px;font-size:16px;outline:none;background:#f8f9fc;color:var(--text);font-family:'DM Sans',sans-serif;transition:border-color .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent);background:#fff;}
+.fg textarea{resize:none;line-height:1.7;}
+.media-prev{width:100%;border-radius:10px;margin-top:8px;max-height:200px;object-fit:cover;display:none;}
+.save-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:13px;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif;}
+.save-btn:disabled{opacity:.5;}
+.cancel-btn{width:100%;padding:13px;border:none;background:none;color:var(--text3);cursor:pointer;margin-top:6px;font-size:14px;font-family:'DM Sans',sans-serif;}
+
+/* FILES */
+.file-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.file-info{padding:14px 16px;}
+.file-name{font-weight:700;font-size:14px;margin-bottom:3px;}
+.file-desc{font-size:12px;color:var(--text3);}
+.dl-btn{display:block;text-align:center;padding:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:14px;text-decoration:none;border-top:1px solid var(--border);}
 .fadmin-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
 .fadmin-info{flex:1;}
 .fadmin-name{font-weight:700;font-size:14px;}
 .fadmin-desc{font-size:12px;color:var(--text3);margin-top:2px;}
-.del-btn{border:1px solid rgba(255,71,87,.2);background:rgba(255,71,87,.06);color:var(--red);padding:9px 12px;border-radius:9px;cursor:pointer;font-size:16px;flex-shrink:0;}
+.del-btn{border:1px solid #fecaca;background:#fff5f5;color:var(--red);padding:10px 14px;border-radius:9px;cursor:pointer;font-size:16px;flex-shrink:0;}
 
-.ewait{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;}
+/* EWAIT */
+.ewait{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:99999;align-items:center;justify-content:center;}
 .ewait.open{display:flex;}
-.ebox{background:#fff;border:1px solid var(--border);padding:28px 22px;border-radius:22px;text-align:center;margin:20px;max-width:300px;width:100%;}
+.ebox{background:#fff;padding:30px 24px;border-radius:22px;text-align:center;margin:20px;max-width:300px;width:100%;}
+
+/* IMG VIEWER */
+#imgViewer{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.96);z-index:999999;flex-direction:column;align-items:center;justify-content:center;}
 </style>
 </head>
 <body>
 
 <div class="screen" id="sBrowser">
-  <div class="s-logo">📱</div>
+  <div class="s-icon">📱</div>
   <div class="s-brand">Gelectronics Cloud</div>
   <div class="s-title">Telegram orqali oching</div>
   <div class="s-text">Bu ilova faqat Telegram bot orqali ishlaydi.</div>
 </div>
 <div class="screen active" id="sLoad">
   <div class="spinner"></div>
-  <div style="color:var(--text3);font-size:13px;margin-top:12px;">Tekshirilmoqda...</div>
+  <div style="color:var(--text3);font-size:13px;margin-top:12px;letter-spacing:.3px;">Tekshirilmoqda...</div>
 </div>
 <div class="screen" id="sReq">
-  <div class="s-logo">🏪</div>
+  <div class="s-icon">🏪</div>
   <div class="s-brand">Gelectronics Cloud</div>
   <div class="s-title">Kirish uchun ruxsat kerak</div>
   <div class="s-text">Admin tasdiqlashi kerak.</div>
   <button class="btn btn-g" onclick="requestAccess()">Ruxsat so'rash →</button>
 </div>
 <div class="screen" id="sPend">
-  <div class="s-logo" style="font-size:40px;">⏳</div>
+  <div class="s-icon" style="font-size:44px;">⏳</div>
   <div class="s-brand">So'rov yuborildi</div>
   <div class="s-title">Admin tasdiqlashini kuting</div>
   <div class="s-text">Bu sahifani yopmang.</div>
   <div class="spinner"></div>
-  <div style="color:var(--text3);font-size:12px;font-family:'DM Mono',monospace;" id="pendSec"></div>
+  <div style="color:var(--text3);font-size:12px;font-family:'DM Mono',monospace;margin-top:8px;" id="pendSec"></div>
 </div>
 <div class="screen" id="sRej">
-  <div class="s-logo" style="font-size:40px;">🚫</div>
+  <div class="s-icon" style="font-size:44px;">🚫</div>
   <div class="s-brand" style="color:var(--red);">Rad etildi</div>
   <div class="s-title">Ruxsat berilmadi</div>
   <button class="btn btn-r" onclick="requestAccess()">Qayta so'rash</button>
 </div>
 <div class="screen" id="sKick">
-  <div class="s-logo" style="font-size:40px;">⛔️</div>
+  <div class="s-icon" style="font-size:44px;">⛔️</div>
   <div class="s-brand" style="color:var(--red);">Chiqarildi</div>
   <div class="s-title">Tizimdan chiqarildingiz</div>
   <button class="btn btn-g" onclick="requestAccess()">Qayta so'rash →</button>
 </div>
 
+<!-- MAIN APP -->
 <div id="APP" style="display:none;">
   <div class="header">
     <div class="h-logo">
@@ -177,21 +222,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);background:#f
       <div class="stat">Jami qiymat<b id="totVal">—</b></div>
     </div>
   </div>
+
   <div class="tabs" id="adminTabs" style="display:none;">
     <div class="tab on" id="tOmbor" onclick="swTab('ombor')">📦 Ombor</div>
     <div class="tab" id="tDevs" onclick="swTab('devices')">📱 Devices</div>
     <div class="tab" id="tFiles" onclick="swTab('files')">🗂 Fayllar</div>
   </div>
 
+  <!-- OMBOR -->
   <div id="cOmbor">
     <div class="grid" id="mainGrid">
-      <div class="card" onclick="openCat('HMI')"><span>🖥</span>HMI</div>
-      <div class="card" onclick="openCat('PLC')"><span>⚙️</span>PLC</div>
-      <div class="card" onclick="openCat('INVERTER')"><span>⚡️</span>INVERTER</div>
-      <div class="card" onclick="openCat('SERVO')"><span>🤖</span>SERVO</div>
-      <div class="card card-files" onclick="openFilesModal()">
-        <span style="font-size:20px;display:inline;margin:0 6px 0 0;">🗂</span>Fayllar
-      </div>
+      <div class="card" onclick="openCat('HMI')"><div class="card-icon">🖥</div>HMI</div>
+      <div class="card" onclick="openCat('PLC')"><div class="card-icon">⚙️</div>PLC</div>
+      <div class="card" onclick="openCat('INVERTER')"><div class="card-icon">⚡️</div>INVERTER</div>
+      <div class="card" onclick="openCat('SERVO')"><div class="card-icon">🤖</div>SERVO</div>
+      <div class="card card-files" onclick="openFilesModal()">🗂 &nbsp;Fayllar</div>
     </div>
     <div class="inv" id="invSec" style="display:none;">
       <div class="inv-top">
@@ -203,6 +248,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);background:#f
     </div>
   </div>
 
+  <!-- DEVICES -->
   <div id="cDevs" style="display:none;" class="section">
     <div class="section-title">Foydalanuvchilar</div>
     <div class="dev-add">
@@ -212,6 +258,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);background:#f
     <div id="devList"></div>
   </div>
 
+  <!-- FILES ADMIN -->
   <div id="cFiles" style="display:none;" class="section">
     <div class="section-title">Fayl qo'shish</div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;">
@@ -225,52 +272,77 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);background:#f
   </div>
 </div>
 
+<!-- ADD/EDIT MODAL -->
 <div class="overlay" id="addModal">
   <div class="mbox" id="mboxEl">
     <div class="m-handle"></div>
-    <div class="m-title" id="mTitle">Mahsulot qo'shish</div>
-    <input type="hidden" id="eId">
-    <div class="fg"><label>Model *</label><input type="text" id="fModel" placeholder="Siemens S7-1200"></div>
-    <div class="fg"><label>Soni *</label><input type="number" id="fSoni" placeholder="0" inputmode="numeric"></div>
-    <div class="fg"><label>Narxi ($) *</label><input type="number" id="fNarx" placeholder="0.00" inputmode="decimal"></div>
-    <div class="fg"><label>Yetkazib beruvchi</label><input type="text" id="fSupp" placeholder="Kompaniya"></div>
-    <div class="fg"><label>Sana</label><input type="date" id="fSana"></div>
-    <div class="fg"><label>Holati</label><select id="fHol"><option>Yangi</option><option>B/U</option></select></div>
-    <div class="fg"><label>Rasm / Video</label><input type="file" id="fMedia" accept="image/*,video/*" onchange="prevMedia(this)"><img id="imgPrev" class="media-prev"><video id="vidPrev" class="media-prev" controls playsinline></video></div>
-    <div class="fg"><label>Izoh</label><input type="text" id="fIzoh" placeholder="Qisqa izoh..."></div>
-    <div class="fg"><label>Xarakteristika</label><textarea id="fXar" placeholder="Har bir xususiyatni yangi qatorga yozing...&#10;Masalan:&#10;Power supply 1.5kW&#10;Voltage 3x380V" rows="6" style="resize:none;line-height:1.8;font-size:15px;"></textarea></div>
-    <button class="save-btn" id="saveBtn" onclick="saveItem()">Saqlash</button>
-    <button class="cancel-btn" onclick="closeModal()">Bekor qilish</button>
+    <div class="m-inner">
+      <div class="m-title" id="mTitle">Mahsulot qo'shish</div>
+      <input type="hidden" id="eId">
+      <div class="fg"><label>Model *</label><input type="text" id="fModel" placeholder="Siemens S7-1200"></div>
+      <div class="fg"><label>Soni *</label><input type="number" id="fSoni" placeholder="0" inputmode="numeric"></div>
+      <div class="fg"><label>Narxi ($) *</label><input type="number" id="fNarx" placeholder="0.00" inputmode="decimal"></div>
+      <div class="fg"><label>Yetkazib beruvchi</label><input type="text" id="fSupp" placeholder="Kompaniya"></div>
+      <div class="fg"><label>Sana</label><input type="date" id="fSana"></div>
+      <div class="fg"><label>Holati</label><select id="fHol"><option>Yangi</option><option>B/U</option></select></div>
+      <div class="fg"><label>Izoh</label><input type="text" id="fIzoh" placeholder="Qisqa izoh..."></div>
+      <div class="fg"><label>Xarakteristika</label><textarea id="fXar" rows="7" placeholder="Har bir xususiyatni yangi qatorga yozing:&#10;Power supply 1.5kW&#10;Voltage 3x380V&#10;Output current 4.8A"></textarea></div>
+      <div class="fg">
+        <label>Rasm / Video</label>
+        <input type="file" id="fMedia" accept="image/*,video/*" onchange="prevMedia(this)">
+        <img id="imgPrev" class="media-prev">
+        <video id="vidPrev" class="media-prev" controls playsinline></video>
+      </div>
+      <button class="save-btn" id="saveBtn" onclick="saveItem()">Saqlash</button>
+      <button class="cancel-btn" onclick="closeModal()">Bekor qilish</button>
+    </div>
   </div>
 </div>
 
+<!-- FILES MODAL -->
 <div class="overlay" id="filesModal">
   <div class="mbox">
     <div class="m-handle"></div>
-    <div id="filesLoginBox">
-      <div class="m-title">🔐 Fayllarga kirish</div>
-      <div class="fg"><label>Login</label><input type="text" id="fLogin" placeholder="Login" autocomplete="off"></div>
-      <div class="fg"><label>Parol</label><input type="password" id="fPass" placeholder="Parol"></div>
-      <button class="save-btn" onclick="checkFilesLogin()">Kirish</button>
-      <button class="cancel-btn" onclick="closeFilesModal()">Bekor qilish</button>
-    </div>
-    <div id="filesListBox" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <div class="m-title" style="margin:0;">🗂 Fayllar</div>
-        <button onclick="logoutFiles()" style="border:none;background:none;color:var(--text3);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">Chiqish</button>
+    <div class="m-inner">
+      <div id="filesLoginBox">
+        <div class="m-title">🔐 Fayllarga kirish</div>
+        <div class="fg"><label>Login</label><input type="text" id="fLogin" placeholder="Login" autocomplete="off"></div>
+        <div class="fg"><label>Parol</label><input type="password" id="fPass" placeholder="Parol"></div>
+        <button class="save-btn" onclick="checkFilesLogin()">Kirish</button>
+        <button class="cancel-btn" onclick="closeFilesModal()">Bekor qilish</button>
       </div>
-      <div id="publicFileList"></div>
+      <div id="filesListBox" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div class="m-title" style="margin:0;">🗂 Fayllar</div>
+          <button onclick="logoutFiles()" style="border:none;background:none;color:var(--text3);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">Chiqish</button>
+        </div>
+        <div id="publicFileList"></div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- EDIT WAIT -->
 <div class="ewait" id="eWait">
   <div class="ebox">
-    <div style="font-size:44px;margin-bottom:14px;">⏳</div>
+    <div style="font-size:44px;margin-bottom:12px;">⏳</div>
     <div style="font-weight:700;font-size:17px;margin-bottom:6px;">Ruxsat kutilmoqda</div>
     <div style="color:var(--text2);font-size:13px;margin-bottom:18px;line-height:1.6;">Admin tahrirlash ruxsatini berishi kerak</div>
     <div class="spinner"></div>
     <button onclick="cancelEditWait()" style="margin-top:12px;border:none;background:none;color:var(--text3);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;">Bekor qilish</button>
+  </div>
+</div>
+
+<!-- IMAGE VIEWER -->
+<div id="imgViewer">
+  <button onclick="closeImgViewer()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;width:44px;height:44px;border-radius:50%;cursor:pointer;z-index:2;">✕</button>
+  <div id="imgViewerWrap" style="width:100%;height:80vh;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:grab;">
+    <img id="imgViewerSrc" style="max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;transform-origin:center;touch-action:none;user-select:none;pointer-events:none;">
+  </div>
+  <div style="display:flex;gap:16px;margin-top:16px;align-items:center;">
+    <button onclick="imgZoom(-0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:26px;width:52px;height:52px;border-radius:50%;cursor:pointer;">−</button>
+    <span id="imgScaleLabel" style="color:rgba(255,255,255,.6);font-size:13px;width:44px;text-align:center;font-family:'DM Mono',monospace;">100%</span>
+    <button onclick="imgZoom(0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:26px;width:52px;height:52px;border-radius:50%;cursor:pointer;">+</button>
   </div>
 </div>
 
@@ -287,10 +359,10 @@ const FB = {
   appId:"1:1051417852266:web:4e9640ff22708f87a68d13",
   databaseURL:"https://scholaris-ai-723bc-default-rtdb.firebaseio.com"
 };
-const RENDER   = "https://yangi-bot-ombori1.onrender.com";
+const RENDER = "https://yangi-bot-ombori1.onrender.com";
 const ADMIN_ID = 8508142416;
-const DEFAULT_LOGIN = 'grand';
-const DEFAULT_PASS  = '5404';
+const FILES_LOGIN = 'grand';
+const FILES_PASS  = '5404';
 
 const fApp = initializeApp(FB);
 const db   = getDatabase(fApp);
@@ -299,19 +371,16 @@ tg.expand();
 
 const user  = tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
 const UID   = user ? user.id : 0;
-const UNAME = user ? [user.first_name, user.last_name||''].join(' ').trim() : '';
+const UNAME = user ? [user.first_name||'', user.last_name||''].join(' ').trim() : '';
 const UUSER = user ? (user.username||'') : '';
 const ADMIN = UID === ADMIN_ID;
 
-let curCat    = '';
-let curEditAct= null;
-let curEditId = null;
-let editUnsub = null;
+let curCat = '', editUnsub = null;
 let userPerms = {view:false, edit:false};
 
 function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const el=document.getElementById(id);
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var el = document.getElementById(id);
   if(el) el.classList.add('active');
 }
 
@@ -320,12 +389,12 @@ if(!UID || UID===0){
   show('sBrowser');
 } else if(ADMIN){
   set(ref(db,'devices/'+UID),{name:UNAME,username:UUSER,viewPerm:true,editPerm:true,isAdmin:true,status:'approved',lastSeen:Date.now()});
-  userPerms={view:true,edit:true};
+  userPerms = {view:true, edit:true};
   showApp();
 } else {
   get(ref(db,'devices/'+UID)).then(function(snap){
     if(!snap.exists()){show('sReq');return;}
-    const d=snap.val();
+    var d = snap.val();
     if(d.status==='kicked'){show('sKick');return;}
     if(d.viewPerm){userPerms.view=true;userPerms.edit=!!d.editPerm;showApp();}
     else if(d.status==='pending'){show('sPend');pollPerm();}
@@ -341,11 +410,11 @@ window.requestAccess = function(){
 };
 
 function pollPerm(){
-  let s=0;
-  const timer=setInterval(function(){s++;const el=document.getElementById('pendSec');if(el)el.textContent=s+' soniya...';},1000);
+  var s=0;
+  var timer=setInterval(function(){s++;var el=document.getElementById('pendSec');if(el)el.textContent=s+' soniya...';},1000);
   onValue(ref(db,'devices/'+UID),function(snap){
     if(!snap.exists())return;
-    const d=snap.val();
+    var d=snap.val();
     if(d.status==='kicked'){clearInterval(timer);show('sKick');}
     else if(d.viewPerm){clearInterval(timer);userPerms.view=true;userPerms.edit=!!d.editPerm;showApp();}
     else if(d.status==='rejected'){clearInterval(timer);show('sRej');}
@@ -353,11 +422,11 @@ function pollPerm(){
 }
 
 function showApp(){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.getElementById('APP').style.display='block';
+  document.getElementById('uName').textContent=UNAME;
   if(ADMIN) document.getElementById('adminTabs').style.display='flex';
   if(userPerms.edit||ADMIN) document.getElementById('addItemBtn').style.display='block';
-  document.getElementById('uName').textContent=UNAME;
   dashboard();
   if(!ADMIN) monitorKick();
 }
@@ -365,18 +434,17 @@ function showApp(){
 function monitorKick(){
   onValue(ref(db,'devices/'+UID),function(snap){
     if(!snap.exists()){show('sKick');document.getElementById('APP').style.display='none';return;}
-    const d=snap.val();
+    var d=snap.val();
     if(d.status==='kicked'){document.getElementById('APP').style.display='none';show('sKick');}
     userPerms.edit=!!d.editPerm;
-    const btn=document.getElementById('addItemBtn');
+    var btn=document.getElementById('addItemBtn');
     if(btn) btn.style.display=userPerms.edit?'block':'none';
   });
 }
 
 function dashboard(){
   onValue(ref(db,'ombor'),function(snap){
-    let cnt=0,val=0;
-    const d=snap.val();
+    var cnt=0,val=0,d=snap.val();
     if(d) for(var c in d) for(var id in d[c]){cnt+=parseInt(d[c][id].soni||0);val+=parseInt(d[c][id].soni||0)*parseFloat(d[c][id].narx||0);}
     document.getElementById('totItems').textContent=cnt+' ta';
     document.getElementById('totVal').textContent='$'+val.toLocaleString();
@@ -413,54 +481,76 @@ function loadItems(cat){
 }
 
 function renderItems(data){
-  const c=document.getElementById('itemsCont');
+  var c=document.getElementById('itemsCont');
   c.innerHTML='';
   if(!data||!Object.keys(data).length){
     c.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div>Mahsulotlar yo\'q</div></div>';
     return;
   }
-  const canEdit=ADMIN||userPerms.edit;
+  var canEdit=ADMIN||userPerms.edit;
   for(var id in data){
-    const it=data[id];
-    let media='';
+    var it=data[id];
+    var badgeClass=it.holati==='B/U'?'item-badge badge-bu':'item-badge badge-new';
+    
+    // Table rows
+    var rows='';
+    rows+='<tr><td class="td-label">Soni</td><td class="td-val">'+it.soni+' ta</td></tr>';
+    rows+='<tr><td class="td-label">Narxi</td><td class="td-val">$'+Number(it.narx).toLocaleString()+'</td></tr>';
+    if(it.supplier) rows+='<tr><td class="td-label">Yetkazuvchi</td><td class="td-val">'+it.supplier+'</td></tr>';
+    if(it.sana) rows+='<tr><td class="td-label">Sana</td><td class="td-val">'+it.sana+'</td></tr>';
+    if(it.izoh) rows+='<tr><td class="td-label">Izoh</td><td class="td-val" style="white-space:normal;word-break:break-word;">'+it.izoh+'</td></tr>';
+
+    // Xarakteristika
+    var xarHtml='';
+    if(it.xar && it.xar.trim()){
+      var lines=it.xar.trim().split('\n');
+      var linesHtml='';
+      for(var i=0;i<lines.length;i++){
+        var line=lines[i].trim();
+        if(line) linesHtml+='<div class="xar-line"><div class="xar-dot"></div><div class="xar-text">'+line+'</div></div>';
+      }
+      xarHtml='<div class="xar-box"><div class="xar-title">Xarakteristika</div>'+linesHtml+'</div>';
+    }
+
+    // Media
+    var media='';
     if(it.mediaUrl){
       media=it.mediaType==='video'
         ?'<video src="'+it.mediaUrl+'" class="item-vid" controls playsinline></video>'
-        :'<img src="'+it.mediaUrl+'" class="item-img" onclick="viewImg(this.src)" style="cursor:zoom-in;">';
+        :'<img src="'+it.mediaUrl+'" class="item-img" onclick="viewImg(\''+it.mediaUrl+'\')">';
     }
-    const editBtns=canEdit?'<div class="item-action-btns"><button class="i-edit" data-action="edit" data-id="'+id+'">✏️ Tahrirlash</button><button class="i-del" data-action="delete" data-id="'+id+'">🗑 O\'chirish</button></div>':'';
-    const badgeClass=it.holati==='B/U'?'item-badge bu':'item-badge';
-    const div=document.createElement('div');
+
+    // Buttons
+    var btns=canEdit?'<div class="item-btns"><button class="i-edit" data-action="edit" data-id="'+id+'">✏️ Tahrirlash</button><button class="i-del" data-action="delete" data-id="'+id+'">🗑 O\'chirish</button></div>':'';
+
+    var div=document.createElement('div');
     div.className='item';
-    div.innerHTML='<div class="item-row"><div class="item-name">'+it.model+'</div><span class="'+badgeClass+'">'+(it.holati||'Yangi')+'</span></div>'
-      +'<table class="item-table">'
-      +'<tr><td>Soni</td><td>'+it.soni+' ta</td></tr>'
-      +'<tr><td>Narxi</td><td>$'+Number(it.narx).toLocaleString()+'</td></tr>'
-      +'<tr><td>Yetkazuvchi</td><td>'+(it.supplier||'-')+'</td></tr>'
-      +'<tr><td>Sana</td><td>'+(it.sana||'-')+'</td></tr>'
-      +(it.izoh?'<tr><td>Izoh</td><td style="white-space:normal;word-break:break-word;">'+it.izoh+'</td></tr>':'')
-      +'</table>'
-      +(it.xar?'<div style="margin-top:10px;padding:12px 14px;background:var(--bg3);border-radius:10px;border-left:3px solid var(--accent2);font-size:13px;color:var(--text2);white-space:pre-line;line-height:1.9;word-break:break-word;width:100%;box-sizing:border-box;">'+it.xar+'</div>':'')
-      +media+editBtns;
+    div.innerHTML=
+      '<div class="item-head">'+
+        '<div class="item-name-row">'+
+          '<div class="item-name">'+it.model+'</div>'+
+          '<span class="'+badgeClass+'">'+(it.holati||'Yangi')+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<table class="item-table">'+rows+'</table>'+
+      xarHtml+media+btns;
     c.appendChild(div);
   }
 }
 
 document.getElementById('itemsCont').addEventListener('click',function(e){
-  const btn=e.target.closest('[data-action]');
+  var btn=e.target.closest('[data-action]');
   if(!btn)return;
   needEdit(btn.dataset.action,btn.dataset.id);
 });
 
 window.needEdit = function(action,itemId){
   itemId=itemId||'';
-  curEditAct=action; curEditId=itemId;
-  if(ADMIN){doAction(action,itemId);return;}
-  if(userPerms.edit){doAction(action,itemId);return;}
+  if(ADMIN||userPerms.edit){doAction(action,itemId);return;}
   document.getElementById('eWait').classList.add('open');
   set(ref(db,'edit_requests/'+UID),{name:UNAME,username:UUSER,action:action,status:'pending',timestamp:Date.now()});
   fetch(RENDER+'/api/request_edit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER,action:action})}).catch(function(){});
-  const erRef=ref(db,'edit_requests/'+UID+'/status');
+  var erRef=ref(db,'edit_requests/'+UID+'/status');
   editUnsub=onValue(erRef,function(snap){
     if(snap.val()==='approved'){document.getElementById('eWait').classList.remove('open');off(erRef);doAction(action,itemId);}
     else if(snap.val()==='rejected'){document.getElementById('eWait').classList.remove('open');off(erRef);tg.showAlert('Tahrirlash ruxsati berilmadi!');}
@@ -492,15 +582,14 @@ function openModal(){
   document.getElementById('fMedia').value='';
   document.getElementById('imgPrev').style.display='none';
   document.getElementById('vidPrev').style.display='none';
-  var m=document.getElementById('addModal');
-  m.classList.add('open');
+  document.getElementById('addModal').classList.add('open');
   setTimeout(function(){document.getElementById('mboxEl').scrollTop=0;},50);
 }
 
 function openEditModal(itemId){
   get(ref(db,'ombor/'+curCat+'/'+itemId)).then(function(snap){
     if(!snap.exists())return;
-    const it=snap.val();
+    var it=snap.val();
     document.getElementById('mTitle').textContent='Tahrirlash';
     document.getElementById('eId').value=itemId;
     document.getElementById('fModel').value=it.model||'';
@@ -514,8 +603,7 @@ function openEditModal(itemId){
     document.getElementById('fMedia').value='';
     document.getElementById('imgPrev').style.display='none';
     document.getElementById('vidPrev').style.display='none';
-    var m=document.getElementById('addModal');
-    m.classList.add('open');
+    document.getElementById('addModal').classList.add('open');
     setTimeout(function(){document.getElementById('mboxEl').scrollTop=0;},50);
   });
 }
@@ -523,22 +611,27 @@ function openEditModal(itemId){
 window.closeModal = function(){document.getElementById('addModal').classList.remove('open');};
 
 window.prevMedia = function(input){
-  const f=input.files[0];if(!f)return;
-  const url=URL.createObjectURL(f);
-  if(f.type.startsWith('image/')){document.getElementById('imgPrev').src=url;document.getElementById('imgPrev').style.display='block';document.getElementById('vidPrev').style.display='none';}
-  else{document.getElementById('vidPrev').src=url;document.getElementById('vidPrev').style.display='block';document.getElementById('imgPrev').style.display='none';}
+  var f=input.files[0];if(!f)return;
+  var url=URL.createObjectURL(f);
+  if(f.type.startsWith('image/')){
+    document.getElementById('imgPrev').src=url;document.getElementById('imgPrev').style.display='block';
+    document.getElementById('vidPrev').style.display='none';
+  } else {
+    document.getElementById('vidPrev').src=url;document.getElementById('vidPrev').style.display='block';
+    document.getElementById('imgPrev').style.display='none';
+  }
 };
 
 function compressMedia(file){
   return new Promise(function(res){
-    if(file.type.startsWith('video/')){const r=new FileReader();r.onload=function(e){res({url:e.target.result,type:'video'});};r.readAsDataURL(file);return;}
-    const img=new Image();const url=URL.createObjectURL(file);
+    if(file.type.startsWith('video/')){var r=new FileReader();r.onload=function(e){res({url:e.target.result,type:'video'});};r.readAsDataURL(file);return;}
+    var img=new Image(),url=URL.createObjectURL(file);
     img.onload=function(){
-      let w=img.width,h=img.height,max=800;
+      var w=img.width,h=img.height,max=800;
       if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
-      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      var cv=document.createElement('canvas');cv.width=w;cv.height=h;
       cv.getContext('2d').drawImage(img,0,0,w,h);
-      res({url:cv.toDataURL('image/jpeg',0.72),type:'image'});
+      res({url:cv.toDataURL('image/jpeg',0.75),type:'image'});
       URL.revokeObjectURL(url);
     };
     img.src=url;
@@ -546,17 +639,25 @@ function compressMedia(file){
 }
 
 window.saveItem = function(){
-  const model=document.getElementById('fModel').value.trim();
-  const soni=document.getElementById('fSoni').value.trim();
-  const narx=document.getElementById('fNarx').value.trim();
+  var model=document.getElementById('fModel').value.trim();
+  var soni=document.getElementById('fSoni').value.trim();
+  var narx=document.getElementById('fNarx').value.trim();
   if(!model||!soni||!narx){tg.showAlert('Model, soni va narxi majburiy!');return;}
-  const btn=document.getElementById('saveBtn');
+  var btn=document.getElementById('saveBtn');
   btn.textContent='Saqlanmoqda...';btn.disabled=true;
-  const eId=document.getElementById('eId').value;
-  const mFile=document.getElementById('fMedia').files[0];
-  const item={model:model,soni:soni,narx:narx,supplier:document.getElementById('fSupp').value.trim(),sana:document.getElementById('fSana').value,holati:document.getElementById('fHol').value,izoh:document.getElementById('fIzoh').value.trim(),xar:document.getElementById('fXar').value.trim(),timestamp:Date.now()};
+  var eId=document.getElementById('eId').value;
+  var mFile=document.getElementById('fMedia').files[0];
+  var item={
+    model:model,soni:soni,narx:narx,
+    supplier:document.getElementById('fSupp').value.trim(),
+    sana:document.getElementById('fSana').value,
+    holati:document.getElementById('fHol').value,
+    izoh:document.getElementById('fIzoh').value.trim(),
+    xar:document.getElementById('fXar').value.trim(),
+    timestamp:Date.now()
+  };
   function saveToDb(it){
-    const p=eId?update(ref(db,'ombor/'+curCat+'/'+eId),it):push(ref(db,'ombor/'+curCat),it);
+    var p=eId?update(ref(db,'ombor/'+curCat+'/'+eId),it):push(ref(db,'ombor/'+curCat),it);
     p.then(function(){closeModal();tg.HapticFeedback.notificationOccurred('success');btn.textContent='Saqlash';btn.disabled=false;});
   }
   if(mFile){
@@ -571,34 +672,48 @@ window.saveItem = function(){
   }
 };
 
+// DEVICES
 function loadDevs(){
   onValue(ref(db,'devices'),function(snap){
-    const c=document.getElementById('devList');c.innerHTML='';
-    const data=snap.val();
+    var c=document.getElementById('devList');c.innerHTML='';
+    var data=snap.val();
     if(!data){c.innerHTML='<div class="empty"><div class="empty-icon">📱</div><div>Hech kim yo\'q</div></div>';return;}
     for(var uid in data){
-      const dv=data[uid];
-      const sb=dv.status==='pending'?'<span class="badge b-wait">⏳ Kutmoqda</span>':dv.status==='kicked'?'<span class="badge b-no">🚫 Chiqarilgan</span>':'<span class="badge b-ok">✅ Faol</span>';
-      const vb=dv.viewPerm?'<span class="badge b-ok">👁 Ko\'rish</span>':'<span class="badge b-no">👁 Yo\'q</span>';
-      const eb=dv.editPerm?'<span class="badge b-edit">✏️ Tahrirlash</span>':'<span class="badge b-no">✏️ Yo\'q</span>';
-      const div=document.createElement('div');div.className='dcard';
-      div.innerHTML='<div class="dcard-top"><div class="davatar">'+((dv.name||'?').charAt(0).toUpperCase())+'</div><div class="dinfo"><div class="dname">'+(dv.name||'Noma\'lum')+(dv.isAdmin?' 👑':'')+'</div><div class="did">ID: '+uid+(dv.username?' · @'+dv.username:'')+'</div><div class="badges">'+sb+vb+eb+'</div></div></div>'
-        +(dv.isAdmin?'':'<div class="dcard-btns"><button class="d-btn" data-uid="'+uid+'" data-act="giveView">👁 Ko\'rish</button><button class="d-btn" data-uid="'+uid+'" data-act="giveEdit">✏️ Tahrirlash</button><button class="d-btn" style="color:var(--red);" data-uid="'+uid+'" data-act="kick">🚫 O\'chirish</button></div>');
+      var dv=data[uid];
+      var sb=dv.status==='pending'?'<span class="dbadge db-wait">⏳ Kutmoqda</span>':dv.status==='kicked'?'<span class="dbadge db-no">🚫 Chiqarilgan</span>':'<span class="dbadge db-ok">✅ Faol</span>';
+      var vb=dv.viewPerm?'<span class="dbadge db-ok">👁 Ko\'rish</span>':'<span class="dbadge db-no">👁 Yo\'q</span>';
+      var eb=dv.editPerm?'<span class="dbadge db-edit">✏️ Tahrirlash</span>':'<span class="dbadge db-no">✏️ Yo\'q</span>';
+      var div=document.createElement('div');div.className='dcard';
+      div.innerHTML=
+        '<div class="dcard-top">'+
+          '<div class="davatar">'+((dv.name||'?').charAt(0).toUpperCase())+'</div>'+
+          '<div class="dinfo">'+
+            '<div class="dname">'+(dv.name||'Noma\'lum')+(dv.isAdmin?' 👑':'')+'</div>'+
+            '<div class="did">ID: '+uid+(dv.username?' · @'+dv.username:'')+'</div>'+
+            '<div class="dbadges">'+sb+vb+eb+'</div>'+
+          '</div>'+
+        '</div>'+
+        (!dv.isAdmin?
+          '<div class="dcard-btns">'+
+            '<button class="d-btn" data-uid="'+uid+'" data-act="giveView">👁 Ko\'rish</button>'+
+            '<button class="d-btn" data-uid="'+uid+'" data-act="giveEdit">✏️ Tahrirlash</button>'+
+            '<button class="d-btn d-btn-del" data-uid="'+uid+'" data-act="kick">🚫 O\'chirish</button>'+
+          '</div>':'');
       c.appendChild(div);
     }
   });
 }
 
 document.getElementById('devList').addEventListener('click',function(e){
-  const btn=e.target.closest('[data-act]');if(!btn)return;
-  const uid=btn.dataset.uid,act=btn.dataset.act;
+  var btn=e.target.closest('[data-act]');if(!btn)return;
+  var uid=btn.dataset.uid,act=btn.dataset.act;
   if(act==='giveView') tg.showConfirm("Ko'rish huquqi berilsinmi?",function(ok){if(ok) update(ref(db,'devices/'+uid),{viewPerm:true,editPerm:false,status:'approved'});});
-  else if(act==='giveEdit') tg.showConfirm("Ko'rish + tahrirlash huquqi berilsinmi?",function(ok){if(ok) update(ref(db,'devices/'+uid),{viewPerm:true,editPerm:true,status:'approved'});});
+  else if(act==='giveEdit') tg.showConfirm("Ko'rish + tahrirlash huquqi?",function(ok){if(ok) update(ref(db,'devices/'+uid),{viewPerm:true,editPerm:true,status:'approved'});});
   else if(act==='kick') tg.showConfirm("Chiqarib yuborasizmi?",function(ok){if(ok) update(ref(db,'devices/'+uid),{viewPerm:false,editPerm:false,status:'kicked'});});
 });
 
 window.addDevById = function(){
-  const input=document.getElementById('newDevId');const uid=input.value.trim();
+  var input=document.getElementById('newDevId'),uid=input.value.trim();
   if(!uid){tg.showAlert('Telegram ID kiriting!');return;}
   get(ref(db,'devices/'+uid)).then(function(snap){
     if(snap.exists()&&snap.val().viewPerm){tg.showAlert('Bu foydalanuvchi allaqachon ruxsatli!');return;}
@@ -607,19 +722,23 @@ window.addDevById = function(){
   });
 };
 
+// FILES
 window.openFilesModal = function(){
-  const logged=sessionStorage.getItem('files_auth');
+  var logged=sessionStorage.getItem('files_auth');
   document.getElementById('filesLoginBox').style.display=logged?'none':'block';
   document.getElementById('filesListBox').style.display=logged?'block':'none';
   document.getElementById('filesModal').classList.add('open');
   if(logged) loadPublicFiles();
 };
-window.closeFilesModal = function(){document.getElementById('filesModal').classList.remove('open');document.getElementById('fLogin').value='';document.getElementById('fPass').value='';};
+window.closeFilesModal = function(){
+  document.getElementById('filesModal').classList.remove('open');
+  document.getElementById('fLogin').value='';document.getElementById('fPass').value='';
+};
 window.checkFilesLogin = function(){
-  const login=document.getElementById('fLogin').value.trim();
-  const pass=document.getElementById('fPass').value.trim();
+  var login=document.getElementById('fLogin').value.trim();
+  var pass=document.getElementById('fPass').value.trim();
   get(ref(db,'files_auth')).then(function(snap){
-    const stored=snap.val()||{login:DEFAULT_LOGIN,pass:DEFAULT_PASS};
+    var stored=snap.val()||{login:FILES_LOGIN,pass:FILES_PASS};
     if(login===stored.login&&pass===stored.pass){
       sessionStorage.setItem('files_auth','1');
       document.getElementById('filesLoginBox').style.display='none';
@@ -629,43 +748,43 @@ window.checkFilesLogin = function(){
     } else {tg.showAlert('Login yoki parol noto\'g\'ri!');tg.HapticFeedback.notificationOccurred('error');}
   });
 };
-window.logoutFiles = function(){sessionStorage.removeItem('files_auth');document.getElementById('filesLoginBox').style.display='block';document.getElementById('filesListBox').style.display='none';};
-
+window.logoutFiles = function(){
+  sessionStorage.removeItem('files_auth');
+  document.getElementById('filesLoginBox').style.display='block';
+  document.getElementById('filesListBox').style.display='none';
+};
 function loadPublicFiles(){
   onValue(ref(db,'files'),function(snap){
-    const c=document.getElementById('publicFileList');if(!c)return;c.innerHTML='';
-    const data=snap.val();
+    var c=document.getElementById('publicFileList');if(!c)return;c.innerHTML='';
+    var data=snap.val();
     if(!data){c.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div>Fayllar yo\'q</div></div>';return;}
     for(var id in data){
-      const f=data[id];const div=document.createElement('div');div.className='file-card';
-      div.innerHTML='<div class="fadmin-name">📄 '+f.name+'</div>'+(f.desc?'<div class="fadmin-desc" style="margin-bottom:12px;">'+f.desc+'</div>':'<div style="margin-bottom:12px;"></div>')+'<a href="'+f.link+'" target="_blank" class="dl-btn">⬇️ Yuklab olish</a>';
+      var f=data[id];var div=document.createElement('div');div.className='file-card';
+      div.innerHTML='<div class="file-info"><div class="file-name">📄 '+f.name+'</div>'+(f.desc?'<div class="file-desc">'+f.desc+'</div>':'')+'</div><a href="'+f.link+'" target="_blank" class="dl-btn">⬇️ Yuklab olish</a>';
       c.appendChild(div);
     }
   });
 }
-
 function loadAdminFiles(){
   onValue(ref(db,'files'),function(snap){
-    const c=document.getElementById('adminFileList');if(!c)return;c.innerHTML='';
-    const data=snap.val();
+    var c=document.getElementById('adminFileList');if(!c)return;c.innerHTML='';
+    var data=snap.val();
     if(!data){c.innerHTML='<div class="empty"><div>Fayllar yo\'q</div></div>';return;}
     for(var id in data){
-      const f=data[id];const div=document.createElement('div');div.className='fadmin-card';
+      var f=data[id];var div=document.createElement('div');div.className='fadmin-card';
       div.innerHTML='<div class="fadmin-info"><div class="fadmin-name">📄 '+f.name+'</div>'+(f.desc?'<div class="fadmin-desc">'+f.desc+'</div>':'')+'</div><button data-fid="'+id+'" class="del-btn">🗑</button>';
       c.appendChild(div);
     }
   });
 }
-
 document.getElementById('adminFileList').addEventListener('click',function(e){
-  const btn=e.target.closest('[data-fid]');if(!btn)return;
+  var btn=e.target.closest('[data-fid]');if(!btn)return;
   tg.showConfirm("Bu faylni o'chirasizmi?",function(ok){if(ok) remove(ref(db,'files/'+btn.dataset.fid));});
 });
-
 window.addFile = function(){
-  const name=document.getElementById('fFileName').value.trim();
-  const link=document.getElementById('fFileLink').value.trim();
-  const desc=document.getElementById('fFileDesc').value.trim();
+  var name=document.getElementById('fFileName').value.trim();
+  var link=document.getElementById('fFileLink').value.trim();
+  var desc=document.getElementById('fFileDesc').value.trim();
   if(!name||!link){tg.showAlert('Nom va link majburiy!');return;}
   push(ref(db,'files'),{name:name,link:link,desc:desc,timestamp:Date.now()}).then(function(){
     document.getElementById('fFileName').value='';document.getElementById('fFileLink').value='';document.getElementById('fFileDesc').value='';
@@ -674,134 +793,45 @@ window.addFile = function(){
 };
 
 // IMAGE VIEWER
-var imgScale=1, imgLastScale=1, imgStartDist=0;
-var imgTransX=0, imgTransY=0, imgDragStartX=0, imgDragStartY=0, imgDragging=false;
-var imgPinchStartX=0, imgPinchStartY=0, imgTransStartX=0, imgTransStartY=0;
-
-function applyImgTransform(){
-  var img=document.getElementById('imgViewerSrc');
-  img.style.transform='scale('+imgScale+') translate('+imgTransX+'px,'+imgTransY+'px)';
+var imgScale=1,imgLastScale=1,imgStartDist=0,imgTransX=0,imgTransY=0,imgDragging=false,imgDragSX=0,imgDragSY=0,imgPinchSX=0,imgPinchSY=0,imgTSX=0,imgTSY=0;
+function applyImg(){
+  document.getElementById('imgViewerSrc').style.transform='scale('+imgScale+') translate('+imgTransX+'px,'+imgTransY+'px)';
   document.getElementById('imgScaleLabel').textContent=Math.round(imgScale*100)+'%';
 }
-
-function resetImgViewer(){
-  imgScale=1; imgLastScale=1; imgTransX=0; imgTransY=0;
-  applyImgTransform();
-}
-
-window.closeImgViewer = function(){
-  document.getElementById('imgViewer').style.display='none';
-  resetImgViewer();
-};
-
-window.imgZoom = function(delta){
-  imgScale=Math.min(5,Math.max(0.5,imgScale+delta));
-  imgLastScale=imgScale;
-  if(imgScale===1){imgTransX=0;imgTransY=0;}
-  applyImgTransform();
-};
-
-window.viewImg = function(src){
-  var img=document.getElementById('imgViewerSrc');
-  img.src=src;
-  resetImgViewer();
-  document.getElementById('imgViewer').style.display='flex';
-};
-
+window.closeImgViewer=function(){document.getElementById('imgViewer').style.display='none';imgScale=1;imgLastScale=1;imgTransX=0;imgTransY=0;applyImg();};
+window.imgZoom=function(d){imgScale=Math.min(5,Math.max(0.5,imgScale+d));imgLastScale=imgScale;if(imgScale===1){imgTransX=0;imgTransY=0;}applyImg();};
+window.viewImg=function(src){document.getElementById('imgViewerSrc').src=src;imgScale=1;imgLastScale=1;imgTransX=0;imgTransY=0;applyImg();document.getElementById('imgViewer').style.display='flex';};
 (function(){
   var wrap=document.getElementById('imgViewerWrap');
-
-  function getDist(t){ var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY; return Math.sqrt(dx*dx+dy*dy); }
-  function getMid(t){ return {x:(t[0].clientX+t[1].clientX)/2, y:(t[0].clientY+t[1].clientY)/2}; }
-
-  // TOUCH
+  function dist(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy);}
+  function mid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2};}
   wrap.addEventListener('touchstart',function(e){
-    if(e.touches.length===2){
-      e.preventDefault();
-      imgStartDist=getDist(e.touches);
-      imgPinchStartX=getMid(e.touches).x;
-      imgPinchStartY=getMid(e.touches).y;
-      imgTransStartX=imgTransX;
-      imgTransStartY=imgTransY;
-      imgLastScale=imgScale;
-    } else if(e.touches.length===1&&imgScale>1){
-      e.preventDefault();
-      imgDragging=true;
-      imgDragStartX=e.touches[0].clientX-imgTransX*imgScale;
-      imgDragStartY=e.touches[0].clientY-imgTransY*imgScale;
-    }
+    if(e.touches.length===2){e.preventDefault();imgStartDist=dist(e.touches);var m=mid(e.touches);imgPinchSX=m.x;imgPinchSY=m.y;imgTSX=imgTransX;imgTSY=imgTransY;imgLastScale=imgScale;}
+    else if(e.touches.length===1&&imgScale>1){e.preventDefault();imgDragging=true;imgDragSX=e.touches[0].clientX-imgTransX*imgScale;imgDragSY=e.touches[0].clientY-imgTransY*imgScale;}
   },{passive:false});
-
   wrap.addEventListener('touchmove',function(e){
     e.preventDefault();
-    if(e.touches.length===2){
-      var dist=getDist(e.touches);
-      imgScale=Math.min(5,Math.max(0.5,imgLastScale*(dist/imgStartDist)));
-      var mid=getMid(e.touches);
-      imgTransX=imgTransStartX+(mid.x-imgPinchStartX)/imgScale;
-      imgTransY=imgTransStartY+(mid.y-imgPinchStartY)/imgScale;
-      applyImgTransform();
-    } else if(e.touches.length===1&&imgDragging){
-      imgTransX=(e.touches[0].clientX-imgDragStartX)/imgScale;
-      imgTransY=(e.touches[0].clientY-imgDragStartY)/imgScale;
-      applyImgTransform();
-    }
+    if(e.touches.length===2){var d2=dist(e.touches);imgScale=Math.min(5,Math.max(0.5,imgLastScale*(d2/imgStartDist)));var m=mid(e.touches);imgTransX=imgTSX+(m.x-imgPinchSX)/imgScale;imgTransY=imgTSY+(m.y-imgPinchSY)/imgScale;applyImg();}
+    else if(e.touches.length===1&&imgDragging){imgTransX=(e.touches[0].clientX-imgDragSX)/imgScale;imgTransY=(e.touches[0].clientY-imgDragSY)/imgScale;applyImg();}
   },{passive:false});
-
-  wrap.addEventListener('touchend',function(e){
-    if(e.touches.length<2){ imgLastScale=imgScale; imgDragging=false; }
-  });
-
-  // MOUSE (desktop)
-  wrap.addEventListener('mousedown',function(e){
-    if(imgScale>1){
-      imgDragging=true;
-      wrap.style.cursor='grabbing';
-      imgDragStartX=e.clientX-imgTransX*imgScale;
-      imgDragStartY=e.clientY-imgTransY*imgScale;
-      e.preventDefault();
-    }
-  });
-  window.addEventListener('mousemove',function(e){
-    if(imgDragging){
-      imgTransX=(e.clientX-imgDragStartX)/imgScale;
-      imgTransY=(e.clientY-imgDragStartY)/imgScale;
-      applyImgTransform();
-    }
-  });
+  wrap.addEventListener('touchend',function(e){if(e.touches.length<2){imgLastScale=imgScale;imgDragging=false;}});
+  wrap.addEventListener('mousedown',function(e){if(imgScale>1){imgDragging=true;wrap.style.cursor='grabbing';imgDragSX=e.clientX-imgTransX*imgScale;imgDragSY=e.clientY-imgTransY*imgScale;e.preventDefault();}});
+  window.addEventListener('mousemove',function(e){if(imgDragging){imgTransX=(e.clientX-imgDragSX)/imgScale;imgTransY=(e.clientY-imgDragSY)/imgScale;applyImg();}});
   window.addEventListener('mouseup',function(){imgDragging=false;wrap.style.cursor='grab';});
-
-  // Mouse wheel zoom (desktop)
-  wrap.addEventListener('wheel',function(e){
-    e.preventDefault();
-    var delta=e.deltaY>0?-0.2:0.2;
-    imgScale=Math.min(5,Math.max(0.5,imgScale+delta));
-    imgLastScale=imgScale;
-    if(imgScale===1){imgTransX=0;imgTransY=0;}
-    applyImgTransform();
-  },{passive:false});
+  wrap.addEventListener('wheel',function(e){e.preventDefault();imgScale=Math.min(5,Math.max(0.5,imgScale+(e.deltaY>0?-0.2:0.2)));imgLastScale=imgScale;if(imgScale===1){imgTransX=0;imgTransY=0;}applyImg();},{passive:false});
 })();
 
+// Keyboard fix
 document.getElementById('addModal').addEventListener('focusin',function(e){
-  if(e.target.matches('input,select,textarea')) setTimeout(function(){e.target.scrollIntoView({behavior:'smooth',block:'center'});},350);
+  if(e.target.matches('input,select,textarea'))
+    setTimeout(function(){e.target.scrollIntoView({behavior:'smooth',block:'center'});},350);
 });
 if(window.visualViewport){
   window.visualViewport.addEventListener('resize',function(){
-    const f=document.querySelector('#mboxEl :focus');
+    var f=document.querySelector('#mboxEl :focus');
     if(f) setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'center'});},100);
   });
 }
 </script>
-<div id="imgViewer" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:99999;flex-direction:column;align-items:center;justify-content:center;">
-  <button onclick="closeImgViewer()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:24px;width:44px;height:44px;border-radius:50%;cursor:pointer;z-index:2;">✕</button>
-  <div id="imgViewerWrap" style="width:100%;height:80vh;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:grab;">
-    <img id="imgViewerSrc" style="max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;transform-origin:center;touch-action:none;user-select:none;pointer-events:none;">
-  </div>
-  <div style="display:flex;gap:16px;margin-top:16px;align-items:center;">
-    <button onclick="imgZoom(-0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:28px;width:52px;height:52px;border-radius:50%;cursor:pointer;">−</button>
-    <span id="imgScaleLabel" style="color:rgba(255,255,255,.6);font-size:13px;width:44px;text-align:center;">100%</span>
-    <button onclick="imgZoom(0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:28px;width:52px;height:52px;border-radius:50%;cursor:pointer;">+</button>
-  </div>
-</div>
 </body>
 </html>
