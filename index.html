@@ -16,8 +16,7 @@
   --text:#1a202c;--text2:#4a5568;--text3:#a0aec0;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
-#APP{max-width:600px;margin:0 auto;}
-.header{max-width:600px;margin:0 auto;border-radius:0 0 16px 16px;}
+#APP{width:100%;}
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;text-align:center;}
 .screen.active{display:flex;}
 .s-logo{font-size:52px;margin-bottom:16px;}
@@ -55,7 +54,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .inv-title{font-size:18px;font-weight:700;flex:1;}
 .add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:14px;width:100%;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:14px;font-family:'DM Sans',sans-serif;}
 
-.item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;position:relative;}
+.item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;position:relative;width:100%;box-sizing:border-box;}
 .item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--accent),var(--accent2));}
 .item-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
 .item-name{font-weight:700;font-size:15px;flex:1;}
@@ -439,7 +438,7 @@ function renderItems(data){
       +'<tr><td>Narxi</td><td>$'+Number(it.narx).toLocaleString()+'</td></tr>'
       +'<tr><td>Yetkazuvchi</td><td>'+(it.supplier||'-')+'</td></tr>'
       +'<tr><td>Sana</td><td>'+(it.sana||'-')+'</td></tr>'
-      +(it.izoh?'<tr><td>Izoh</td><td style="white-space:normal;word-break:break-word;max-width:160px;">'+it.izoh+'</td></tr>':'')
+      +(it.izoh?'<tr><td>Izoh</td><td style="white-space:normal;word-break:break-word;">'+it.izoh+'</td></tr>':'')
       +'</table>'
       +(it.xar?'<div style="margin-top:10px;padding:12px 14px;background:var(--bg3);border-radius:10px;border-left:3px solid var(--accent2);font-size:13px;color:var(--text2);white-space:pre-line;line-height:1.9;word-break:break-word;width:100%;box-sizing:border-box;">'+it.xar+'</div>':'')
       +media+editBtns;
