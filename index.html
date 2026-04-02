@@ -554,7 +554,7 @@ window.saveItem = function(){
   btn.textContent='Saqlanmoqda...';btn.disabled=true;
   const eId=document.getElementById('eId').value;
   const mFile=document.getElementById('fMedia').files[0];
-  const item={model:model,soni:soni,narx:narx,supplier:document.getElementById('fSupp').value.trim(),sana:document.getElementById('fSana').value,holati:document.getElementById('fHol').value,izoh:document.getElementById('fIzoh').value.trim(),timestamp:Date.now()};
+  const item={model:model,soni:soni,narx:narx,supplier:document.getElementById('fSupp').value.trim(),sana:document.getElementById('fSana').value,holati:document.getElementById('fHol').value,izoh:document.getElementById('fIzoh').value.trim(),xar:document.getElementById('fXar').value.trim(),timestamp:Date.now()};
   function saveToDb(it){
     const p=eId?update(ref(db,'ombor/'+curCat+'/'+eId),it):push(ref(db,'ombor/'+curCat),it);
     p.then(function(){closeModal();tg.HapticFeedback.notificationOccurred('success');btn.textContent='Saqlash';btn.disabled=false;});
