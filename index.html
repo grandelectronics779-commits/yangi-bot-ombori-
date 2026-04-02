@@ -55,7 +55,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .inv-title{font-size:18px;font-weight:700;flex:1;}
 .add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:14px;width:100%;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:14px;font-family:'DM Sans',sans-serif;}
 
-.item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;}
+.item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;position:relative;}
 .item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--accent),var(--accent2));}
 .item-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;}
 .item-name{font-weight:700;font-size:15px;flex:1;}
@@ -66,7 +66,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .item-table tr:not(:last-child) td{border-bottom:1px solid var(--border);}
 .item-table td{padding:8px 10px;vertical-align:middle;}
 .item-table td:first-child{color:var(--text2);font-weight:600;font-size:13px;white-space:nowrap;}
-.item-table td:last-child{color:var(--text);font-weight:700;font-size:14px;text-align:right;white-space:nowrap;border-left:2px solid var(--border);padding-left:14px;font-family:'DM Mono',monospace;width:1%;}
+.item-table td:last-child{color:var(--text);font-weight:700;font-size:14px;text-align:right;border-left:2px solid var(--border);padding-left:14px;font-family:'DM Mono',monospace;width:1%;white-space:nowrap;}
 
 .item-img{width:100%;border-radius:10px;margin:10px 0 4px;max-height:110px;object-fit:cover;display:block;border:1px solid var(--border);}
 .item-vid{width:100%;border-radius:10px;margin:10px 0 4px;max-height:110px;display:block;}
@@ -441,7 +441,7 @@ function renderItems(data){
       +'<tr><td>Sana</td><td>'+(it.sana||'-')+'</td></tr>'
       +(it.izoh?'<tr><td>Izoh</td><td style="white-space:normal;word-break:break-word;max-width:160px;">'+it.izoh+'</td></tr>':'')
       +'</table>'
-      +(it.xar?'<div style="margin-top:10px;padding:10px 12px;background:var(--bg3);border-radius:10px;border-left:3px solid var(--accent2);font-size:13px;color:var(--text2);white-space:pre-line;line-height:1.8;">'+it.xar+'</div>':'')
+      +(it.xar?'<div style="margin-top:10px;padding:12px 14px;background:var(--bg3);border-radius:10px;border-left:3px solid var(--accent2);font-size:13px;color:var(--text2);white-space:pre-line;line-height:1.9;word-break:break-word;width:100%;box-sizing:border-box;">'+it.xar+'</div>':'')
       +media+editBtns;
     c.appendChild(div);
   }
