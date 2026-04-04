@@ -91,7 +91,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .xar-text{font-size:13px;color:var(--text2);line-height:1.5;}
 
 /* MEDIA */
-.item-img{width:100%;max-height:160px;object-fit:cover;display:block;cursor:zoom-in;}
+.item-img{width:100%;max-height:100px;object-fit:cover;display:block;cursor:zoom-in;}
 .item-vid{width:100%;max-height:160px;display:block;}
 
 /* ITEM BUTTONS */
@@ -99,6 +99,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .i-edit{flex:1;padding:12px;background:#f0f9ff;color:var(--accent2);border:none;border-right:1px solid var(--border);font-size:13px;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;}
 .i-del{flex:1;padding:12px;background:#fff5f5;color:var(--red);border:none;font-size:13px;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;}
 
+.batafsil-btn{width:100%;padding:10px;background:none;border:none;border-top:1px solid var(--border);font-size:13px;color:var(--accent2);cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif;text-align:center;}
+.xar-box{display:none;padding:12px 16px;background:#f8faff;border-top:1px solid var(--border);}
+.xar-box.open{display:block;}
+.xar-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.xar-line{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;}
+.xar-line:last-child{margin-bottom:0;}
+.xar-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);margin-top:5px;flex-shrink:0;}
+.xar-text{font-size:13px;color:var(--text2);line-height:1.5;}
 .empty{text-align:center;padding:50px 20px;color:var(--text3);}
 .empty-icon{font-size:44px;margin-bottom:10px;}
 
@@ -523,6 +531,7 @@ function renderItems(data){
     // Buttons
     var btns=canEdit?'<div class="item-btns"><button class="i-edit" data-action="edit" data-id="'+id+'">✏️ Tahrirlash</button><button class="i-del" data-action="delete" data-id="'+id+'">🗑 O\'chirish</button></div>':'';
 
+    var xarBtn = (it.xar&&it.xar.trim()) ? '<button class="batafsil-btn" onclick="toggleXar(this)">📋 Batafsil ▼</button>' : '';
     var div=document.createElement('div');
     div.className='item';
     div.innerHTML=
@@ -533,7 +542,7 @@ function renderItems(data){
         '</div>'+
       '</div>'+
       '<table class="item-table">'+rows+'</table>'+
-      xarHtml+media+btns;
+      xarBtn+xarHtml+media+btns;
     c.appendChild(div);
   }
 }
@@ -670,6 +679,13 @@ window.saveItem = function(){
       });
     } else saveToDb(item);
   }
+};
+
+window.toggleXar = function(btn){
+  var box = btn.nextElementSibling;
+  var open = box.classList.contains('open');
+  box.classList.toggle('open', !open);
+  btn.textContent = open ? '📋 Batafsil ▼' : '📋 Yopish ▲';
 };
 
 // DEVICES
