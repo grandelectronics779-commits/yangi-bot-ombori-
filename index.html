@@ -21,8 +21,6 @@
   --text3:#a0aec0;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
-
-/* SCREENS */
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;text-align:center;}
 .screen.active{display:flex;}
 .s-icon{font-size:56px;margin-bottom:16px;}
@@ -34,8 +32,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .btn{display:block;border:none;padding:15px 24px;border-radius:13px;font-size:15px;font-weight:700;cursor:pointer;width:100%;max-width:300px;margin-top:10px;font-family:'DM Sans',sans-serif;}
 .btn-g{background:var(--accent);color:#fff;}
 .btn-r{background:var(--red);color:#fff;}
-
-/* HEADER */
 .header{background:#fff;border-bottom:1px solid var(--border);padding:14px 16px;position:sticky;top:0;z-index:10;}
 .h-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .h-logo{display:flex;align-items:center;gap:10px;min-width:0;}
@@ -47,29 +43,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .stats{display:flex;gap:8px;margin-top:12px;}
 .stat{background:var(--bg);border:1px solid var(--border);padding:10px 14px;border-radius:10px;flex:1;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;font-weight:600;}
 .stat b{display:block;font-size:18px;font-weight:700;color:var(--text);margin-top:2px;font-family:'DM Mono',monospace;}
-
-/* TABS */
 .tabs{display:flex;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;}
 .tabs::-webkit-scrollbar{display:none;}
 .tab{flex:1;min-width:80px;padding:12px 8px;text-align:center;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;text-transform:uppercase;letter-spacing:.3px;}
 .tab.on{color:var(--accent);border-bottom-color:var(--accent);}
-
-/* GRID */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;}
 .card{background:var(--card);border:1px solid var(--border);padding:22px 12px 18px;border-radius:16px;text-align:center;font-weight:700;font-size:14px;cursor:pointer;transition:all .15s;color:var(--text);}
 .card:active{transform:scale(.96);border-color:var(--accent);background:#f0fdf9;}
 .card-icon{font-size:32px;margin-bottom:10px;}
 .card-files{grid-column:1/-1;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--text3);border-style:dashed;background:var(--bg);font-weight:600;}
 .card-count{font-size:11px;color:var(--text3);margin-top:6px;font-weight:600;}
-
-/* INVENTORY */
 .inv{padding:0 14px 14px;}
 .inv-top{display:flex;align-items:center;gap:10px;padding:12px 0;position:sticky;top:64px;background:var(--bg);z-index:5;}
 .back-btn{background:#fff;border:1px solid var(--border);font-size:18px;cursor:pointer;padding:8px 14px;border-radius:10px;color:var(--text);flex-shrink:0;}
 .inv-title{font-size:18px;font-weight:700;flex:1;}
 .add-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:14px;width:100%;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:14px;font-family:'DM Sans',sans-serif;}
-
-/* ITEM CARD */
 .item{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
 .item-head{padding:14px 16px 10px;border-bottom:1px solid var(--border);}
 .item-name-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
@@ -77,16 +65,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .item-badge{font-size:10px;padding:4px 10px;border-radius:20px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;flex-shrink:0;}
 .badge-new{background:#e6faf5;color:var(--accent);border:1px solid #b2eedd;}
 .badge-bu{background:#fff8e6;color:var(--gold);border:1px solid #fde68a;}
-
-/* TABLE */
 .item-table{width:100%;border-collapse:collapse;}
 .item-table tr{border-bottom:1px solid var(--border);}
 .item-table tr:last-child{border-bottom:none;}
 .item-table td{padding:9px 16px;font-size:14px;vertical-align:middle;}
 .item-table .td-label{color:var(--text3);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;width:40%;}
 .item-table .td-val{color:var(--text);font-weight:700;text-align:right;font-family:'DM Mono',monospace;word-break:break-word;}
-
-/* XAR BOX */
 .batafsil-btn{width:100%;padding:10px;background:none;border:none;border-top:1px solid var(--border);font-size:13px;color:var(--accent2);cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif;text-align:center;}
 .xar-box{display:none;padding:12px 16px;background:#f8faff;border-top:1px solid var(--border);}
 .xar-box.open{display:block;}
@@ -95,26 +79,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .xar-line:last-child{margin-bottom:0;}
 .xar-dot{width:5px;height:5px;border-radius:50%;background:var(--accent2);margin-top:5px;flex-shrink:0;}
 .xar-text{font-size:13px;color:var(--text2);line-height:1.5;word-break:break-word;}
-
-/* MEDIA */
 .media-wrap{padding:12px 16px;border-top:1px solid var(--border);background:#fafbfd;}
 .item-img{width:80px;height:80px;object-fit:cover;display:block;cursor:zoom-in;border-radius:10px;}
 .item-vid{width:100%;max-height:180px;display:block;background:#000;border-radius:10px;}
 .no-media{height:80px;border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:13px;font-weight:600;background:#fff;}
-
-/* ITEM BUTTONS */
 .item-btns{display:flex;gap:0;border-top:1px solid var(--border);}
 .i-edit{flex:1;padding:12px;background:#f0f9ff;color:var(--accent2);border:none;border-right:1px solid var(--border);font-size:13px;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;}
 .i-del{flex:1;padding:12px;background:#fff5f5;color:var(--red);border:none;font-size:13px;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;}
-
 .empty{text-align:center;padding:50px 20px;color:var(--text3);}
 .empty-icon{font-size:44px;margin-bottom:10px;}
-
-/* SECTION */
 .section{padding:16px;}
 .section-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
-
-/* DEVICES */
 .dev-add{display:flex;gap:8px;margin-bottom:16px;}
 .dev-add input{flex:1;padding:13px 14px;border:1.5px solid var(--border);border-radius:11px;font-size:15px;outline:none;background:#fff;color:var(--text);font-family:'DM Sans',sans-serif;}
 .dev-add input:focus{border-color:var(--accent);}
@@ -135,8 +110,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .d-btn{flex:1;padding:11px 6px;border:none;background:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text2);}
 .d-btn:not(:last-child){border-right:1px solid var(--border);}
 .d-btn-del{color:var(--red);}
-
-/* MODAL */
 .overlay{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-end;}
 .overlay.open{display:flex;}
 .mbox{background:#fff;width:100%;border-radius:22px 22px 0 0;max-height:94vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
@@ -153,13 +126,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .save-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:13px;font-weight:700;font-size:16px;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif;}
 .save-btn:disabled{opacity:.5;}
 .cancel-btn{width:100%;padding:13px;border:none;background:none;color:var(--text3);cursor:pointer;margin-top:6px;font-size:14px;font-family:'DM Sans',sans-serif;}
-
-/* SEARCH */
 .search-results{padding-top:4px;}
 .search-info{font-size:12px;color:var(--text3);margin-bottom:12px;}
 .search-cat{font-size:11px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
-
-/* FILES */
 .file-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
 .file-info{padding:14px 16px;}
 .file-name{font-weight:700;font-size:14px;margin-bottom:3px;word-break:break-word;}
@@ -170,15 +139,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .fadmin-name{font-weight:700;font-size:14px;word-break:break-word;}
 .fadmin-desc{font-size:12px;color:var(--text3);margin-top:2px;word-break:break-word;}
 .del-btn{border:1px solid #fecaca;background:#fff5f5;color:var(--red);padding:10px 14px;border-radius:9px;cursor:pointer;font-size:16px;flex-shrink:0;}
-
-/* EWAIT */
 .ewait{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.65);z-index:99999;align-items:center;justify-content:center;}
 .ewait.open{display:flex;}
 .ebox{background:#fff;padding:30px 24px;border-radius:22px;text-align:center;margin:20px;max-width:300px;width:100%;}
-
-/* IMG VIEWER */
 #imgViewer{display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.96);z-index:999999;flex-direction:column;align-items:center;justify-content:center;}
-
 @media (max-width:420px){
   .grid{grid-template-columns:1fr 1fr;}
   .item-table .td-label{width:45%;}
@@ -187,19 +151,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </style>
 </head>
 <body>
-
 <div class="screen" id="sBrowser">
   <div class="s-icon">📱</div>
   <div class="s-brand">Gelectronics Cloud</div>
   <div class="s-title">Telegram orqali oching</div>
   <div class="s-text">Bu ilova faqat Telegram bot orqali ishlaydi.</div>
 </div>
-
 <div class="screen active" id="sLoad">
   <div class="spinner"></div>
   <div style="color:var(--text3);font-size:13px;margin-top:12px;letter-spacing:.3px;">Tekshirilmoqda...</div>
 </div>
-
 <div class="screen" id="sReq">
   <div class="s-icon">🏪</div>
   <div class="s-brand">Gelectronics Cloud</div>
@@ -207,7 +168,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="s-text">Admin tasdiqlashi kerak.</div>
   <button class="btn btn-g" onclick="requestAccess()">Ruxsat so'rash →</button>
 </div>
-
 <div class="screen" id="sPend">
   <div class="s-icon" style="font-size:44px;">⏳</div>
   <div class="s-brand">So'rov yuborildi</div>
@@ -216,21 +176,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="spinner"></div>
   <div style="color:var(--text3);font-size:12px;font-family:'DM Mono',monospace;margin-top:8px;" id="pendSec"></div>
 </div>
-
 <div class="screen" id="sRej">
   <div class="s-icon" style="font-size:44px;">🚫</div>
   <div class="s-brand" style="color:var(--red);">Rad etildi</div>
   <div class="s-title">Ruxsat berilmadi</div>
   <button class="btn btn-r" onclick="requestAccess()">Qayta so'rash</button>
 </div>
-
 <div class="screen" id="sKick">
   <div class="s-icon" style="font-size:44px;">⛔️</div>
   <div class="s-brand" style="color:var(--red);">Chiqarildi</div>
   <div class="s-title">Tizimdan chiqarildingiz</div>
   <button class="btn btn-g" onclick="requestAccess()">Qayta so'rash →</button>
 </div>
-
 <div id="APP" style="display:none;">
   <div class="header">
     <div class="h-top">
@@ -250,16 +207,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="stat">Jami qiymat<b id="totVal">—</b></div>
     </div>
   </div>
-
   <div class="tabs" id="adminTabs" style="display:none;">
     <div class="tab on" id="tOmbor" onclick="swTab('ombor')">📦 Ombor</div>
     <div class="tab" id="tDevs" onclick="swTab('devices')">📱 Devices</div>
     <div class="tab" id="tFiles" onclick="swTab('files')">🗂 Fayllar</div>
   </div>
-
   <div id="cOmbor">
     <div class="grid" id="mainGrid"></div>
-
     <div class="inv" id="invSec" style="display:none;">
       <div class="inv-top">
         <button class="back-btn" onclick="goBack()">←</button>
@@ -269,7 +223,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div id="itemsCont"></div>
     </div>
   </div>
-
   <div id="cDevs" style="display:none;" class="section">
     <div class="section-title">Foydalanuvchilar</div>
     <div class="dev-add">
@@ -278,7 +231,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div id="devList"></div>
   </div>
-
   <div id="cFiles" style="display:none;" class="section">
     <div class="section-title">Fayl qo'shish</div>
     <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;">
@@ -291,7 +243,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div id="adminFileList"></div>
   </div>
 </div>
-
 <div class="overlay" id="addModal">
   <div class="mbox" id="mboxEl">
     <div class="m-handle"></div>
@@ -317,7 +268,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-
 <div class="overlay" id="filesModal">
   <div class="mbox">
     <div class="m-handle"></div>
@@ -339,7 +289,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-
 <div class="overlay" id="searchModal">
   <div class="mbox">
     <div class="m-handle"></div>
@@ -356,7 +305,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-
 <div class="ewait" id="eWait">
   <div class="ebox">
     <div style="font-size:44px;margin-bottom:12px;">⏳</div>
@@ -366,7 +314,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <button onclick="cancelEditWait()" style="margin-top:12px;border:none;background:none;color:var(--text3);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;">Bekor qilish</button>
   </div>
 </div>
-
 <div id="imgViewer">
   <button onclick="closeImgViewer()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;width:44px;height:44px;border-radius:50%;cursor:pointer;z-index:2;">✕</button>
   <div id="imgViewerWrap" style="width:100%;height:80vh;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:grab;">
@@ -378,11 +325,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <button onclick="imgZoom(0.25)" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:26px;width:52px;height:52px;border-radius:50%;cursor:pointer;">+</button>
   </div>
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getDatabase, ref, push, onValue, remove, update, get, set, off } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
 const FB = {
   apiKey:"AIzaSyA_q2H1qPnG6aUqE3ZBPw9OHsBrTF8EHNU",
   authDomain:"scholaris-ai-723bc.firebaseapp.com",
@@ -392,78 +337,56 @@ const FB = {
   appId:"1:1051417852266:web:4e9640ff22708f87a68d13",
   databaseURL:"https://scholaris-ai-723bc-default-rtdb.firebaseio.com"
 };
-
 const RENDER = "https://yangi-bot-ombori1.onrender.com";
 const ADMIN_ID = 8508142416;
 const FILES_LOGIN = "grand";
 const FILES_PASS  = "5404";
-
 const fApp = initializeApp(FB);
 const db   = getDatabase(fApp);
 const tg   = window.Telegram.WebApp;
 tg.expand();
-
 const user  = tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
-
 if(!user || !user.id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var brs = document.getElementById('sBrowser');
   if(brs) brs.classList.add('active');
 }
-
 const UID   = user ? user.id : 0;
 const UNAME = user ? [user.first_name||'', user.last_name||''].join(' ').trim() : '';
 const UUSER = user ? (user.username||'') : '';
 const ADMIN = UID === ADMIN_ID;
-
 let curCat = '';
 let editUnsub = null;
 let userPerms = {view:false, edit:false};
 let omborCache = {};
-
 function show(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var el = document.getElementById(id);
   if(el) el.classList.add('active');
 }
-
 function esc(v){
   return String(v || '').replace(/[&<>"']/g, function(m){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
   });
 }
-
 function catIcon(cat){
-  const map = {
-    HMI:'🖥',
-    PLC:'⚙️',
-    INVERTER:'⚡️',
-    SERVO:'🤖',
-    IGBT:'🔋',
-    DIOD:'🔌',
-    TIRISTOR:'🧩'
-  };
+  const map = {HMI:'🖥',PLC:'⚙️',INVERTER:'⚡️',SERVO:'🤖',IGBT:'🔋',DIOD:'🔌',TIRISTOR:'🧩'};
   return map[cat] || '📦';
 }
-
 function formatMoney(n){
   var num = parseFloat(n || 0);
   if(isNaN(num)) num = 0;
   return num.toLocaleString();
 }
-
 function mediaHtml(it){
   if(!it.mediaUrl){
     return '<div class="media-wrap"><div class="no-media">Rasm yo‘q</div></div>';
   }
-
   if(it.mediaType === 'video'){
-    return '<div class="media-wrap"><video src="' + it.mediaUrl + '" class="item-vid" controls playsinline onerror="this.parentNode.innerHTML=&quot;<div class=\\\'no-media\\\'>Video yuklanmadi</div>&quot;"></video></div>';
+    return '<div class="media-wrap"><video src="' + it.mediaUrl + '" class="item-vid" controls playsinline onerror="this.parentNode.innerHTML=\'<div class=&quot;no-media&quot;>Video yuklanmadi</div>\'"></video></div>';
   }
-
-  return '<div class="media-wrap"><img src="' + it.mediaUrl + '" class="item-img" onclick="viewImg(\'' + it.mediaUrl + '\')" onerror="this.parentNode.innerHTML=&quot;<div class=\\\'no-media\\\'>Rasm yuklanmadi</div>&quot;"></div>';
+  return '<div class="media-wrap"><img src="' + it.mediaUrl + '" class="item-img" onclick="viewImg(this.src)" onerror="this.parentNode.innerHTML=\'<div class=&quot;no-media&quot;>Rasm yuklanmadi</div>\'"></div>';
 }
-
 function xarHtmlBuild(text){
   if(!text || !text.trim()) return '';
   var lines = text.trim().split('\n');
@@ -477,53 +400,29 @@ function xarHtmlBuild(text){
   if(!linesHtml) return '';
   return '<button class="batafsil-btn" onclick="toggleXar(this)">📋 Batafsil ▼</button><div class="xar-box"><div class="xar-title">Xarakteristika</div>' + linesHtml + '</div>';
 }
-
 function itemCardHtml(id, it, cat, canEdit){
   var badgeClass = it.holati === 'B/U' ? 'item-badge badge-bu' : 'item-badge badge-new';
-
   var rows = '';
   rows += '<tr><td class="td-label">Soni</td><td class="td-val">' + esc(it.soni) + ' ta</td></tr>';
   rows += '<tr><td class="td-label">Narxi</td><td class="td-val">$' + formatMoney(it.narx) + '</td></tr>';
   if(it.supplier) rows += '<tr><td class="td-label">Yetkazuvchi</td><td class="td-val">' + esc(it.supplier) + '</td></tr>';
   if(it.sana) rows += '<tr><td class="td-label">Sana</td><td class="td-val">' + esc(it.sana) + '</td></tr>';
   if(it.izoh) rows += '<tr><td class="td-label">Izoh</td><td class="td-val" style="white-space:normal;word-break:break-word;font-family:\'DM Sans\',sans-serif;">' + esc(it.izoh) + '</td></tr>';
-
-  var btns = canEdit
-    ? '<div class="item-btns"><button class="i-edit" data-action="edit" data-id="' + id + '">✏️ Tahrirlash</button><button class="i-del" data-action="delete" data-id="' + id + '">🗑 O\'chirish</button></div>'
-    : '';
-
-  return '' +
-    '<div class="item" data-cat="' + esc(cat) + '">' +
-      '<div class="item-head">' +
-        '<div class="item-name-row">' +
-          '<div class="item-name">' + esc(it.model || '') + '</div>' +
-          '<span class="' + badgeClass + '">' + esc(it.holati || 'Yangi') + '</span>' +
-        '</div>' +
-      '</div>' +
-      '<table class="item-table">' + rows + '</table>' +
-      xarHtmlBuild(it.xar || '') +
-      mediaHtml(it) +
-      btns +
-    '</div>';
+  var btns = canEdit ? '<div class="item-btns"><button class="i-edit" data-action="edit" data-id="' + id + '">✏️ Tahrirlash</button><button class="i-del" data-action="delete" data-id="' + id + '">🗑 O\'chirish</button></div>' : '';
+  return '<div class="item" data-cat="' + esc(cat) + '"><div class="item-head"><div class="item-name-row"><div class="item-name">' + esc(it.model || '') + '</div><span class="' + badgeClass + '">' + esc(it.holati || 'Yangi') + '</span></div></div><table class="item-table">' + rows + '</table>' + xarHtmlBuild(it.xar || '') + mediaHtml(it) + btns + '</div>';
 }
-
 function loadCategories(){
   onValue(ref(db,'ombor'), function(snap){
     omborCache = snap.val() || {};
     renderCategories();
-    if(curCat){
-      renderItems(omborCache[curCat] || {});
-    }
+    if(curCat){ renderItems(omborCache[curCat] || {}); }
   });
 }
-
 function renderCategories(){
   var grid = document.getElementById('mainGrid');
   if(!grid) return;
-
   grid.innerHTML = '';
   var cats = Object.keys(omborCache).sort();
-
   if(!cats.length){
     grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📭</div><div>Bo‘limlar yo‘q</div></div>';
   } else {
@@ -536,25 +435,20 @@ function renderCategories(){
       grid.appendChild(div);
     });
   }
-
   var files = document.createElement('div');
   files.className = 'card card-files';
   files.innerHTML = '🗂 &nbsp;Fayllar';
   files.onclick = window.openFilesModal;
   grid.appendChild(files);
 }
-
 function renderItems(data){
   var c = document.getElementById('itemsCont');
   c.innerHTML = '';
-
   if(!data || !Object.keys(data).length){
     c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div>Mahsulotlar yo\'q</div></div>';
     return;
   }
-
   var canEdit = ADMIN || userPerms.edit;
-
   for(var id in data){
     var it = data[id] || {};
     var div = document.createElement('div');
@@ -562,133 +456,70 @@ function renderItems(data){
     c.appendChild(div.firstElementChild);
   }
 }
-
-function loadItems(cat){
-  renderItems(omborCache[cat] || {});
-}
-
+function loadItems(cat){ renderItems(omborCache[cat] || {}); }
 function allSearchResults(q){
   var out = [];
   var query = (q || '').toLowerCase().trim();
   if(!query) return out;
-
   for(var cat in omborCache){
     var group = omborCache[cat] || {};
     for(var id in group){
       var it = group[id] || {};
-      var bag = [
-        cat,
-        it.model || '',
-        it.supplier || '',
-        it.izoh || '',
-        it.xar || '',
-        it.holati || ''
-      ].join(' ').toLowerCase();
-
-      if(bag.includes(query)){
-        out.push({cat:cat, id:id, item:it});
-      }
+      var bag = [cat,it.model || '',it.supplier || '',it.izoh || '',it.xar || '',it.holati || ''].join(' ').toLowerCase();
+      if(bag.includes(query)){ out.push({cat:cat,id:id,item:it}); }
     }
   }
-
   return out;
 }
-
 window.openSearchModal = function(){
   document.getElementById('searchModal').classList.add('open');
   document.getElementById('searchInput').value = '';
   document.getElementById('searchResults').innerHTML = '<div class="search-info">Qidirish uchun biror so‘z yozing</div>';
-  setTimeout(function(){
-    document.getElementById('searchInput').focus();
-  }, 100);
+  setTimeout(function(){ document.getElementById('searchInput').focus(); }, 100);
 };
-
-window.closeSearchModal = function(){
-  document.getElementById('searchModal').classList.remove('open');
-};
-
+window.closeSearchModal = function(){ document.getElementById('searchModal').classList.remove('open'); };
 window.runSearch = function(){
   var q = document.getElementById('searchInput').value.trim();
   var box = document.getElementById('searchResults');
-
   if(!q){
     box.innerHTML = '<div class="search-info">Qidirish uchun biror so‘z yozing</div>';
     return;
   }
-
   var found = allSearchResults(q);
   if(!found.length){
     box.innerHTML = '<div class="empty"><div class="empty-icon">🔎</div><div>Hech narsa topilmadi</div></div>';
     return;
   }
-
   var canEdit = ADMIN || userPerms.edit;
   var html = '<div class="search-info">' + found.length + ' ta natija topildi</div>';
-
   found.forEach(function(row){
     html += '<div class="search-cat">' + esc(row.cat) + '</div>';
     html += itemCardHtml(row.id, row.item, row.cat, canEdit);
   });
-
   box.innerHTML = html;
 };
-
 if(!UID || UID===0){
   show('sBrowser');
 } else if(ADMIN){
-  set(ref(db,'devices/' + UID), {
-    name:UNAME,
-    username:UUSER,
-    viewPerm:true,
-    editPerm:true,
-    isAdmin:true,
-    status:'approved',
-    lastSeen:Date.now()
-  });
+  set(ref(db,'devices/' + UID), {name:UNAME,username:UUSER,viewPerm:true,editPerm:true,isAdmin:true,status:'approved',lastSeen:Date.now()});
   userPerms = {view:true, edit:true};
   showApp();
 } else {
   get(ref(db,'devices/' + UID)).then(function(snap){
-    if(!snap.exists()){
-      show('sReq');
-      return;
-    }
+    if(!snap.exists()){ show('sReq'); return; }
     var d = snap.val();
-    if(d.status === 'kicked'){
-      show('sKick');
-      return;
-    }
-    if(d.viewPerm){
-      userPerms.view = true;
-      userPerms.edit = !!d.editPerm;
-      showApp();
-    } else if(d.status === 'pending'){
-      show('sPend');
-      pollPerm();
-    } else {
-      show('sReq');
-    }
+    if(d.status === 'kicked'){ show('sKick'); return; }
+    if(d.viewPerm){ userPerms.view = true; userPerms.edit = !!d.editPerm; showApp(); }
+    else if(d.status === 'pending'){ show('sPend'); pollPerm(); }
+    else{ show('sReq'); }
   });
 }
-
 window.requestAccess = function(){
   show('sPend');
-  set(ref(db,'devices/' + UID), {
-    name:UNAME,
-    username:UUSER,
-    viewPerm:false,
-    editPerm:false,
-    status:'pending',
-    timestamp:Date.now()
-  });
-  fetch(RENDER + '/api/request_access', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER})
-  }).catch(function(){});
+  set(ref(db,'devices/' + UID), {name:UNAME,username:UUSER,viewPerm:false,editPerm:false,status:'pending',timestamp:Date.now()});
+  fetch(RENDER + '/api/request_access', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER})}).catch(function(){});
   pollPerm();
 };
-
 function pollPerm(){
   var s = 0;
   var timer = setInterval(function(){
@@ -696,25 +527,14 @@ function pollPerm(){
     var el = document.getElementById('pendSec');
     if(el) el.textContent = s + ' soniya...';
   }, 1000);
-
   onValue(ref(db,'devices/' + UID), function(snap){
     if(!snap.exists()) return;
     var d = snap.val();
-    if(d.status === 'kicked'){
-      clearInterval(timer);
-      show('sKick');
-    } else if(d.viewPerm){
-      clearInterval(timer);
-      userPerms.view = true;
-      userPerms.edit = !!d.editPerm;
-      showApp();
-    } else if(d.status === 'rejected'){
-      clearInterval(timer);
-      show('sRej');
-    }
+    if(d.status === 'kicked'){ clearInterval(timer); show('sKick'); }
+    else if(d.viewPerm){ clearInterval(timer); userPerms.view = true; userPerms.edit = !!d.editPerm; showApp(); }
+    else if(d.status === 'rejected'){ clearInterval(timer); show('sRej'); }
   });
 }
-
 function showApp(){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.getElementById('APP').style.display = 'block';
@@ -725,25 +545,16 @@ function showApp(){
   loadCategories();
   if(!ADMIN) monitorKick();
 }
-
 function monitorKick(){
   onValue(ref(db,'devices/' + UID), function(snap){
-    if(!snap.exists()){
-      show('sKick');
-      document.getElementById('APP').style.display = 'none';
-      return;
-    }
+    if(!snap.exists()){ show('sKick'); document.getElementById('APP').style.display = 'none'; return; }
     var d = snap.val();
-    if(d.status === 'kicked'){
-      document.getElementById('APP').style.display = 'none';
-      show('sKick');
-    }
+    if(d.status === 'kicked'){ document.getElementById('APP').style.display = 'none'; show('sKick'); }
     userPerms.edit = !!d.editPerm;
     var btn = document.getElementById('addItemBtn');
     if(btn) btn.style.display = userPerms.edit ? 'block' : 'none';
   });
 }
-
 function dashboard(){
   onValue(ref(db,'ombor'), function(snap){
     var cnt = 0, val = 0, d = snap.val();
@@ -759,7 +570,6 @@ function dashboard(){
     document.getElementById('totVal').textContent = '$' + val.toLocaleString();
   });
 }
-
 window.swTab = function(t){
   document.getElementById('cOmbor').style.display = t === 'ombor' ? 'block' : 'none';
   document.getElementById('cDevs').style.display = t === 'devices' ? 'block' : 'none';
@@ -770,7 +580,6 @@ window.swTab = function(t){
   if(t === 'devices') loadDevs();
   if(t === 'files') loadAdminFiles();
 };
-
 window.openCat = function(cat){
   curCat = cat;
   document.getElementById('mainGrid').style.display = 'none';
@@ -778,95 +587,53 @@ window.openCat = function(cat){
   document.getElementById('catTitle').textContent = cat;
   loadItems(cat);
 };
-
 window.goBack = function(){
   document.getElementById('mainGrid').style.display = 'grid';
   document.getElementById('invSec').style.display = 'none';
   curCat = '';
 };
-
 function getActionContext(btn){
   var itemEl = btn.closest('.item');
   var cat = itemEl && itemEl.dataset.cat ? itemEl.dataset.cat : curCat;
-  return {cat:cat, id:btn.dataset.id};
+  return {cat:cat,id:btn.dataset.id};
 }
-
 document.body.addEventListener('click', function(e){
   var btn = e.target.closest('[data-action]');
   if(!btn) return;
   var ctx = getActionContext(btn);
   needEdit(btn.dataset.action, ctx.id, ctx.cat);
 });
-
 window.needEdit = function(action, itemId, forcedCat){
   itemId = itemId || '';
   var actionCat = forcedCat || curCat;
-
-  if(ADMIN || userPerms.edit){
-    doAction(action, itemId, actionCat);
-    return;
-  }
-
+  if(ADMIN || userPerms.edit){ doAction(action, itemId, actionCat); return; }
   document.getElementById('eWait').classList.add('open');
-  set(ref(db,'edit_requests/' + UID), {
-    name:UNAME,
-    username:UUSER,
-    action:action,
-    status:'pending',
-    timestamp:Date.now()
-  });
-
-  fetch(RENDER + '/api/request_edit', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER,action:action})
-  }).catch(function(){});
-
+  set(ref(db,'edit_requests/' + UID), {name:UNAME,username:UUSER,action:action,status:'pending',timestamp:Date.now()});
+  fetch(RENDER + '/api/request_edit', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER,action:action})}).catch(function(){});
   var erRef = ref(db,'edit_requests/' + UID + '/status');
   editUnsub = onValue(erRef, function(snap){
-    if(snap.val() === 'approved'){
-      document.getElementById('eWait').classList.remove('open');
-      off(erRef);
-      doAction(action, itemId, actionCat);
-    } else if(snap.val() === 'rejected'){
-      document.getElementById('eWait').classList.remove('open');
-      off(erRef);
-      tg.showAlert('Tahrirlash ruxsati berilmadi!');
-    }
+    if(snap.val() === 'approved'){ document.getElementById('eWait').classList.remove('open'); off(erRef); doAction(action, itemId, actionCat); }
+    else if(snap.val() === 'rejected'){ document.getElementById('eWait').classList.remove('open'); off(erRef); tg.showAlert('Tahrirlash ruxsati berilmadi!'); }
   });
 };
-
 window.cancelEditWait = function(){
   document.getElementById('eWait').classList.remove('open');
-  if(editUnsub){
-    editUnsub();
-    editUnsub = null;
-  }
+  if(editUnsub){ editUnsub(); editUnsub = null; }
   remove(ref(db,'edit_requests/' + UID));
 };
-
 function doAction(action, itemId, actionCat){
-  if(action === 'add'){
-    curCat = actionCat || curCat;
-    openModal();
-  } else if(action === 'edit'){
-    openEditModal(itemId, actionCat || curCat);
-  } else if(action === 'delete'){
+  if(action === 'add'){ curCat = actionCat || curCat; openModal(); }
+  else if(action === 'edit'){ openEditModal(itemId, actionCat || curCat); }
+  else if(action === 'delete'){
     tg.showConfirm("Haqiqatan ham o'chirasizmi?", function(ok){
-      if(ok){
-        remove(ref(db,'ombor/' + (actionCat || curCat) + '/' + itemId));
-        tg.HapticFeedback.notificationOccurred('success');
-      }
+      if(ok){ remove(ref(db,'ombor/' + (actionCat || curCat) + '/' + itemId)); tg.HapticFeedback.notificationOccurred('success'); }
     });
   }
 }
-
 function openModal(){
   document.getElementById('mTitle').textContent = 'Mahsulot qo\'shish';
   document.getElementById('eId').value = '';
-  ['fModel','fSoni','fNarx','fSupp','fIzoh','fXar'].forEach(function(id){
-    document.getElementById(id).value = '';
-  });
+  ['fModel','fSoni','fNarx','fSupp','fIzoh','fXar'].forEach(function(id){ document.getElementById(id).value = ''; });
   document.getElementById('fSana').valueAsDate = new Date();
   document.getElementById('fHol').value = 'Yangi';
   document.getElementById('fMedia').value = '';
@@ -875,7 +642,6 @@ function openModal(){
   document.getElementById('addModal').classList.add('open');
   setTimeout(function(){ document.getElementById('mboxEl').scrollTop = 0; }, 50);
 }
-
 function openEditModal(itemId, cat){
   get(ref(db,'ombor/' + cat + '/' + itemId)).then(function(snap){
     if(!snap.exists()) return;
@@ -898,11 +664,7 @@ function openEditModal(itemId, cat){
     setTimeout(function(){ document.getElementById('mboxEl').scrollTop = 0; }, 50);
   });
 }
-
-window.closeModal = function(){
-  document.getElementById('addModal').classList.remove('open');
-};
-
+window.closeModal = function(){ document.getElementById('addModal').classList.remove('open'); };
 window.prevMedia = function(input){
   var f = input.files[0];
   if(!f) return;
@@ -917,7 +679,6 @@ window.prevMedia = function(input){
     document.getElementById('imgPrev').style.display = 'none';
   }
 };
-
 function compressMedia(file){
   return new Promise(function(res){
     if(file.type.startsWith('video/')){
@@ -943,65 +704,27 @@ function compressMedia(file){
     img.src = url;
   });
 }
-
 window.saveItem = function(){
   var model = document.getElementById('fModel').value.trim();
   var soni  = document.getElementById('fSoni').value.trim();
   var narx  = document.getElementById('fNarx').value.trim();
-
-  if(!model || !soni || !narx){
-    tg.showAlert('Model, soni va narxi majburiy!');
-    return;
-  }
-
+  if(!model || !soni || !narx){ tg.showAlert('Model, soni va narxi majburiy!'); return; }
   var btn = document.getElementById('saveBtn');
-  btn.textContent = 'Saqlanmoqda...';
-  btn.disabled = true;
-
+  btn.textContent = 'Saqlanmoqda...'; btn.disabled = true;
   var eId = document.getElementById('eId').value;
   var mFile = document.getElementById('fMedia').files[0];
-
-  var item = {
-    model:model,
-    soni:soni,
-    narx:narx,
-    supplier:document.getElementById('fSupp').value.trim(),
-    sana:document.getElementById('fSana').value,
-    holati:document.getElementById('fHol').value,
-    izoh:document.getElementById('fIzoh').value.trim(),
-    xar:document.getElementById('fXar').value.trim(),
-    timestamp:Date.now()
-  };
-
-  function doneReset(){
-    closeModal();
-    tg.HapticFeedback.notificationOccurred('success');
-    btn.textContent = 'Saqlash';
-    btn.disabled = false;
-  }
-
+  var item = {model:model,soni:soni,narx:narx,supplier:document.getElementById('fSupp').value.trim(),sana:document.getElementById('fSana').value,holati:document.getElementById('fHol').value,izoh:document.getElementById('fIzoh').value.trim(),xar:document.getElementById('fXar').value.trim(),timestamp:Date.now()};
+  function doneReset(){ closeModal(); tg.HapticFeedback.notificationOccurred('success'); btn.textContent = 'Saqlash'; btn.disabled = false; }
   function saveToDb(it){
     var p = eId ? update(ref(db,'ombor/' + curCat + '/' + eId), it) : push(ref(db,'ombor/' + curCat), it);
-    p.then(doneReset).catch(function(){
-      btn.textContent = 'Saqlash';
-      btn.disabled = false;
-      tg.showAlert('Saqlashda xato bo‘ldi');
-    });
+    p.then(doneReset).catch(function(){ btn.textContent = 'Saqlash'; btn.disabled = false; tg.showAlert('Saqlashda xato bo‘ldi'); });
   }
-
   if(mFile){
-    compressMedia(mFile).then(function(c){
-      item.mediaUrl = c.url;
-      item.mediaType = c.type;
-      saveToDb(item);
-    }).catch(function(){ saveToDb(item); });
+    compressMedia(mFile).then(function(c){ item.mediaUrl = c.url; item.mediaType = c.type; saveToDb(item); }).catch(function(){ saveToDb(item); });
   } else {
     if(eId){
       get(ref(db,'ombor/' + curCat + '/' + eId)).then(function(snap){
-        if(snap.exists() && snap.val().mediaUrl){
-          item.mediaUrl = snap.val().mediaUrl;
-          item.mediaType = snap.val().mediaType;
-        }
+        if(snap.exists() && snap.val().mediaUrl){ item.mediaUrl = snap.val().mediaUrl; item.mediaType = snap.val().mediaType; }
         saveToDb(item);
       }).catch(function(){ saveToDb(item); });
     } else {
@@ -1009,101 +732,55 @@ window.saveItem = function(){
     }
   }
 };
-
 window.toggleXar = function(btn){
   var box = btn.nextElementSibling;
   var open = box.classList.contains('open');
   box.classList.toggle('open', !open);
   btn.textContent = open ? '📋 Batafsil ▼' : '📋 Yopish ▲';
 };
-
 function loadDevs(){
   onValue(ref(db,'devices'), function(snap){
     var c = document.getElementById('devList');
     c.innerHTML = '';
     var data = snap.val();
-
-    if(!data){
-      c.innerHTML = '<div class="empty"><div class="empty-icon">📱</div><div>Hech kim yo\'q</div></div>';
-      return;
-    }
-
+    if(!data){ c.innerHTML = '<div class="empty"><div class="empty-icon">📱</div><div>Hech kim yo\'q</div></div>'; return; }
     for(var uid in data){
       var dv = data[uid];
       var sb = dv.status === 'pending' ? '<span class="dbadge db-wait">⏳ Kutmoqda</span>' : dv.status === 'kicked' ? '<span class="dbadge db-no">🚫 Chiqarilgan</span>' : '<span class="dbadge db-ok">✅ Faol</span>';
       var vb = dv.viewPerm ? '<span class="dbadge db-ok">👁 Ko\'rish</span>' : '<span class="dbadge db-no">👁 Yo\'q</span>';
       var eb = dv.editPerm ? '<span class="dbadge db-edit">✏️ Tahrirlash</span>' : '<span class="dbadge db-no">✏️ Yo\'q</span>';
-
       var div = document.createElement('div');
       div.className = 'dcard';
-      div.innerHTML =
-        '<div class="dcard-top">' +
-          '<div class="davatar">' + esc((dv.name || '?').charAt(0).toUpperCase()) + '</div>' +
-          '<div class="dinfo">' +
-            '<div class="dname">' + esc(dv.name || 'Noma\'lum') + (dv.isAdmin ? ' 👑' : '') + '</div>' +
-            '<div class="did">ID: ' + esc(uid) + (dv.username ? ' · @' + esc(dv.username) : '') + '</div>' +
-            '<div class="dbadges">' + sb + vb + eb + '</div>' +
-          '</div>' +
-        '</div>' +
-        (!dv.isAdmin ? '<div class="dcard-btns"><button class="d-btn" data-uid="' + uid + '" data-act="giveView">👁 Ko\'rish</button><button class="d-btn" data-uid="' + uid + '" data-act="giveEdit">✏️ Tahrirlash</button><button class="d-btn d-btn-del" data-uid="' + uid + '" data-act="kick">🚫 O\'chirish</button></div>' : '');
-
+      div.innerHTML = '<div class="dcard-top"><div class="davatar">' + esc((dv.name || '?').charAt(0).toUpperCase()) + '</div><div class="dinfo"><div class="dname">' + esc(dv.name || 'Noma\'lum') + (dv.isAdmin ? ' 👑' : '') + '</div><div class="did">ID: ' + esc(uid) + (dv.username ? ' · @' + esc(dv.username) : '') + '</div><div class="dbadges">' + sb + vb + eb + '</div></div></div>' + (!dv.isAdmin ? '<div class="dcard-btns"><button class="d-btn" data-uid="' + uid + '" data-act="giveView">👁 Ko\'rish</button><button class="d-btn" data-uid="' + uid + '" data-act="giveEdit">✏️ Tahrirlash</button><button class="d-btn d-btn-del" data-uid="' + uid + '" data-act="kick">🚫 O\'chirish</button></div>' : '');
       c.appendChild(div);
     }
   });
 }
-
 document.getElementById('devList').addEventListener('click', function(e){
   var btn = e.target.closest('[data-act]');
   if(!btn) return;
   var uid = btn.dataset.uid;
   var act = btn.dataset.act;
-
   if(act === 'giveView'){
-    tg.showConfirm("Ko'rish huquqi berilsinmi?", function(ok){
-      if(ok) update(ref(db,'devices/' + uid), {viewPerm:true, editPerm:false, status:'approved'});
-    });
+    tg.showConfirm("Ko'rish huquqi berilsinmi?", function(ok){ if(ok) update(ref(db,'devices/' + uid), {viewPerm:true, editPerm:false, status:'approved'}); });
   } else if(act === 'giveEdit'){
-    tg.showConfirm("Ko'rish + tahrirlash huquqi?", function(ok){
-      if(ok) update(ref(db,'devices/' + uid), {viewPerm:true, editPerm:true, status:'approved'});
-    });
+    tg.showConfirm("Ko'rish + tahrirlash huquqi?", function(ok){ if(ok) update(ref(db,'devices/' + uid), {viewPerm:true, editPerm:true, status:'approved'}); });
   } else if(act === 'kick'){
-    tg.showConfirm("Chiqarib yuborasizmi?", function(ok){
-      if(ok) update(ref(db,'devices/' + uid), {viewPerm:false, editPerm:false, status:'kicked'});
-    });
+    tg.showConfirm("Chiqarib yuborasizmi?", function(ok){ if(ok) update(ref(db,'devices/' + uid), {viewPerm:false, editPerm:false, status:'kicked'}); });
   }
 });
-
 window.addDevById = function(){
   var input = document.getElementById('newDevId');
   var uid = input.value.trim();
-
-  if(!uid){
-    tg.showAlert('Telegram ID kiriting!');
-    return;
-  }
-
+  if(!uid){ tg.showAlert('Telegram ID kiriting!'); return; }
   get(ref(db,'devices/' + uid)).then(function(snap){
-    if(snap.exists() && snap.val().viewPerm){
-      tg.showAlert('Bu foydalanuvchi allaqachon ruxsatli!');
-      return;
-    }
-
-    set(ref(db,'devices/' + uid), {
-      name:'ID: ' + uid,
-      username:'',
-      viewPerm:true,
-      editPerm:false,
-      status:'approved',
-      addedByAdmin:true,
-      lastSeen:Date.now()
-    });
-
+    if(snap.exists() && snap.val().viewPerm){ tg.showAlert('Bu foydalanuvchi allaqachon ruxsatli!'); return; }
+    set(ref(db,'devices/' + uid), {name:'ID: ' + uid,username:'',viewPerm:true,editPerm:false,status:'approved',addedByAdmin:true,lastSeen:Date.now()});
     input.value = '';
     tg.showAlert('Foydalanuvchi qo\'shildi!');
     tg.HapticFeedback.notificationOccurred('success');
   });
 };
-
 window.openFilesModal = function(){
   var logged = sessionStorage.getItem('files_auth');
   document.getElementById('filesLoginBox').style.display = logged ? 'none' : 'block';
@@ -1111,17 +788,14 @@ window.openFilesModal = function(){
   document.getElementById('filesModal').classList.add('open');
   if(logged) loadPublicFiles();
 };
-
 window.closeFilesModal = function(){
   document.getElementById('filesModal').classList.remove('open');
   document.getElementById('fLogin').value = '';
   document.getElementById('fPass').value = '';
 };
-
 window.checkFilesLogin = function(){
   var login = document.getElementById('fLogin').value.trim();
   var pass  = document.getElementById('fPass').value.trim();
-
   get(ref(db,'files_auth')).then(function(snap){
     var stored = snap.val() || {login:FILES_LOGIN, pass:FILES_PASS};
     if(login === stored.login && pass === stored.pass){
@@ -1130,31 +804,21 @@ window.checkFilesLogin = function(){
       document.getElementById('filesListBox').style.display = 'block';
       tg.HapticFeedback.notificationOccurred('success');
       loadPublicFiles();
-    } else {
-      tg.showAlert('Login yoki parol noto\'g\'ri!');
-      tg.HapticFeedback.notificationOccurred('error');
-    }
+    } else { tg.showAlert('Login yoki parol noto\'g\'ri!'); tg.HapticFeedback.notificationOccurred('error'); }
   });
 };
-
 window.logoutFiles = function(){
   sessionStorage.removeItem('files_auth');
   document.getElementById('filesLoginBox').style.display = 'block';
   document.getElementById('filesListBox').style.display = 'none';
 };
-
 function loadPublicFiles(){
   onValue(ref(db,'files'), function(snap){
     var c = document.getElementById('publicFileList');
     if(!c) return;
     c.innerHTML = '';
     var data = snap.val();
-
-    if(!data){
-      c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div>Fayllar yo\'q</div></div>';
-      return;
-    }
-
+    if(!data){ c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div>Fayllar yo\'q</div></div>'; return; }
     for(var id in data){
       var f = data[id];
       var div = document.createElement('div');
@@ -1164,19 +828,13 @@ function loadPublicFiles(){
     }
   });
 }
-
 function loadAdminFiles(){
   onValue(ref(db,'files'), function(snap){
     var c = document.getElementById('adminFileList');
     if(!c) return;
     c.innerHTML = '';
     var data = snap.val();
-
-    if(!data){
-      c.innerHTML = '<div class="empty"><div>Fayllar yo\'q</div></div>';
-      return;
-    }
-
+    if(!data){ c.innerHTML = '<div class="empty"><div>Fayllar yo\'q</div></div>'; return; }
     for(var id in data){
       var f = data[id];
       var div = document.createElement('div');
@@ -1186,26 +844,17 @@ function loadAdminFiles(){
     }
   });
 }
-
 document.getElementById('adminFileList').addEventListener('click', function(e){
   var btn = e.target.closest('[data-fid]');
   if(!btn) return;
-  tg.showConfirm("Bu faylni o'chirasizmi?", function(ok){
-    if(ok) remove(ref(db,'files/' + btn.dataset.fid));
-  });
+  tg.showConfirm("Bu faylni o'chirasizmi?", function(ok){ if(ok) remove(ref(db,'files/' + btn.dataset.fid)); });
 });
-
 window.addFile = function(){
   var name = document.getElementById('fFileName').value.trim();
   var link = document.getElementById('fFileLink').value.trim();
   var desc = document.getElementById('fFileDesc').value.trim();
-
-  if(!name || !link){
-    tg.showAlert('Nom va link majburiy!');
-    return;
-  }
-
-  push(ref(db,'files'), {name:name, link:link, desc:desc, timestamp:Date.now()}).then(function(){
+  if(!name || !link){ tg.showAlert('Nom va link majburiy!'); return; }
+  push(ref(db,'files'), {name:name,link:link,desc:desc,timestamp:Date.now()}).then(function(){
     document.getElementById('fFileName').value = '';
     document.getElementById('fFileLink').value = '';
     document.getElementById('fFileDesc').value = '';
@@ -1213,7 +862,6 @@ window.addFile = function(){
     tg.HapticFeedback.notificationOccurred('success');
   });
 };
-
 var imgScale=1,imgLastScale=1,imgStartDist=0,imgTransX=0,imgTransY=0,imgDragging=false,imgDragSX=0,imgDragSY=0,imgPinchSX=0,imgPinchSY=0,imgTSX=0,imgTSY=0;
 function applyImg(){
   document.getElementById('imgViewerSrc').style.transform='scale('+imgScale+') translate('+imgTransX+'px,'+imgTransY+'px)';
@@ -1224,8 +872,7 @@ window.closeImgViewer=function(){
   imgScale=1;imgLastScale=1;imgTransX=0;imgTransY=0;applyImg();
 };
 window.imgZoom=function(d){
-  imgScale=Math.min(5,Math.max(0.5,imgScale+d));
-  imgLastScale=imgScale;
+  imgScale=Math.min(5,Math.max(0.5,imgScale+d));imgLastScale=imgScale;
   if(imgScale===1){imgTransX=0;imgTransY=0;}
   applyImg();
 };
@@ -1240,12 +887,10 @@ window.viewImg=function(src){
   function mid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2};}
   wrap.addEventListener('touchstart',function(e){
     if(e.touches.length===2){
-      e.preventDefault();
-      imgStartDist=dist(e.touches);
+      e.preventDefault();imgStartDist=dist(e.touches);
       var m=mid(e.touches);imgPinchSX=m.x;imgPinchSY=m.y;imgTSX=imgTransX;imgTSY=imgTransY;imgLastScale=imgScale;
     }else if(e.touches.length===1&&imgScale>1){
-      e.preventDefault();
-      imgDragging=true;imgDragSX=e.touches[0].clientX-imgTransX*imgScale;imgDragSY=e.touches[0].clientY-imgTransY*imgScale;
+      e.preventDefault();imgDragging=true;imgDragSX=e.touches[0].clientX-imgTransX*imgScale;imgDragSY=e.touches[0].clientY-imgTransY*imgScale;
     }
   },{passive:false});
   wrap.addEventListener('touchmove',function(e){
@@ -1266,18 +911,13 @@ window.viewImg=function(src){
   });
   window.addEventListener('mouseup',function(){imgDragging=false;wrap.style.cursor='grab';});
   wrap.addEventListener('wheel',function(e){
-    e.preventDefault();
-    imgScale=Math.min(5,Math.max(0.5,imgScale+(e.deltaY>0?-0.2:0.2)));
-    imgLastScale=imgScale;
+    e.preventDefault();imgScale=Math.min(5,Math.max(0.5,imgScale+(e.deltaY>0?-0.2:0.2)));imgLastScale=imgScale;
     if(imgScale===1){imgTransX=0;imgTransY=0;}
     applyImg();
   },{passive:false});
 })();
-
 document.getElementById('addModal').addEventListener('focusin',function(e){
-  if(e.target.matches('input,select,textarea')){
-    setTimeout(function(){e.target.scrollIntoView({behavior:'smooth',block:'center'});},350);
-  }
+  if(e.target.matches('input,select,textarea')) setTimeout(function(){e.target.scrollIntoView({behavior:'smooth',block:'center'});},350);
 });
 if(window.visualViewport){
   window.visualViewport.addEventListener('resize',function(){
