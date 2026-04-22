@@ -127,8 +127,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .save-btn:disabled{opacity:.5;}
 .cancel-btn{width:100%;padding:13px;border:none;background:none;color:var(--text3);cursor:pointer;margin-top:6px;font-size:14px;font-family:'DM Sans',sans-serif;}
 .search-results{padding-top:4px;}
-.search-info{font-size:12px;color:var(--text3);margin-bottom:12px;}
-.search-cat{font-size:11px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.search-info{font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5;}
+.search-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.search-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;}
+.search-inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+.search-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--border);border-radius:999px;background:#fff;font-size:12px;color:var(--text2);font-weight:600;}
+.search-chip input{accent-color:var(--accent);}
+.search-cat{margin-bottom:8px;}
+.search-cat-pill{display:inline-flex;align-items:center;gap:6px;background:#eef6ff;color:var(--accent2);border:1px solid #bfdbfe;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
+.search-actions{display:flex;gap:10px;margin-bottom:12px;}
+.search-actions .btn-lite{flex:1;border:1px solid var(--border);background:#fff;color:var(--text2);padding:12px;border-radius:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.search-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.search-pill{font-size:11px;padding:4px 8px;border-radius:999px;background:#f3f7fb;color:var(--text2);border:1px solid var(--border);font-weight:700;}
+@media (max-width:520px){
+  .search-grid,.search-grid-3{grid-template-columns:1fr;}
+}
 .file-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
 .file-info{padding:14px 16px;}
 .file-name{font-weight:700;font-size:14px;margin-bottom:3px;word-break:break-word;}
@@ -295,11 +308,60 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="m-inner">
       <div class="m-title">🔍 Qidirish</div>
       <div class="fg">
-        <label>Model, supplier, izoh...</label>
-        <input type="text" id="searchInput" placeholder="Masalan: FP75, Siemens, Infineon..." oninput="runSearch()">
+        <label>So‘z yoki model</label>
+        <input type="text" id="searchInput" placeholder="Masalan: FP75R12, Siemens, Infineon..." oninput="runSearch()">
       </div>
+
+      <div class="search-grid">
+        <div class="fg" style="margin:0">
+          <label>Kategoriya</label>
+          <select id="searchCategory" onchange="runSearch()">
+            <option value="">Hammasi</option>
+          </select>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Holat</label>
+          <select id="searchStatus" onchange="runSearch()">
+            <option value="">Hammasi</option>
+            <option value="Yangi">Yangi</option>
+            <option value="B/U">B/U</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="search-grid-3">
+        <div class="fg" style="margin:0">
+          <label>Sort</label>
+          <select id="searchSort" onchange="runSearch()">
+            <option value="relevance">Eng mos</option>
+            <option value="model_asc">Model A-Z</option>
+            <option value="price_asc">Narx ↑</option>
+            <option value="price_desc">Narx ↓</option>
+            <option value="qty_desc">Soni ↓</option>
+            <option value="new_first">Yangi avval</option>
+          </select>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Min narx</label>
+          <input type="number" id="searchMinPrice" placeholder="0" oninput="runSearch()">
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Max narx</label>
+          <input type="number" id="searchMaxPrice" placeholder="1000" oninput="runSearch()">
+        </div>
+      </div>
+
+      <div class="search-inline">
+        <label class="search-chip"><input type="checkbox" id="searchCurrentOnly" onchange="runSearch()"> Faqat joriy kategoriya</label>
+        <label class="search-chip"><input type="checkbox" id="searchHasImage" onchange="runSearch()"> Faqat rasmi bor</label>
+      </div>
+
+      <div class="search-actions">
+        <button class="btn-lite" onclick="resetSearchFilters()">Tozalash</button>
+      </div>
+
       <div class="search-results" id="searchResults">
-        <div class="search-info">Qidirish uchun biror so‘z yozing</div>
+        <div class="search-info">Qidiruv, filter, sort va narx oralig‘i bilan ishlaydi.</div>
       </div>
       <button class="cancel-btn" onclick="closeSearchModal()">Yopish</button>
     </div>
@@ -415,6 +477,7 @@ function loadCategories(){
   onValue(ref(db,'ombor'), function(snap){
     omborCache = snap.val() || {};
     renderCategories();
+    populateSearchCategories();
     if(curCat){ renderItems(omborCache[curCat] || {}); }
   });
 }
@@ -457,47 +520,274 @@ function renderItems(data){
   }
 }
 function loadItems(cat){ renderItems(omborCache[cat] || {}); }
-function allSearchResults(q){
-  var out = [];
-  var query = (q || '').toLowerCase().trim();
-  if(!query) return out;
-  for(var cat in omborCache){
-    var group = omborCache[cat] || {};
-    for(var id in group){
-      var it = group[id] || {};
-      var bag = [cat,it.model || '',it.supplier || '',it.izoh || '',it.xar || '',it.holati || ''].join(' ').toLowerCase();
-      if(bag.includes(query)){ out.push({cat:cat,id:id,item:it}); }
+function normalizeSearchText(v){
+  return String(v || '')
+    .toLowerCase()
+    .replace(/[ʻʼ‘’`´]/g, "'")
+    .replace(/o['’`´ʻʼ]/g, 'o')
+    .replace(/g['’`´ʻʼ]/g, 'g')
+    .replace(/sh/g, 'sh')
+    .replace(/ch/g, 'ch')
+    .replace(/[^a-z0-9$%+\-\/. ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function compactSearchText(v){
+  return normalizeSearchText(v).replace(/[^a-z0-9]/g, '');
+}
+function levenshtein(a,b){
+  a=String(a||''); b=String(b||'');
+  var m=a.length,n=b.length;
+  if(!m) return n;
+  if(!n) return m;
+  var dp=[],i,j;
+  for(i=0;i<=n;i++) dp[i]=i;
+  for(i=1;i<=m;i++){
+    var prev=dp[0];
+    dp[0]=i;
+    for(j=1;j<=n;j++){
+      var tmp=dp[j];
+      if(a.charAt(i-1)===b.charAt(j-1)) dp[j]=prev;
+      else dp[j]=Math.min(prev+1, dp[j]+1, dp[j-1]+1);
+      prev=tmp;
     }
   }
-  return out;
+  return dp[n];
+}
+function fuzzyModelHit(token, model){
+  var t=compactSearchText(token);
+  var m=compactSearchText(model);
+  if(!t || !m || t.length<4) return 0;
+  if(m.indexOf(t)!==-1) return 0;
+  var words=normalizeSearchText(model).split(' ');
+  var best=99;
+  for(var i=0;i<words.length;i++){
+    var w=compactSearchText(words[i]);
+    if(!w) continue;
+    var d=levenshtein(t,w);
+    if(d<best) best=d;
+    if(best===0) break;
+  }
+  if(best===1) return 220;
+  if(best===2 && t.length>=6) return 120;
+  return 0;
+}
+function scoreItemForSearch(query, cat, id, it){
+  var q=normalizeSearchText(query);
+  var qc=compactSearchText(query);
+  var tokens=q ? q.split(' ').filter(Boolean) : [];
+
+  var fields = {
+    model: normalizeSearchText(it.model || ''),
+    supplier: normalizeSearchText(it.supplier || ''),
+    izoh: normalizeSearchText(it.izoh || ''),
+    xar: normalizeSearchText(it.xar || ''),
+    holat: normalizeSearchText(it.holati || ''),
+    catn: normalizeSearchText(cat || ''),
+    sana: normalizeSearchText(it.sana || ''),
+    soni: normalizeSearchText(it.soni || ''),
+    narx: normalizeSearchText(it.narx || '')
+  };
+
+  var score=0;
+  var matchedTokens=0;
+  var strong=false;
+
+  if(q){
+    if(fields.model===q){ score+=1600; strong=true; }
+    if(compactSearchText(it.model || '')===qc){ score+=1500; strong=true; }
+    if(fields.model.indexOf(q)===0 && q.length>=2){ score+=950; strong=true; }
+    else if(fields.model.indexOf(q)!==-1){ score+=700; strong=true; }
+
+    if(fields.catn===q){ score+=520; strong=true; }
+    else if(fields.catn.indexOf(q)!==-1){ score+=240; }
+
+    if(fields.supplier===q){ score+=500; strong=true; }
+    else if(fields.supplier.indexOf(q)!==-1){ score+=260; }
+
+    if(fields.holat===q){ score+=260; }
+    if(fields.narx===q || fields.soni===q || fields.sana===q){ score+=220; strong=true; }
+  }
+
+  for(var i=0;i<tokens.length;i++){
+    var t=tokens[i];
+    var tc=compactSearchText(t);
+    var tokenScore=0;
+    if(!t) continue;
+
+    if(fields.model.indexOf(t)!==-1) tokenScore=Math.max(tokenScore, 180);
+    if(tc && compactSearchText(it.model || '').indexOf(tc)!==-1) tokenScore=Math.max(tokenScore, 210);
+    if(fields.supplier.indexOf(t)!==-1) tokenScore=Math.max(tokenScore, 100);
+    if(fields.catn.indexOf(t)!==-1) tokenScore=Math.max(tokenScore, 90);
+    if(fields.holat.indexOf(t)!==-1) tokenScore=Math.max(tokenScore, 80);
+    if(fields.izoh.indexOf(t)!==-1) tokenScore=Math.max(tokenScore, 55);
+    if(fields.xar.indexOf(t)!==-1) tokenScore=Math.max(tokenScore, 55);
+    if(fields.sana.indexOf(t)!==-1 || fields.soni===t || fields.narx===t) tokenScore=Math.max(tokenScore, 75);
+
+    if(tokenScore===0) tokenScore=fuzzyModelHit(t, it.model || '');
+    if(tokenScore>0){ matchedTokens++; score+=tokenScore; }
+  }
+
+  if(tokens.length>1){
+    if(matchedTokens===tokens.length) score+=320;
+    else if(matchedTokens>=Math.ceil(tokens.length/2)) score+=90;
+    else score-=240;
+  }
+
+  if(q && !strong && matchedTokens===0) return null;
+  if(q && score<=0) return null;
+
+  return {cat:cat,id:id,item:it,score:score};
+}
+function getSearchOptions(){
+  return {
+    q:(document.getElementById('searchInput')||{}).value ? document.getElementById('searchInput').value.trim() : '',
+    cat:(document.getElementById('searchCategory')||{}).value || '',
+    status:(document.getElementById('searchStatus')||{}).value || '',
+    sort:(document.getElementById('searchSort')||{}).value || 'relevance',
+    minPrice:(document.getElementById('searchMinPrice')||{}).value || '',
+    maxPrice:(document.getElementById('searchMaxPrice')||{}).value || '',
+    currentOnly:!!((document.getElementById('searchCurrentOnly')||{}).checked),
+    hasImage:!!((document.getElementById('searchHasImage')||{}).checked)
+  };
+}
+function populateSearchCategories(){
+  var sel=document.getElementById('searchCategory');
+  if(!sel) return;
+  var current=sel.value;
+  sel.innerHTML='<option value="">Hammasi</option>';
+  var cats=Object.keys(omborCache || {}).sort();
+  cats.forEach(function(cat){
+    var opt=document.createElement('option');
+    opt.value=cat;
+    opt.textContent=cat;
+    sel.appendChild(opt);
+  });
+  if(current && cats.indexOf(current)!==-1) sel.value=current;
+}
+function applySearchFilters(rows, opts){
+  return rows.filter(function(row){
+    var it=row.item || {};
+    var price=parseFloat(it.narx || 0);
+    if(opts.cat && row.cat!==opts.cat) return false;
+    if(opts.currentOnly && curCat && row.cat!==curCat) return false;
+    if(opts.status && (it.holati || '')!==opts.status) return false;
+    if(opts.hasImage && !it.mediaUrl) return false;
+    if(opts.minPrice!=='' && !isNaN(Number(opts.minPrice)) && price < Number(opts.minPrice)) return false;
+    if(opts.maxPrice!=='' && !isNaN(Number(opts.maxPrice)) && price > Number(opts.maxPrice)) return false;
+    return true;
+  });
+}
+function sortSearchResults(rows, sort){
+  rows.sort(function(a,b){
+    var ap=parseFloat((a.item||{}).narx || 0); if(isNaN(ap)) ap=0;
+    var bp=parseFloat((b.item||{}).narx || 0); if(isNaN(bp)) bp=0;
+    var aq=parseFloat((a.item||{}).soni || 0); if(isNaN(aq)) aq=0;
+    var bq=parseFloat((b.item||{}).soni || 0); if(isNaN(bq)) bq=0;
+    var am=((a.item||{}).model || '').toLowerCase();
+    var bm=((b.item||{}).model || '').toLowerCase();
+    var ah=((a.item||{}).holati || '');
+    var bh=((b.item||{}).holati || '');
+
+    if(sort==='model_asc') return am.localeCompare(bm);
+    if(sort==='price_asc') return ap-bp || am.localeCompare(bm);
+    if(sort==='price_desc') return bp-ap || am.localeCompare(bm);
+    if(sort==='qty_desc') return bq-aq || am.localeCompare(bm);
+    if(sort==='new_first'){
+      if(ah!==bh){
+        if(ah==='Yangi') return -1;
+        if(bh==='Yangi') return 1;
+      }
+      return am.localeCompare(bm);
+    }
+    if(b.score!==a.score) return b.score-a.score;
+    return am.localeCompare(bm);
+  });
+  return rows;
+}
+function allSearchResults(opts){
+  var out=[];
+  for(var cat in omborCache){
+    var group=omborCache[cat] || {};
+    for(var id in group){
+      var it=group[id] || {};
+      var row=scoreItemForSearch(opts.q, cat, id, it);
+      if(!opts.q && row===null) row={cat:cat,id:id,item:it,score:0};
+      if(row) out.push(row);
+    }
+  }
+  out=applySearchFilters(out, opts);
+  out=sortSearchResults(out, opts.sort);
+  return out.slice(0, 120);
+}
+function activeSearchPills(opts){
+  var pills='';
+  if(opts.cat) pills += '<span class="search-pill">Kategoriya: ' + esc(opts.cat) + '</span>';
+  if(opts.currentOnly && curCat) pills += '<span class="search-pill">Joriy: ' + esc(curCat) + '</span>';
+  if(opts.status) pills += '<span class="search-pill">Holat: ' + esc(opts.status) + '</span>';
+  if(opts.minPrice!=='') pills += '<span class="search-pill">Min: $' + esc(opts.minPrice) + '</span>';
+  if(opts.maxPrice!=='') pills += '<span class="search-pill">Max: $' + esc(opts.maxPrice) + '</span>';
+  if(opts.hasImage) pills += '<span class="search-pill">Faqat rasmi bor</span>';
+  if(opts.sort && opts.sort!=='relevance'){
+    var names={model_asc:'Model A-Z',price_asc:'Narx ↑',price_desc:'Narx ↓',qty_desc:'Soni ↓',new_first:'Yangi avval'};
+    pills += '<span class="search-pill">Sort: ' + esc(names[opts.sort] || opts.sort) + '</span>';
+  }
+  return pills;
+}
+function searchResultCardHtml(row, canEdit){
+  return '<div class="search-cat"><span class="search-cat-pill">Kategoriya: ' + esc(row.cat) + '</span></div>' + itemCardHtml(row.id, row.item, row.cat, canEdit);
 }
 window.openSearchModal = function(){
   document.getElementById('searchModal').classList.add('open');
   document.getElementById('searchInput').value = '';
-  document.getElementById('searchResults').innerHTML = '<div class="search-info">Qidirish uchun biror so‘z yozing</div>';
+  document.getElementById('searchStatus').value = '';
+  document.getElementById('searchSort').value = 'relevance';
+  document.getElementById('searchMinPrice').value = '';
+  document.getElementById('searchMaxPrice').value = '';
+  document.getElementById('searchCurrentOnly').checked = false;
+  document.getElementById('searchHasImage').checked = false;
+  populateSearchCategories();
+  document.getElementById('searchCategory').value = '';
+  document.getElementById('searchResults').innerHTML = '<div class="search-info">Kuchli qidiruv: filter, sort, kategoriya, narx oralig‘i va joriy kategoriya bo‘yicha ishlaydi.</div>';
   setTimeout(function(){ document.getElementById('searchInput').focus(); }, 100);
 };
 window.closeSearchModal = function(){ document.getElementById('searchModal').classList.remove('open'); };
+window.resetSearchFilters = function(){
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchCategory').value = '';
+  document.getElementById('searchStatus').value = '';
+  document.getElementById('searchSort').value = 'relevance';
+  document.getElementById('searchMinPrice').value = '';
+  document.getElementById('searchMaxPrice').value = '';
+  document.getElementById('searchCurrentOnly').checked = false;
+  document.getElementById('searchHasImage').checked = false;
+  runSearch();
+};
 window.runSearch = function(){
-  var q = document.getElementById('searchInput').value.trim();
+  var opts=getSearchOptions();
   var box = document.getElementById('searchResults');
-  if(!q){
-    box.innerHTML = '<div class="search-info">Qidirish uchun biror so‘z yozing</div>';
+  var hasAnyFilter = !!(opts.q || opts.cat || opts.status || opts.minPrice!=='' || opts.maxPrice!=='' || opts.currentOnly || opts.hasImage || (opts.sort && opts.sort!=='relevance'));
+  if(!hasAnyFilter){
+    box.innerHTML = '<div class="search-info">Kuchli qidiruv: filter, sort, kategoriya, narx oralig‘i va joriy kategoriya bo‘yicha ishlaydi.</div>';
     return;
   }
-  var found = allSearchResults(q);
+  var found = allSearchResults(opts);
   if(!found.length){
-    box.innerHTML = '<div class="empty"><div class="empty-icon">🔎</div><div>Hech narsa topilmadi</div></div>';
+    box.innerHTML = '<div class="search-meta">' + activeSearchPills(opts) + '</div><div class="empty"><div class="empty-icon">🔎</div><div>Hech narsa topilmadi</div></div>';
     return;
   }
   var canEdit = ADMIN || userPerms.edit;
-  var html = '<div class="search-info">' + found.length + ' ta natija topildi</div>';
+  var html = '<div class="search-meta">' + activeSearchPills(opts) + '</div>';
+  html += '<div class="search-info"><b>' + found.length + ' ta</b> natija topildi</div>';
   found.forEach(function(row){
-    html += '<div class="search-cat">' + esc(row.cat) + '</div>';
-    html += itemCardHtml(row.id, row.item, row.cat, canEdit);
+    html += searchResultCardHtml(row, canEdit);
   });
   box.innerHTML = html;
 };
+document.addEventListener('keydown', function(e){
+  var modal=document.getElementById('searchModal');
+  if(modal && modal.classList.contains('open') && e.key==='Escape') closeSearchModal();
+});
 if(!UID || UID===0){
   show('sBrowser');
 } else if(ADMIN){
