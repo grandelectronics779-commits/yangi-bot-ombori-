@@ -37,10 +37,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* HEADER */
 .header{background:#fff;border-bottom:1px solid var(--border);padding:14px 16px;position:sticky;top:0;z-index:10;}
-.h-logo{display:flex;align-items:center;gap:10px;}
+.h-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.h-logo{display:flex;align-items:center;gap:10px;min-width:0;}
 .h-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .h-title{font-size:17px;font-weight:700;}
-.h-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.h-sub{font-size:11px;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.h-actions{display:flex;gap:8px;flex-shrink:0;}
+.h-btn{border:1px solid var(--border);background:#fff;color:var(--text);width:42px;height:42px;border-radius:12px;cursor:pointer;font-size:18px;font-weight:700;}
 .stats{display:flex;gap:8px;margin-top:12px;}
 .stat{background:var(--bg);border:1px solid var(--border);padding:10px 14px;border-radius:10px;flex:1;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;font-weight:600;}
 .stat b{display:block;font-size:18px;font-weight:700;color:var(--text);margin-top:2px;font-family:'DM Mono',monospace;}
@@ -94,8 +97,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .xar-text{font-size:13px;color:var(--text2);line-height:1.5;word-break:break-word;}
 
 /* MEDIA */
-.item-img{width:80px;height:80px;object-fit:cover;display:block;cursor:zoom-in;border-radius:10px;float:right;margin:0 0 8px 10px;}
-.item-vid{width:100%;max-height:160px;display:block;background:#000;}
+.media-wrap{padding:12px 16px;border-top:1px solid var(--border);background:#fafbfd;}
+.item-img{width:80px;height:80px;object-fit:cover;display:block;cursor:zoom-in;border-radius:10px;}
+.item-vid{width:100%;max-height:180px;display:block;background:#000;border-radius:10px;}
+.no-media{height:80px;border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:13px;font-weight:600;background:#fff;}
 
 /* ITEM BUTTONS */
 .item-btns{display:flex;gap:0;border-top:1px solid var(--border);}
@@ -149,6 +154,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .save-btn:disabled{opacity:.5;}
 .cancel-btn{width:100%;padding:13px;border:none;background:none;color:var(--text3);cursor:pointer;margin-top:6px;font-size:14px;font-family:'DM Sans',sans-serif;}
 
+/* SEARCH */
+.search-results{padding-top:4px;}
+.search-info{font-size:12px;color:var(--text3);margin-bottom:12px;}
+.search-cat{font-size:11px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+
 /* FILES */
 .file-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
 .file-info{padding:14px 16px;}
@@ -172,6 +182,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @media (max-width:420px){
   .grid{grid-template-columns:1fr 1fr;}
   .item-table .td-label{width:45%;}
+  .h-sub{max-width:120px;}
 }
 </style>
 </head>
@@ -222,11 +233,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <div id="APP" style="display:none;">
   <div class="header">
-    <div class="h-logo">
-      <div class="h-icon">📦</div>
-      <div>
-        <div class="h-title">Gelectronics Cloud</div>
-        <div class="h-sub" id="uName"></div>
+    <div class="h-top">
+      <div class="h-logo">
+        <div class="h-icon">📦</div>
+        <div style="min-width:0;">
+          <div class="h-title">Gelectronics Cloud</div>
+          <div class="h-sub" id="uName"></div>
+        </div>
+      </div>
+      <div class="h-actions">
+        <button class="h-btn" onclick="openSearchModal()" title="Qidirish">🔍</button>
       </div>
     </div>
     <div class="stats">
@@ -324,6 +340,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+<div class="overlay" id="searchModal">
+  <div class="mbox">
+    <div class="m-handle"></div>
+    <div class="m-inner">
+      <div class="m-title">🔍 Qidirish</div>
+      <div class="fg">
+        <label>Model, supplier, izoh...</label>
+        <input type="text" id="searchInput" placeholder="Masalan: FP75, Siemens, Infineon..." oninput="runSearch()">
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-info">Qidirish uchun biror so‘z yozing</div>
+      </div>
+      <button class="cancel-btn" onclick="closeSearchModal()">Yopish</button>
+    </div>
+  </div>
+</div>
+
 <div class="ewait" id="eWait">
   <div class="ebox">
     <div style="font-size:44px;margin-bottom:12px;">⏳</div>
@@ -396,13 +429,7 @@ function show(id){
 
 function esc(v){
   return String(v || '').replace(/[&<>"']/g, function(m){
-    return {
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#39;'
-    }[m];
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
   });
 }
 
@@ -419,54 +446,6 @@ function catIcon(cat){
   return map[cat] || '📦';
 }
 
-function loadCategories(){
-  onValue(ref(db,'ombor'), function(snap){
-    omborCache = snap.val() || {};
-    renderCategories();
-
-    if(curCat){
-      renderItems(omborCache[curCat] || {});
-    }
-  });
-}
-
-function renderCategories(){
-  var grid = document.getElementById('mainGrid');
-  if(!grid) return;
-
-  grid.innerHTML = '';
-
-  var cats = Object.keys(omborCache).sort();
-
-  if(!cats.length){
-    grid.innerHTML =
-      '<div class="empty" style="grid-column:1/-1">' +
-        '<div class="empty-icon">📭</div>' +
-        '<div>Bo‘limlar yo‘q</div>' +
-      '</div>';
-  } else {
-    cats.forEach(function(cat){
-      var count = Object.keys(omborCache[cat] || {}).length;
-      var div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML =
-        '<div class="card-icon">' + catIcon(cat) + '</div>' +
-        '<div>' + esc(cat) + '</div>' +
-        '<div class="card-count">' + count + ' ta</div>';
-      div.onclick = function(){
-        openCat(cat);
-      };
-      grid.appendChild(div);
-    });
-  }
-
-  var files = document.createElement('div');
-  files.className = 'card card-files';
-  files.innerHTML = '🗂 &nbsp;Fayllar';
-  files.onclick = window.openFilesModal;
-  grid.appendChild(files);
-}
-
 function formatMoney(n){
   var num = parseFloat(n || 0);
   if(isNaN(num)) num = 0;
@@ -474,11 +453,15 @@ function formatMoney(n){
 }
 
 function mediaHtml(it){
-  if(!it.mediaUrl) return '';
-  if(it.mediaType === 'video'){
-    return '<video src="' + it.mediaUrl + '" class="item-vid" controls playsinline></video>';
+  if(!it.mediaUrl){
+    return '<div class="media-wrap"><div class="no-media">Rasm yo‘q</div></div>';
   }
-  return '<img src="' + it.mediaUrl + '" class="item-img" onclick="viewImg(\'' + it.mediaUrl + '\')">';
+
+  if(it.mediaType === 'video'){
+    return '<div class="media-wrap"><video src="' + it.mediaUrl + '" class="item-vid" controls playsinline onerror="this.parentNode.innerHTML=&quot;<div class=\\\'no-media\\\'>Video yuklanmadi</div>&quot;"></video></div>';
+  }
+
+  return '<div class="media-wrap"><img src="' + it.mediaUrl + '" class="item-img" onclick="viewImg(\'' + it.mediaUrl + '\')" onerror="this.parentNode.innerHTML=&quot;<div class=\\\'no-media\\\'>Rasm yuklanmadi</div>&quot;"></div>';
 }
 
 function xarHtmlBuild(text){
@@ -495,6 +478,72 @@ function xarHtmlBuild(text){
   return '<button class="batafsil-btn" onclick="toggleXar(this)">📋 Batafsil ▼</button><div class="xar-box"><div class="xar-title">Xarakteristika</div>' + linesHtml + '</div>';
 }
 
+function itemCardHtml(id, it, cat, canEdit){
+  var badgeClass = it.holati === 'B/U' ? 'item-badge badge-bu' : 'item-badge badge-new';
+
+  var rows = '';
+  rows += '<tr><td class="td-label">Soni</td><td class="td-val">' + esc(it.soni) + ' ta</td></tr>';
+  rows += '<tr><td class="td-label">Narxi</td><td class="td-val">$' + formatMoney(it.narx) + '</td></tr>';
+  if(it.supplier) rows += '<tr><td class="td-label">Yetkazuvchi</td><td class="td-val">' + esc(it.supplier) + '</td></tr>';
+  if(it.sana) rows += '<tr><td class="td-label">Sana</td><td class="td-val">' + esc(it.sana) + '</td></tr>';
+  if(it.izoh) rows += '<tr><td class="td-label">Izoh</td><td class="td-val" style="white-space:normal;word-break:break-word;font-family:\'DM Sans\',sans-serif;">' + esc(it.izoh) + '</td></tr>';
+
+  var btns = canEdit
+    ? '<div class="item-btns"><button class="i-edit" data-action="edit" data-id="' + id + '">✏️ Tahrirlash</button><button class="i-del" data-action="delete" data-id="' + id + '">🗑 O\'chirish</button></div>'
+    : '';
+
+  return '' +
+    '<div class="item" data-cat="' + esc(cat) + '">' +
+      '<div class="item-head">' +
+        '<div class="item-name-row">' +
+          '<div class="item-name">' + esc(it.model || '') + '</div>' +
+          '<span class="' + badgeClass + '">' + esc(it.holati || 'Yangi') + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<table class="item-table">' + rows + '</table>' +
+      xarHtmlBuild(it.xar || '') +
+      mediaHtml(it) +
+      btns +
+    '</div>';
+}
+
+function loadCategories(){
+  onValue(ref(db,'ombor'), function(snap){
+    omborCache = snap.val() || {};
+    renderCategories();
+    if(curCat){
+      renderItems(omborCache[curCat] || {});
+    }
+  });
+}
+
+function renderCategories(){
+  var grid = document.getElementById('mainGrid');
+  if(!grid) return;
+
+  grid.innerHTML = '';
+  var cats = Object.keys(omborCache).sort();
+
+  if(!cats.length){
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📭</div><div>Bo‘limlar yo‘q</div></div>';
+  } else {
+    cats.forEach(function(cat){
+      var count = Object.keys(omborCache[cat] || {}).length;
+      var div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = '<div class="card-icon">' + catIcon(cat) + '</div><div>' + esc(cat) + '</div><div class="card-count">' + count + ' ta</div>';
+      div.onclick = function(){ openCat(cat); };
+      grid.appendChild(div);
+    });
+  }
+
+  var files = document.createElement('div');
+  files.className = 'card card-files';
+  files.innerHTML = '🗂 &nbsp;Fayllar';
+  files.onclick = window.openFilesModal;
+  grid.appendChild(files);
+}
+
 function renderItems(data){
   var c = document.getElementById('itemsCont');
   c.innerHTML = '';
@@ -508,40 +557,81 @@ function renderItems(data){
 
   for(var id in data){
     var it = data[id] || {};
-    var badgeClass = it.holati === 'B/U' ? 'item-badge badge-bu' : 'item-badge badge-new';
-
-    var rows = '';
-    rows += '<tr><td class="td-label">Soni</td><td class="td-val">' + esc(it.soni) + ' ta</td></tr>';
-    rows += '<tr><td class="td-label">Narxi</td><td class="td-val">$' + formatMoney(it.narx) + '</td></tr>';
-    if(it.supplier) rows += '<tr><td class="td-label">Yetkazuvchi</td><td class="td-val">' + esc(it.supplier) + '</td></tr>';
-    if(it.sana) rows += '<tr><td class="td-label">Sana</td><td class="td-val">' + esc(it.sana) + '</td></tr>';
-    if(it.izoh) rows += '<tr><td class="td-label">Izoh</td><td class="td-val" style="white-space:normal;word-break:break-word;font-family:\'DM Sans\',sans-serif;">' + esc(it.izoh) + '</td></tr>';
-
-    var btns = canEdit
-      ? '<div class="item-btns"><button class="i-edit" data-action="edit" data-id="' + id + '">✏️ Tahrirlash</button><button class="i-del" data-action="delete" data-id="' + id + '">🗑 O\'chirish</button></div>'
-      : '';
-
     var div = document.createElement('div');
-    div.className = 'item';
-    div.innerHTML =
-      '<div class="item-head">' +
-        '<div class="item-name-row">' +
-          '<div class="item-name">' + esc(it.model || '') + '</div>' +
-          '<span class="' + badgeClass + '">' + esc(it.holati || 'Yangi') + '</span>' +
-        '</div>' +
-      '</div>' +
-      '<table class="item-table">' + rows + '</table>' +
-      xarHtmlBuild(it.xar || '') +
-      mediaHtml(it) +
-      btns;
-
-    c.appendChild(div);
+    div.innerHTML = itemCardHtml(id, it, curCat, canEdit);
+    c.appendChild(div.firstElementChild);
   }
 }
 
 function loadItems(cat){
   renderItems(omborCache[cat] || {});
 }
+
+function allSearchResults(q){
+  var out = [];
+  var query = (q || '').toLowerCase().trim();
+  if(!query) return out;
+
+  for(var cat in omborCache){
+    var group = omborCache[cat] || {};
+    for(var id in group){
+      var it = group[id] || {};
+      var bag = [
+        cat,
+        it.model || '',
+        it.supplier || '',
+        it.izoh || '',
+        it.xar || '',
+        it.holati || ''
+      ].join(' ').toLowerCase();
+
+      if(bag.includes(query)){
+        out.push({cat:cat, id:id, item:it});
+      }
+    }
+  }
+
+  return out;
+}
+
+window.openSearchModal = function(){
+  document.getElementById('searchModal').classList.add('open');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '<div class="search-info">Qidirish uchun biror so‘z yozing</div>';
+  setTimeout(function(){
+    document.getElementById('searchInput').focus();
+  }, 100);
+};
+
+window.closeSearchModal = function(){
+  document.getElementById('searchModal').classList.remove('open');
+};
+
+window.runSearch = function(){
+  var q = document.getElementById('searchInput').value.trim();
+  var box = document.getElementById('searchResults');
+
+  if(!q){
+    box.innerHTML = '<div class="search-info">Qidirish uchun biror so‘z yozing</div>';
+    return;
+  }
+
+  var found = allSearchResults(q);
+  if(!found.length){
+    box.innerHTML = '<div class="empty"><div class="empty-icon">🔎</div><div>Hech narsa topilmadi</div></div>';
+    return;
+  }
+
+  var canEdit = ADMIN || userPerms.edit;
+  var html = '<div class="search-info">' + found.length + ' ta natija topildi</div>';
+
+  found.forEach(function(row){
+    html += '<div class="search-cat">' + esc(row.cat) + '</div>';
+    html += itemCardHtml(row.id, row.item, row.cat, canEdit);
+  });
+
+  box.innerHTML = html;
+};
 
 if(!UID || UID===0){
   show('sBrowser');
@@ -594,11 +684,7 @@ window.requestAccess = function(){
   fetch(RENDER + '/api/request_access', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      user_id:UID,
-      name:UNAME,
-      username:UUSER
-    })
+    body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER})
   }).catch(function(){});
   pollPerm();
 };
@@ -699,21 +785,29 @@ window.goBack = function(){
   curCat = '';
 };
 
-document.getElementById('itemsCont').addEventListener('click', function(e){
+function getActionContext(btn){
+  var itemEl = btn.closest('.item');
+  var cat = itemEl && itemEl.dataset.cat ? itemEl.dataset.cat : curCat;
+  return {cat:cat, id:btn.dataset.id};
+}
+
+document.body.addEventListener('click', function(e){
   var btn = e.target.closest('[data-action]');
   if(!btn) return;
-  needEdit(btn.dataset.action, btn.dataset.id);
+  var ctx = getActionContext(btn);
+  needEdit(btn.dataset.action, ctx.id, ctx.cat);
 });
 
-window.needEdit = function(action, itemId){
+window.needEdit = function(action, itemId, forcedCat){
   itemId = itemId || '';
+  var actionCat = forcedCat || curCat;
+
   if(ADMIN || userPerms.edit){
-    doAction(action, itemId);
+    doAction(action, itemId, actionCat);
     return;
   }
 
   document.getElementById('eWait').classList.add('open');
-
   set(ref(db,'edit_requests/' + UID), {
     name:UNAME,
     username:UUSER,
@@ -725,12 +819,7 @@ window.needEdit = function(action, itemId){
   fetch(RENDER + '/api/request_edit', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      user_id:UID,
-      name:UNAME,
-      username:UUSER,
-      action:action
-    })
+    body:JSON.stringify({user_id:UID,name:UNAME,username:UUSER,action:action})
   }).catch(function(){});
 
   var erRef = ref(db,'edit_requests/' + UID + '/status');
@@ -738,7 +827,7 @@ window.needEdit = function(action, itemId){
     if(snap.val() === 'approved'){
       document.getElementById('eWait').classList.remove('open');
       off(erRef);
-      doAction(action, itemId);
+      doAction(action, itemId, actionCat);
     } else if(snap.val() === 'rejected'){
       document.getElementById('eWait').classList.remove('open');
       off(erRef);
@@ -756,15 +845,16 @@ window.cancelEditWait = function(){
   remove(ref(db,'edit_requests/' + UID));
 };
 
-function doAction(action, itemId){
+function doAction(action, itemId, actionCat){
   if(action === 'add'){
+    curCat = actionCat || curCat;
     openModal();
   } else if(action === 'edit'){
-    openEditModal(itemId);
+    openEditModal(itemId, actionCat || curCat);
   } else if(action === 'delete'){
     tg.showConfirm("Haqiqatan ham o'chirasizmi?", function(ok){
       if(ok){
-        remove(ref(db,'ombor/' + curCat + '/' + itemId));
+        remove(ref(db,'ombor/' + (actionCat || curCat) + '/' + itemId));
         tg.HapticFeedback.notificationOccurred('success');
       }
     });
@@ -783,14 +873,13 @@ function openModal(){
   document.getElementById('imgPrev').style.display = 'none';
   document.getElementById('vidPrev').style.display = 'none';
   document.getElementById('addModal').classList.add('open');
-  setTimeout(function(){
-    document.getElementById('mboxEl').scrollTop = 0;
-  }, 50);
+  setTimeout(function(){ document.getElementById('mboxEl').scrollTop = 0; }, 50);
 }
 
-function openEditModal(itemId){
-  get(ref(db,'ombor/' + curCat + '/' + itemId)).then(function(snap){
+function openEditModal(itemId, cat){
+  get(ref(db,'ombor/' + cat + '/' + itemId)).then(function(snap){
     if(!snap.exists()) return;
+    curCat = cat;
     var it = snap.val();
     document.getElementById('mTitle').textContent = 'Tahrirlash';
     document.getElementById('eId').value = itemId;
@@ -806,9 +895,7 @@ function openEditModal(itemId){
     document.getElementById('imgPrev').style.display = 'none';
     document.getElementById('vidPrev').style.display = 'none';
     document.getElementById('addModal').classList.add('open');
-    setTimeout(function(){
-      document.getElementById('mboxEl').scrollTop = 0;
-    }, 50);
+    setTimeout(function(){ document.getElementById('mboxEl').scrollTop = 0; }, 50);
   });
 }
 
@@ -835,35 +922,24 @@ function compressMedia(file){
   return new Promise(function(res){
     if(file.type.startsWith('video/')){
       var r = new FileReader();
-      r.onload = function(e){
-        res({url:e.target.result, type:'video'});
-      };
+      r.onload = function(e){ res({url:e.target.result, type:'video'}); };
       r.readAsDataURL(file);
       return;
     }
-
     var img = new Image();
     var url = URL.createObjectURL(file);
-
     img.onload = function(){
       var w = img.width, h = img.height, max = 800;
       if(w > max || h > max){
-        if(w > h){
-          h = Math.round(h * max / w);
-          w = max;
-        } else {
-          w = Math.round(w * max / h);
-          h = max;
-        }
+        if(w > h){ h = Math.round(h * max / w); w = max; }
+        else{ w = Math.round(w * max / h); h = max; }
       }
       var cv = document.createElement('canvas');
-      cv.width = w;
-      cv.height = h;
+      cv.width = w; cv.height = h;
       cv.getContext('2d').drawImage(img, 0, 0, w, h);
       res({url:cv.toDataURL('image/jpeg', 0.75), type:'image'});
       URL.revokeObjectURL(url);
     };
-
     img.src = url;
   });
 }
@@ -905,10 +981,7 @@ window.saveItem = function(){
   }
 
   function saveToDb(it){
-    var p = eId
-      ? update(ref(db,'ombor/' + curCat + '/' + eId), it)
-      : push(ref(db,'ombor/' + curCat), it);
-
+    var p = eId ? update(ref(db,'ombor/' + curCat + '/' + eId), it) : push(ref(db,'ombor/' + curCat), it);
     p.then(doneReset).catch(function(){
       btn.textContent = 'Saqlash';
       btn.disabled = false;
@@ -921,9 +994,7 @@ window.saveItem = function(){
       item.mediaUrl = c.url;
       item.mediaType = c.type;
       saveToDb(item);
-    }).catch(function(){
-      saveToDb(item);
-    });
+    }).catch(function(){ saveToDb(item); });
   } else {
     if(eId){
       get(ref(db,'ombor/' + curCat + '/' + eId)).then(function(snap){
@@ -932,9 +1003,7 @@ window.saveItem = function(){
           item.mediaType = snap.val().mediaType;
         }
         saveToDb(item);
-      }).catch(function(){
-        saveToDb(item);
-      });
+      }).catch(function(){ saveToDb(item); });
     } else {
       saveToDb(item);
     }
@@ -961,19 +1030,9 @@ function loadDevs(){
 
     for(var uid in data){
       var dv = data[uid];
-      var sb = dv.status === 'pending'
-        ? '<span class="dbadge db-wait">⏳ Kutmoqda</span>'
-        : dv.status === 'kicked'
-          ? '<span class="dbadge db-no">🚫 Chiqarilgan</span>'
-          : '<span class="dbadge db-ok">✅ Faol</span>';
-
-      var vb = dv.viewPerm
-        ? '<span class="dbadge db-ok">👁 Ko\'rish</span>'
-        : '<span class="dbadge db-no">👁 Yo\'q</span>';
-
-      var eb = dv.editPerm
-        ? '<span class="dbadge db-edit">✏️ Tahrirlash</span>'
-        : '<span class="dbadge db-no">✏️ Yo\'q</span>';
+      var sb = dv.status === 'pending' ? '<span class="dbadge db-wait">⏳ Kutmoqda</span>' : dv.status === 'kicked' ? '<span class="dbadge db-no">🚫 Chiqarilgan</span>' : '<span class="dbadge db-ok">✅ Faol</span>';
+      var vb = dv.viewPerm ? '<span class="dbadge db-ok">👁 Ko\'rish</span>' : '<span class="dbadge db-no">👁 Yo\'q</span>';
+      var eb = dv.editPerm ? '<span class="dbadge db-edit">✏️ Tahrirlash</span>' : '<span class="dbadge db-no">✏️ Yo\'q</span>';
 
       var div = document.createElement('div');
       div.className = 'dcard';
@@ -986,13 +1045,7 @@ function loadDevs(){
             '<div class="dbadges">' + sb + vb + eb + '</div>' +
           '</div>' +
         '</div>' +
-        (!dv.isAdmin
-          ? '<div class="dcard-btns">' +
-              '<button class="d-btn" data-uid="' + uid + '" data-act="giveView">👁 Ko\'rish</button>' +
-              '<button class="d-btn" data-uid="' + uid + '" data-act="giveEdit">✏️ Tahrirlash</button>' +
-              '<button class="d-btn d-btn-del" data-uid="' + uid + '" data-act="kick">🚫 O\'chirish</button>' +
-            '</div>'
-          : '');
+        (!dv.isAdmin ? '<div class="dcard-btns"><button class="d-btn" data-uid="' + uid + '" data-act="giveView">👁 Ko\'rish</button><button class="d-btn" data-uid="' + uid + '" data-act="giveEdit">✏️ Tahrirlash</button><button class="d-btn d-btn-del" data-uid="' + uid + '" data-act="kick">🚫 O\'chirish</button></div>' : '');
 
       c.appendChild(div);
     }
@@ -1106,12 +1159,7 @@ function loadPublicFiles(){
       var f = data[id];
       var div = document.createElement('div');
       div.className = 'file-card';
-      div.innerHTML =
-        '<div class="file-info">' +
-          '<div class="file-name">📄 ' + esc(f.name) + '</div>' +
-          (f.desc ? '<div class="file-desc">' + esc(f.desc) + '</div>' : '') +
-        '</div>' +
-        '<a href="' + f.link + '" target="_blank" class="dl-btn">⬇️ Yuklab olish</a>';
+      div.innerHTML = '<div class="file-info"><div class="file-name">📄 ' + esc(f.name) + '</div>' + (f.desc ? '<div class="file-desc">' + esc(f.desc) + '</div>' : '') + '</div><a href="' + f.link + '" target="_blank" class="dl-btn">⬇️ Yuklab olish</a>';
       c.appendChild(div);
     }
   });
@@ -1133,12 +1181,7 @@ function loadAdminFiles(){
       var f = data[id];
       var div = document.createElement('div');
       div.className = 'fadmin-card';
-      div.innerHTML =
-        '<div class="fadmin-info">' +
-          '<div class="fadmin-name">📄 ' + esc(f.name) + '</div>' +
-          (f.desc ? '<div class="fadmin-desc">' + esc(f.desc) + '</div>' : '') +
-        '</div>' +
-        '<button data-fid="' + id + '" class="del-btn">🗑</button>';
+      div.innerHTML = '<div class="fadmin-info"><div class="fadmin-name">📄 ' + esc(f.name) + '</div>' + (f.desc ? '<div class="fadmin-desc">' + esc(f.desc) + '</div>' : '') + '</div><button data-fid="' + id + '" class="del-btn">🗑</button>';
       c.appendChild(div);
     }
   });
@@ -1162,12 +1205,7 @@ window.addFile = function(){
     return;
   }
 
-  push(ref(db,'files'), {
-    name:name,
-    link:link,
-    desc:desc,
-    timestamp:Date.now()
-  }).then(function(){
+  push(ref(db,'files'), {name:name, link:link, desc:desc, timestamp:Date.now()}).then(function(){
     document.getElementById('fFileName').value = '';
     document.getElementById('fFileLink').value = '';
     document.getElementById('fFileDesc').value = '';
@@ -1176,150 +1214,75 @@ window.addFile = function(){
   });
 };
 
-var imgScale = 1, imgLastScale = 1, imgStartDist = 0, imgTransX = 0, imgTransY = 0, imgDragging = false, imgDragSX = 0, imgDragSY = 0, imgPinchSX = 0, imgPinchSY = 0, imgTSX = 0, imgTSY = 0;
-
+var imgScale=1,imgLastScale=1,imgStartDist=0,imgTransX=0,imgTransY=0,imgDragging=false,imgDragSX=0,imgDragSY=0,imgPinchSX=0,imgPinchSY=0,imgTSX=0,imgTSY=0;
 function applyImg(){
-  document.getElementById('imgViewerSrc').style.transform = 'scale(' + imgScale + ') translate(' + imgTransX + 'px,' + imgTransY + 'px)';
-  document.getElementById('imgScaleLabel').textContent = Math.round(imgScale * 100) + '%';
+  document.getElementById('imgViewerSrc').style.transform='scale('+imgScale+') translate('+imgTransX+'px,'+imgTransY+'px)';
+  document.getElementById('imgScaleLabel').textContent=Math.round(imgScale*100)+'%';
 }
-
-window.closeImgViewer = function(){
-  document.getElementById('imgViewer').style.display = 'none';
-  imgScale = 1;
-  imgLastScale = 1;
-  imgTransX = 0;
-  imgTransY = 0;
+window.closeImgViewer=function(){
+  document.getElementById('imgViewer').style.display='none';
+  imgScale=1;imgLastScale=1;imgTransX=0;imgTransY=0;applyImg();
+};
+window.imgZoom=function(d){
+  imgScale=Math.min(5,Math.max(0.5,imgScale+d));
+  imgLastScale=imgScale;
+  if(imgScale===1){imgTransX=0;imgTransY=0;}
   applyImg();
 };
-
-window.imgZoom = function(d){
-  imgScale = Math.min(5, Math.max(0.5, imgScale + d));
-  imgLastScale = imgScale;
-  if(imgScale === 1){
-    imgTransX = 0;
-    imgTransY = 0;
-  }
-  applyImg();
+window.viewImg=function(src){
+  document.getElementById('imgViewerSrc').src=src;
+  imgScale=1;imgLastScale=1;imgTransX=0;imgTransY=0;applyImg();
+  document.getElementById('imgViewer').style.display='flex';
 };
-
-window.viewImg = function(src){
-  document.getElementById('imgViewerSrc').src = src;
-  imgScale = 1;
-  imgLastScale = 1;
-  imgTransX = 0;
-  imgTransY = 0;
-  applyImg();
-  document.getElementById('imgViewer').style.display = 'flex';
-};
-
 (function(){
-  var wrap = document.getElementById('imgViewerWrap');
-
-  function dist(t){
-    var dx = t[0].clientX - t[1].clientX;
-    var dy = t[0].clientY - t[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  function mid(t){
-    return {
-      x:(t[0].clientX + t[1].clientX) / 2,
-      y:(t[0].clientY + t[1].clientY) / 2
-    };
-  }
-
-  wrap.addEventListener('touchstart', function(e){
-    if(e.touches.length === 2){
+  var wrap=document.getElementById('imgViewerWrap');
+  function dist(t){var dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy);}
+  function mid(t){return{x:(t[0].clientX+t[1].clientX)/2,y:(t[0].clientY+t[1].clientY)/2};}
+  wrap.addEventListener('touchstart',function(e){
+    if(e.touches.length===2){
       e.preventDefault();
-      imgStartDist = dist(e.touches);
-      var m = mid(e.touches);
-      imgPinchSX = m.x;
-      imgPinchSY = m.y;
-      imgTSX = imgTransX;
-      imgTSY = imgTransY;
-      imgLastScale = imgScale;
-    } else if(e.touches.length === 1 && imgScale > 1){
+      imgStartDist=dist(e.touches);
+      var m=mid(e.touches);imgPinchSX=m.x;imgPinchSY=m.y;imgTSX=imgTransX;imgTSY=imgTransY;imgLastScale=imgScale;
+    }else if(e.touches.length===1&&imgScale>1){
       e.preventDefault();
-      imgDragging = true;
-      imgDragSX = e.touches[0].clientX - imgTransX * imgScale;
-      imgDragSY = e.touches[0].clientY - imgTransY * imgScale;
+      imgDragging=true;imgDragSX=e.touches[0].clientX-imgTransX*imgScale;imgDragSY=e.touches[0].clientY-imgTransY*imgScale;
     }
-  }, {passive:false});
-
-  wrap.addEventListener('touchmove', function(e){
+  },{passive:false});
+  wrap.addEventListener('touchmove',function(e){
     e.preventDefault();
-    if(e.touches.length === 2){
-      var d2 = dist(e.touches);
-      imgScale = Math.min(5, Math.max(0.5, imgLastScale * (d2 / imgStartDist)));
-      var m = mid(e.touches);
-      imgTransX = imgTSX + (m.x - imgPinchSX) / imgScale;
-      imgTransY = imgTSY + (m.y - imgPinchSY) / imgScale;
-      applyImg();
-    } else if(e.touches.length === 1 && imgDragging){
-      imgTransX = (e.touches[0].clientX - imgDragSX) / imgScale;
-      imgTransY = (e.touches[0].clientY - imgDragSY) / imgScale;
-      applyImg();
+    if(e.touches.length===2){
+      var d2=dist(e.touches);imgScale=Math.min(5,Math.max(0.5,imgLastScale*(d2/imgStartDist)));
+      var m=mid(e.touches);imgTransX=imgTSX+(m.x-imgPinchSX)/imgScale;imgTransY=imgTSY+(m.y-imgPinchSY)/imgScale;applyImg();
+    }else if(e.touches.length===1&&imgDragging){
+      imgTransX=(e.touches[0].clientX-imgDragSX)/imgScale;imgTransY=(e.touches[0].clientY-imgDragSY)/imgScale;applyImg();
     }
-  }, {passive:false});
-
-  wrap.addEventListener('touchend', function(e){
-    if(e.touches.length < 2){
-      imgLastScale = imgScale;
-      imgDragging = false;
-    }
+  },{passive:false});
+  wrap.addEventListener('touchend',function(e){if(e.touches.length<2){imgLastScale=imgScale;imgDragging=false;}});
+  wrap.addEventListener('mousedown',function(e){
+    if(imgScale>1){imgDragging=true;wrap.style.cursor='grabbing';imgDragSX=e.clientX-imgTransX*imgScale;imgDragSY=e.clientY-imgTransY*imgScale;e.preventDefault();}
   });
-
-  wrap.addEventListener('mousedown', function(e){
-    if(imgScale > 1){
-      imgDragging = true;
-      wrap.style.cursor = 'grabbing';
-      imgDragSX = e.clientX - imgTransX * imgScale;
-      imgDragSY = e.clientY - imgTransY * imgScale;
-      e.preventDefault();
-    }
+  window.addEventListener('mousemove',function(e){
+    if(imgDragging){imgTransX=(e.clientX-imgDragSX)/imgScale;imgTransY=(e.clientY-imgDragSY)/imgScale;applyImg();}
   });
-
-  window.addEventListener('mousemove', function(e){
-    if(imgDragging){
-      imgTransX = (e.clientX - imgDragSX) / imgScale;
-      imgTransY = (e.clientY - imgDragSY) / imgScale;
-      applyImg();
-    }
-  });
-
-  window.addEventListener('mouseup', function(){
-    imgDragging = false;
-    wrap.style.cursor = 'grab';
-  });
-
-  wrap.addEventListener('wheel', function(e){
+  window.addEventListener('mouseup',function(){imgDragging=false;wrap.style.cursor='grab';});
+  wrap.addEventListener('wheel',function(e){
     e.preventDefault();
-    imgScale = Math.min(5, Math.max(0.5, imgScale + (e.deltaY > 0 ? -0.2 : 0.2)));
-    imgLastScale = imgScale;
-    if(imgScale === 1){
-      imgTransX = 0;
-      imgTransY = 0;
-    }
+    imgScale=Math.min(5,Math.max(0.5,imgScale+(e.deltaY>0?-0.2:0.2)));
+    imgLastScale=imgScale;
+    if(imgScale===1){imgTransX=0;imgTransY=0;}
     applyImg();
-  }, {passive:false});
+  },{passive:false});
 })();
 
-document.getElementById('addModal').addEventListener('focusin', function(e){
+document.getElementById('addModal').addEventListener('focusin',function(e){
   if(e.target.matches('input,select,textarea')){
-    setTimeout(function(){
-      e.target.scrollIntoView({behavior:'smooth', block:'center'});
-    }, 350);
+    setTimeout(function(){e.target.scrollIntoView({behavior:'smooth',block:'center'});},350);
   }
 });
-
 if(window.visualViewport){
-  window.visualViewport.addEventListener('resize', function(){
-    var f = document.querySelector('#mboxEl :focus');
-    if(f){
-      setTimeout(function(){
-        f.scrollIntoView({behavior:'smooth', block:'center'});
-      }, 100);
-    }
+  window.visualViewport.addEventListener('resize',function(){
+    var f=document.querySelector('#mboxEl :focus');
+    if(f) setTimeout(function(){f.scrollIntoView({behavior:'smooth',block:'center'});},100);
   });
 }
 </script>
